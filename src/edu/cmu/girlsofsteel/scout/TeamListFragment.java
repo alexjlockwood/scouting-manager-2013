@@ -2,14 +2,16 @@ package edu.cmu.girlsofsteel.scout;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+
+import com.actionbarsherlock.app.SherlockListFragment;
+
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract;
 
 // For small screens
-public class TeamListFragment extends ListFragment implements
+public class TeamListFragment extends SherlockListFragment implements
 		LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static final int LOADER_ID = 0x01;

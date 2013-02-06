@@ -1,8 +1,8 @@
 package edu.cmu.girlsofsteel.scout;
 
-import android.support.v4.app.Fragment;
+import com.actionbarsherlock.app.SherlockFragment;
 
 // For large screens
-public class TeamGridFragment extends Fragment {
+public class TeamGridFragment extends SherlockFragment {
 
 }
