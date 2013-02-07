@@ -4,12 +4,20 @@
     <string name="app_name">Scouting Manager</string>
     <string name="menu_settings">Settings</string>
 
-    <!-- Titles -->
+    <!-- Dialogs -->
     <string name="title_add_team">Add Team</string>
+    <plurals name="title_delete_teams">
+        <item quantity="one">Delete team?</item>
+        <item quantity="other">Delete teams?</item>
+    </plurals>
+    <plurals name="message_delete_teams">
+        <item quantity="one">Permanently delete %d team?</item>
+        <item quantity="other">Permanently delete %d teams?</item>
+    </plurals>
     
     <!-- Menu -->
     <string name="menu_add_team">Add Team</string>
-    <string name="menu_delete_team">Delete team</string>
+    <string name="menu_delete">Delete</string>
     <string name="menu_search">Search</string>
     <string name="menu_search_team_hint">Search for team</string>
     

@@ -26,6 +26,12 @@ public final class LogUtil {
     }
   }
 
+  public static void LOGI(String tag, String message) {
+    //if (Log.isLoggable(tag, Log.INFO)) {
+      Log.i(tag, message);
+    //}
+  }
+
   public static void LOGV(String tag, String message) {
     if (Log.isLoggable(tag, Log.VERBOSE)) {
       Log.v(tag, message);
