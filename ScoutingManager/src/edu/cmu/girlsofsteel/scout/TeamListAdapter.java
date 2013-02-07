@@ -1,5 +1,6 @@
 package edu.cmu.girlsofsteel.scout;
 
+import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.ResourceCursorAdapter;
@@ -8,8 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class TeamListAdapter extends ResourceCursorAdapter {
-	private static final String TAG = "TeamListAdapter";
-	private static final boolean DEBUG = true;
+	private static final String TAG = makeLogTag(TeamListAdapter.class);
 
 	public TeamListAdapter(Context context) {
 		super(context, R.layout.team_list_row, null, 0);

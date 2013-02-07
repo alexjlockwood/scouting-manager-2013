@@ -5,8 +5,10 @@ import android.os.Bundle;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 
+import edu.cmu.girlsofsteel.scout.util.LogUtil;
 
 public class MainActivity extends SherlockFragmentActivity {
+  private static final String TAG = LogUtil.makeLogTag(MainActivity.class);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
