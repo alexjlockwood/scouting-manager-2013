@@ -2,7 +2,19 @@
 <resources>
 
     <string name="app_name">Scouting Manager</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
 
+    <!-- Titles -->
+    <string name="title_add_team">Add Team</string>
+    
+    <!-- Menu -->
+    <string name="menu_add_team">Add Team</string>
+    <string name="menu_delete_team">Delete team</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_search_team_hint">Search for team</string>
+    
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    
 </resources>

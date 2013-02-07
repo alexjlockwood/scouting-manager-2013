@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
 public class TeamListAdapter extends ResourceCursorAdapter {
 	private static final String TAG = makeLogTag(TeamListAdapter.class);
 
