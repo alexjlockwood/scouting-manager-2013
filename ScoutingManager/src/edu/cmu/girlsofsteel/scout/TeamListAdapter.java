@@ -47,6 +47,6 @@ public class TeamListAdapter extends ResourceCursorAdapter {
 	static class ViewHolder {
         TextView teamNum;
         ImageView teamPhoto;
-        int teamNumCol, teamPhotoCol;
-    }
+    int teamNumCol, teamPhotoCol;
+  }
 }
