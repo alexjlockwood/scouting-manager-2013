@@ -2,7 +2,13 @@
 <resources>
 
     <string name="app_name">Scouting Manager</string>
-    <string name="menu_settings">Settings</string>
+
+    <!-- Messages -->
+    <string name="message_no_teams">No teams!</string>
+    
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Dialogs -->
     <string name="title_add_team">Add Team</string>
@@ -14,15 +20,13 @@
         <item quantity="one">Permanently delete %d team?</item>
         <item quantity="other">Permanently delete %d teams?</item>
     </plurals>
-    
+
     <!-- Menu -->
     <string name="menu_add_team">Add Team</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_search">Search</string>
     <string name="menu_search_team_hint">Search for team</string>
-    
-    <!-- Common -->
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    
+    <string name="menu_export">Export</string>
+    <string name="menu_settings">Settings</string>
+
 </resources>

@@ -1,7 +1,16 @@
 package edu.cmu.girlsofsteel.scout;
 
+
+
+
+// TODO: switch to MultiChoiceModeListener if it is available
+// TODO: if not, check out https://snipt.net/tweakt/sherlocklistviewjava/
+// TODO: also check out http://stackoverflow.com/a/14296781/844882
+
+
+
+
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -13,11 +22,14 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.ActionMode;
@@ -25,28 +37,30 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
-import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.DatabaseUtil;
 
 // For small screens
 public class TeamListFragment extends SherlockListFragment implements ActionMode.Callback,
-    AdapterView.OnItemLongClickListener, LoaderManager.LoaderCallbacks<Cursor>, OnQueryTextListener {
+    AdapterView.OnItemLongClickListener, LoaderManager.LoaderCallbacks<Cursor>,
+    AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
+
   private static final String TAG = makeLogTag(TeamListFragment.class);
   private static final int LOADER_ID = 0x01;
+  private static final String DEFAULT_SORT = " COLLATE LOCALIZED ASC";
+  private String mFilter;
   private TeamListAdapter mAdapter;
   private ActionMode mMode;
   private ListView mListView;
 
-  @SuppressLint("NewApi")
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     mAdapter = new TeamListAdapter(getActivity());
     setListAdapter(mAdapter);
     setListShown(false);
-    setEmptyText("No teams");
+    setEmptyText(getActivity().getString(R.string.message_no_teams));
     setHasOptionsMenu(true);
     getLoaderManager().initLoader(LOADER_ID, null, this);
 
@@ -54,6 +68,7 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
     mListView = getListView();
     mListView.setItemsCanFocus(false);
     mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+    mListView.setOnItemClickListener(this);
     mListView.setOnItemLongClickListener(this);
   }
 
@@ -63,8 +78,10 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
 
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.team_list_options_menu, menu);
-    ((SearchView) menu.findItem(R.id.search_view).getActionView()).setOnQueryTextListener(this);
+    inflater.inflate(R.menu.team_list_actionbar, menu);
+    SearchView searchView = (SearchView) menu.findItem(R.id.search_view).getActionView();
+    searchView.setOnQueryTextListener(this);
+    searchView.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
     super.onCreateOptionsMenu(menu, inflater);
   }
 
@@ -83,7 +100,12 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
   /** CONTEXTUAL ACTION BAR **/
   /***************************/
 
-  @SuppressLint("NewApi")
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    // TODO Auto-generated method stub
+    Toast.makeText(getActivity(), "Team clicked!", Toast.LENGTH_SHORT).show();
+  }
+
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
     mListView.setItemChecked(position, true);
@@ -124,6 +146,9 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
   @Override
   public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
     switch (item.getItemId()) {
+      case R.id.cab_action_export:
+        Toast.makeText(getActivity(), "Export!", Toast.LENGTH_SHORT).show();
+        return true;
       case R.id.cab_action_delete:
         long[] ids = mListView.getCheckedItemIds();
         DeleteTeamDialog dialog = DeleteTeamDialog.newInstance(ids);
@@ -140,7 +165,11 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    return new CursorLoader(getActivity(), Teams.CONTENT_URI, null, null, null, null);
+    String[] proj = new String[] { Teams._ID, Teams.NUMBER, Teams.PHOTO };
+    String where = TextUtils.isEmpty(mFilter) ? null : Teams.NUMBER + " LIKE ?";
+    String[] whereArgs = TextUtils.isEmpty(mFilter) ? null : new String[] { mFilter };
+    String sort = Teams.NUMBER + DEFAULT_SORT;
+    return new CursorLoader(getActivity(), Teams.CONTENT_URI, proj, where, whereArgs, sort);
   }
 
   @Override
@@ -164,14 +193,14 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
 
   @Override
   public boolean onQueryTextSubmit(String query) {
-    // TODO Auto-generated method stub
-    return false;
+    return true;
   }
 
   @Override
   public boolean onQueryTextChange(String newText) {
-    // TODO Auto-generated method stub
-    return false;
+    mFilter = newText;
+    getLoaderManager().restartLoader(LOADER_ID, null, this);
+    return true;
   }
 
   /*********************/
@@ -204,7 +233,7 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
               new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int whichButton) {
-                  // do something
+                  // Do nothing
                 }
               })
           .create();
@@ -246,14 +275,10 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
               new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int whichButton) {
-                  // do nothing
+                  // Do nothing
                 }
               })
           .create();
     }
-  }
-
-  private void showDialog() {
-
   }
 }
