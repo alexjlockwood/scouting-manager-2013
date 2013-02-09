@@ -14,7 +14,7 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.InputType;
@@ -30,7 +30,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
-import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.DatabaseUtil;
@@ -40,13 +39,10 @@ import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 
 // For small screens
 public class TeamListFragment extends SherlockListFragment implements MultiChoiceModeListener,
-    LoaderCallbacks<Cursor>, OnQueryTextListener {
+    LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
 
   @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
-  private static final int TEAM_LOADER_ID = 0x01;
-  private static final String DEFAULT_SORT = " COLLATE LOCALIZED ASC";
-  private String mFilter;
   private TeamListAdapter mAdapter;
   private Set<Integer> mSelectedPositions = new LinkedHashSet<Integer>();
 
@@ -54,8 +50,9 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     view.setBackgroundColor(Color.WHITE);
-    getListView().setSelector(android.R.color.transparent);
-    getListView().setCacheColorHint(Color.WHITE);
+    ListView listView = getListView();
+    listView.setSelector(android.R.color.transparent);
+    listView.setCacheColorHint(Color.WHITE);
   }
 
   @Override
@@ -107,15 +104,12 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   public boolean onActionItemClicked(ActionMode mode, android.view.MenuItem item) {
     mode.finish();
     switch (item.getItemId()) {
-      case R.id.cab_action_delete: {
+      case R.id.cab_action_delete:
         Toast.makeText(getActivity(), "Delete teams!", Toast.LENGTH_SHORT).show();
         return true;
-      }
-      case R.id.cab_action_export: {
-        // Toast.makeText(getActivity(), "Export teams!", Toast.LENGTH_SHORT).show();
+      case R.id.cab_action_export:
         new ExportDatabaseTask(getActivity()).execute(Teams.CONTENT_URI);
         return true;
-      }
     }
     return false;
   }
@@ -149,17 +143,37 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
         numSelectedTeams, numSelectedTeams));
   }
 
+  /*************************/
+  /** QUERY TEXT LISTENER **/
+  /*************************/
+
+  @Override
+  public boolean onQueryTextSubmit(String query) {
+    return true;
+  }
+
+  @Override
+  public boolean onQueryTextChange(String newText) {
+    mFilter = newText;
+    getLoaderManager().restartLoader(TEAM_LOADER_ID, null, this);
+    return true;
+  }
+
   /**********************/
   /** LOADER CALLBACKS **/
   /**********************/
 
+  private static final int TEAM_LOADER_ID = 0x01;
+  private static final String[] PROJECTION = new String[] { Teams._ID, Teams.NUMBER, Teams.PHOTO };
+  private static final String DEFAULT_SORT = Teams.NUMBER + " COLLATE LOCALIZED ASC";
+  private String mFilter;
+
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    String[] projection = new String[] { Teams._ID, Teams.NUMBER, Teams.PHOTO };
     String where = TextUtils.isEmpty(mFilter) ? null : Teams.NUMBER + " LIKE ?";
     String[] whereArgs = TextUtils.isEmpty(mFilter) ? null : new String[] { mFilter + "%" };
-    String sort = Teams.NUMBER + DEFAULT_SORT;
-    return new CursorLoader(getActivity(), Teams.CONTENT_URI, projection, where, whereArgs, sort);
+    return new CursorLoader(getActivity(), Teams.CONTENT_URI, PROJECTION, where, whereArgs,
+        DEFAULT_SORT);
   }
 
   @Override
@@ -175,22 +189,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   @Override
   public void onLoaderReset(Loader<Cursor> data) {
     mAdapter.swapCursor(null);
-  }
-
-  /*************************/
-  /** QUERY TEXT LISTENER **/
-  /*************************/
-
-  @Override
-  public boolean onQueryTextSubmit(String query) {
-    return true;
-  }
-
-  @Override
-  public boolean onQueryTextChange(String newText) {
-    mFilter = newText;
-    getLoaderManager().restartLoader(TEAM_LOADER_ID, null, this);
-    return true;
   }
 
   /*********************/
