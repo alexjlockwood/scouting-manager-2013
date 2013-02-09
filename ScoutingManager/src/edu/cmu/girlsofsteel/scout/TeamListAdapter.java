@@ -10,6 +10,7 @@ import android.widget.TextView;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
 public class TeamListAdapter extends ResourceCursorAdapter {
+  @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListAdapter.class);
 
   public TeamListAdapter(Context context) {

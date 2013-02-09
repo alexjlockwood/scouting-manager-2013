@@ -8,6 +8,7 @@ import com.actionbarsherlock.view.Menu;
 import edu.cmu.girlsofsteel.scout.util.LogUtil;
 
 public class MainActivity extends SherlockFragmentActivity {
+  @SuppressWarnings("unused")
   private static final String TAG = LogUtil.makeLogTag(MainActivity.class);
 
   @Override

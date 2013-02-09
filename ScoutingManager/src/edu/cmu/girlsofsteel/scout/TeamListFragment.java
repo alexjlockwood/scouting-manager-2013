@@ -1,58 +1,62 @@
 package edu.cmu.girlsofsteel.scout;
 
-
-
-
-// TODO: switch to MultiChoiceModeListener if it is available
-// TODO: if not, check out https://snipt.net/tweakt/sherlocklistviewjava/
-// TODO: also check out http://stackoverflow.com/a/14296781/844882
-
-
-
-
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
+import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.DatabaseUtil;
+import edu.cmu.girlsofsteel.scout.util.ExportDatabaseTask;
+import edu.cmu.girlsofsteel.scout.util.actionmodecompat.ActionMode;
+import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 
 // For small screens
-public class TeamListFragment extends SherlockListFragment implements ActionMode.Callback,
-    AdapterView.OnItemLongClickListener, LoaderManager.LoaderCallbacks<Cursor>,
-    AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
+public class TeamListFragment extends SherlockListFragment implements MultiChoiceModeListener,
+    LoaderCallbacks<Cursor>, OnQueryTextListener {
 
+  @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
-  private static final int LOADER_ID = 0x01;
+  private static final int TEAM_LOADER_ID = 0x01;
   private static final String DEFAULT_SORT = " COLLATE LOCALIZED ASC";
   private String mFilter;
   private TeamListAdapter mAdapter;
-  private ActionMode mMode;
-  private ListView mListView;
+  private Set<Integer> mSelectedPositions = new LinkedHashSet<Integer>();
+
+  @Override
+  public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    view.setBackgroundColor(Color.WHITE);
+    getListView().setSelector(android.R.color.transparent);
+    getListView().setCacheColorHint(Color.WHITE);
+  }
 
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
@@ -62,14 +66,13 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
     setListShown(false);
     setEmptyText(getActivity().getString(R.string.message_no_teams));
     setHasOptionsMenu(true);
-    getLoaderManager().initLoader(LOADER_ID, null, this);
+    getLoaderManager().initLoader(TEAM_LOADER_ID, null, this);
+    ActionMode.setMultiChoiceMode(getListView(), getActivity(), this);
+  }
 
-    mMode = null;
-    mListView = getListView();
-    mListView.setItemsCanFocus(false);
-    mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-    mListView.setOnItemClickListener(this);
-    mListView.setOnItemLongClickListener(this);
+  @Override
+  public void onListItemClick(ListView l, View v, int position, long id) {
+    Toast.makeText(getActivity(), "Team clicked!", Toast.LENGTH_SHORT).show();
   }
 
   /****************/
@@ -101,62 +104,49 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
   /***************************/
 
   @Override
-  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    // TODO Auto-generated method stub
-    Toast.makeText(getActivity(), "Team clicked!", Toast.LENGTH_SHORT).show();
-  }
-
-  @Override
-  public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-    mListView.setItemChecked(position, true);
-    if (mListView.getCheckedItemPositions().size() > 0) {
-      if (mMode == null) {
-        mMode = getSherlockActivity().startActionMode(this);
+  public boolean onActionItemClicked(ActionMode mode, android.view.MenuItem item) {
+    mode.finish();
+    switch (item.getItemId()) {
+      case R.id.cab_action_delete: {
+        Toast.makeText(getActivity(), "Delete teams!", Toast.LENGTH_SHORT).show();
+        return true;
       }
-    } else {
-      if (mMode != null) {
-        mMode.finish();
+      case R.id.cab_action_export: {
+        // Toast.makeText(getActivity(), "Export teams!", Toast.LENGTH_SHORT).show();
+        new ExportDatabaseTask(getActivity()).execute(Teams.CONTENT_URI);
+        return true;
       }
     }
-    return true;
-  }
-
-  @Override
-  public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-    getSherlockActivity().getSupportMenuInflater().inflate(R.menu.team_list_cab, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
     return false;
+  }
+
+  @Override
+  public boolean onCreateActionMode(ActionMode mode, android.view.Menu menu) {
+    android.view.MenuInflater inflater = mode.getMenuInflater();
+    inflater.inflate(R.menu.team_list_cab, menu);
+    mSelectedPositions.clear();
+    return true;
   }
 
   @Override
   public void onDestroyActionMode(ActionMode mode) {
-    int count = mListView.getAdapter().getCount();
-    for (int i = 0; i < count; i++) {
-      mListView.setItemChecked(i, false);
-    }
-    if (mMode == mode) {
-      mMode = null;
-    }
   }
 
   @Override
-  public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.cab_action_export:
-        Toast.makeText(getActivity(), "Export!", Toast.LENGTH_SHORT).show();
-        return true;
-      case R.id.cab_action_delete:
-        long[] ids = mListView.getCheckedItemIds();
-        DeleteTeamDialog dialog = DeleteTeamDialog.newInstance(ids);
-        dialog.show(getFragmentManager(), AddTeamDialog.class.getSimpleName());
-        mode.finish();
-        return true;
-    }
+  public boolean onPrepareActionMode(ActionMode mode, android.view.Menu menu) {
     return false;
+  }
+
+  @Override
+  public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+    if (checked) {
+      mSelectedPositions.add(position);
+    } else {
+      mSelectedPositions.remove(position);
+    }
+    int numSelectedTeams = mSelectedPositions.size();
+    mode.setTitle(getResources().getQuantityString(R.plurals.title_selected_teams,
+        numSelectedTeams, numSelectedTeams));
   }
 
   /**********************/
@@ -165,11 +155,11 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    String[] proj = new String[] { Teams._ID, Teams.NUMBER, Teams.PHOTO };
+    String[] projection = new String[] { Teams._ID, Teams.NUMBER, Teams.PHOTO };
     String where = TextUtils.isEmpty(mFilter) ? null : Teams.NUMBER + " LIKE ?";
-    String[] whereArgs = TextUtils.isEmpty(mFilter) ? null : new String[] { mFilter };
+    String[] whereArgs = TextUtils.isEmpty(mFilter) ? null : new String[] { mFilter + "%" };
     String sort = Teams.NUMBER + DEFAULT_SORT;
-    return new CursorLoader(getActivity(), Teams.CONTENT_URI, proj, where, whereArgs, sort);
+    return new CursorLoader(getActivity(), Teams.CONTENT_URI, projection, where, whereArgs, sort);
   }
 
   @Override
@@ -199,7 +189,7 @@ public class TeamListFragment extends SherlockListFragment implements ActionMode
   @Override
   public boolean onQueryTextChange(String newText) {
     mFilter = newText;
-    getLoaderManager().restartLoader(LOADER_ID, null, this);
+    getLoaderManager().restartLoader(TEAM_LOADER_ID, null, this);
     return true;
   }
 
