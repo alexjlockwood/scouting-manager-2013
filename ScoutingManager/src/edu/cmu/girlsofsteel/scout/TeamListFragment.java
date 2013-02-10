@@ -19,8 +19,11 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -89,7 +92,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_add_team:
-        AddTeamDialog dialog = AddTeamDialog.newInstance();
+        DialogFragment dialog = AddTeamDialog.newInstance();
         dialog.show(getFragmentManager(), AddTeamDialog.class.getSimpleName());
         return true;
     }
@@ -101,20 +104,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   /***************************/
 
   @Override
-  public boolean onActionItemClicked(ActionMode mode, android.view.MenuItem item) {
-    mode.finish();
-    switch (item.getItemId()) {
-      case R.id.cab_action_delete:
-        Toast.makeText(getActivity(), "Delete teams!", Toast.LENGTH_SHORT).show();
-        return true;
-      case R.id.cab_action_export:
-        new ExportDatabaseTask(getActivity()).execute(Teams.CONTENT_URI);
-        return true;
-    }
-    return false;
-  }
-
-  @Override
   public boolean onCreateActionMode(ActionMode mode, android.view.Menu menu) {
     android.view.MenuInflater inflater = mode.getMenuInflater();
     inflater.inflate(R.menu.team_list_cab, menu);
@@ -123,11 +112,24 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   }
 
   @Override
-  public void onDestroyActionMode(ActionMode mode) {
-  }
+  public boolean onActionItemClicked(ActionMode mode, android.view.MenuItem item) {
+    long[] ids = getListView().getCheckedItemIds();
+    mode.finish();
 
-  @Override
-  public boolean onPrepareActionMode(ActionMode mode, android.view.Menu menu) {
+    // WARNING: This is a hack! When commenting out this line, the contextual
+    // action bar will not close after the first time an action item has been
+    // clicked.
+    ActionMode.setMultiChoiceMode(getListView(), getActivity(), this);
+
+    switch (item.getItemId()) {
+      case R.id.cab_action_delete:
+        DialogFragment dialog = DeleteTeamDialog.newInstance(ids);
+        dialog.show(getFragmentManager(), DeleteTeamDialog.class.getSimpleName());
+        return true;
+      case R.id.cab_action_export:
+        new ExportDatabaseTask(getSherlockActivity()).execute(Teams.CONTENT_URI);
+        return true;
+    }
     return false;
   }
 
@@ -141,6 +143,15 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     int numSelectedTeams = mSelectedPositions.size();
     mode.setTitle(getResources().getQuantityString(R.plurals.title_selected_teams,
         numSelectedTeams, numSelectedTeams));
+  }
+
+  @Override
+  public boolean onPrepareActionMode(ActionMode mode, android.view.Menu menu) {
+    return false;
+  }
+
+  @Override
+  public void onDestroyActionMode(ActionMode mode) {
   }
 
   /*************************/
@@ -204,7 +215,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     public Dialog onCreateDialog(Bundle savedInstanceState) {
       final LayoutInflater factory = LayoutInflater.from(getActivity());
       final EditText edit = (EditText) factory.inflate(R.layout.dialog_add_team, null);
-      return new AlertDialog.Builder(getActivity())
+      final Dialog dialog = new AlertDialog.Builder(getActivity())
           .setTitle(R.string.title_add_team)
           .setView(edit)
           .setPositiveButton(R.string.ok,
@@ -225,6 +236,16 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
                 }
               })
           .create();
+      edit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+          if (hasFocus) {
+            Window window = dialog.getWindow();
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+          }
+        }
+      });
+      return dialog;
     }
   }
 
@@ -235,7 +256,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   public static class DeleteTeamDialog extends DialogFragment {
     private static final String KEY_IDS = "key_ids";
 
-    public static DeleteTeamDialog newInstance(long[] ids) {
+    public static DeleteTeamDialog newInstance(long... ids) {
       DeleteTeamDialog dialog = new DeleteTeamDialog();
       Bundle args = new Bundle();
       args.putLongArray(KEY_IDS, ids);

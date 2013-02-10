@@ -116,8 +116,7 @@ class ActionModeHoneycomb extends ActionMode {
       }
 
       @Override
-      public boolean onActionItemClicked(android.view.ActionMode actionMode,
-          MenuItem menuItem) {
+      public boolean onActionItemClicked(android.view.ActionMode actionMode, MenuItem menuItem) {
         return listener.onActionItemClicked(mWrappedActionMode, menuItem);
       }
 

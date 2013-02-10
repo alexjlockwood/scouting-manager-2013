@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import android.content.AsyncQueryHandler;
 import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
@@ -17,26 +16,23 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 public final class DatabaseUtil {
 
   public static void insertTeam(Context ctx, ContentValues initialValues) {
-    ContentResolver cr = ctx.getContentResolver();
-    AsyncQueryHandler handler = new AsyncQueryHandler(cr) {
-    };
+    AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) { };
     handler.startInsert(-1, null, Teams.CONTENT_URI, initialValues);
   }
 
-  public static void deleteTeams(final Context ctx, long[] teamIds) {
-    final ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
-    for (int i = 0; i < teamIds.length; i++) {
-      ops.add(ContentProviderOperation.newDelete(Teams.CONTENT_URI)
-          .withSelection(Teams._ID + "=" + teamIds[i], null)
-          .build());
-      ops.add(ContentProviderOperation.newDelete(TeamMatches.CONTENT_URI)
-          .withSelection(TeamMatches.TEAM_ID + "=" + teamIds[i], null)
-          .build());
-    }
-
+  public static void deleteTeams(final Context ctx, final long... teamIds) {
     new Thread() {
       @Override
       public void run() {
+        final ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+        for (int i = 0; i < teamIds.length; i++) {
+          ops.add(ContentProviderOperation.newDelete(Teams.CONTENT_URI)
+              .withSelection(Teams._ID + "=" + teamIds[i], null)
+              .build());
+          ops.add(ContentProviderOperation.newDelete(TeamMatches.CONTENT_URI)
+              .withSelection(TeamMatches.TEAM_ID + "=" + teamIds[i], null)
+              .build());
+        }
         try {
           ctx.getContentResolver().applyBatch(ScoutContract.AUTHORITY, ops);
         } catch (RemoteException e) {
