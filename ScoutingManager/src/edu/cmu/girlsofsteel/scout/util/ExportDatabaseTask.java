@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;

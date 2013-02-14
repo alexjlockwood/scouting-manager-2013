@@ -8,8 +8,16 @@ import com.actionbarsherlock.view.Menu;
 import edu.cmu.girlsofsteel.scout.util.LogUtil;
 
 public class MainActivity extends SherlockFragmentActivity {
-  @SuppressWarnings("unused")
   private static final String TAG = LogUtil.makeLogTag(MainActivity.class);
+
+  /**
+   * Defines an enum type to determine whether the application is in
+   * "team scouting mode" or "match scouting mode".
+   */
+  public static enum ScoutMode {
+    TEAM,
+    MATCH,
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

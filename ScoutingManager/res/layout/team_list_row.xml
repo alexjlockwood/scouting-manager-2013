@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:paddingBottom="5dp"
-    android:paddingTop="5dp"
-    android:background="@drawable/activatable_item_background">
+    android:background="@drawable/activatable_item_background"
+    android:padding="8dp" >
 
     <ImageView
         android:id="@+id/team_list_row_photo"

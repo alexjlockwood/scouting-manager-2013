@@ -5,6 +5,7 @@ import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
@@ -12,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
@@ -19,24 +21,31 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 
+import edu.cmu.girlsofsteel.scout.MainActivity.ScoutMode;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
-import edu.cmu.girlsofsteel.scout.util.DatabaseUtil;
 import edu.cmu.girlsofsteel.scout.util.ExportDatabaseTask;
+import edu.cmu.girlsofsteel.scout.util.StorageUtil;
+import edu.cmu.girlsofsteel.scout.util.UIUtils;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.ActionMode;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 
@@ -44,10 +53,11 @@ import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 public class TeamListFragment extends SherlockListFragment implements MultiChoiceModeListener,
     LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
 
-  @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
   private TeamListAdapter mAdapter;
   private Set<Integer> mSelectedPositions = new LinkedHashSet<Integer>();
+  private CompoundButton mScoutModeView;
+  private ScoutMode mScoutMode;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -58,16 +68,59 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     listView.setCacheColorHint(Color.WHITE);
   }
 
+  @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    mAdapter = new TeamListAdapter(getActivity());
+    final SherlockFragmentActivity activity = getSherlockActivity();
+    mAdapter = new TeamListAdapter(activity);
     setListAdapter(mAdapter);
     setListShown(false);
     setEmptyText(getActivity().getString(R.string.message_no_teams));
     setHasOptionsMenu(true);
     getLoaderManager().initLoader(TEAM_LOADER_ID, null, this);
-    ActionMode.setMultiChoiceMode(getListView(), getActivity(), this);
+    ActionMode.setMultiChoiceMode(getListView(), activity, this);
+
+    if (UIUtils.hasICS()) {
+      mScoutModeView = new Switch(activity);
+      int padding = activity.getResources()
+          .getDimensionPixelSize(R.dimen.action_bar_switch_padding);
+      mScoutModeView.setPadding(0, 0, padding, 0);
+      ((Switch) mScoutModeView).setTextOff("Team");
+      ((Switch) mScoutModeView).setTextOn("Match");
+    } else {
+      mScoutModeView = new ToggleButton(activity);
+      ((ToggleButton) mScoutModeView).setTextOff("Team");
+      ((ToggleButton) mScoutModeView).setTextOn("Match");
+    }
+
+    activity.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+        ActionBar.DISPLAY_SHOW_CUSTOM);
+    activity.getSupportActionBar().setCustomView(mScoutModeView, new ActionBar.LayoutParams(
+        ActionBar.LayoutParams.WRAP_CONTENT,
+        ActionBar.LayoutParams.WRAP_CONTENT,
+        Gravity.CENTER_VERTICAL | Gravity.END));
+
+    mScoutMode = StorageUtil.getScoutMode(getActivity());
+    mScoutModeView.setChecked(mScoutMode == ScoutMode.MATCH);
+
+    mScoutModeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+          Toast.makeText(activity, "Match mode selected!", Toast.LENGTH_SHORT).show();
+        } else {
+          Toast.makeText(activity, "Team mode selected!", Toast.LENGTH_SHORT).show();
+        }
+      }
+    });
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    // Save most recent scout mode to SharedPreferences
+    StorageUtil.setScoutMode(getActivity(), mScoutMode);
   }
 
   @Override
@@ -118,7 +171,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
     // WARNING: This is a hack! When commenting out this line, the contextual
     // action bar will not close after the first time an action item has been
-    // clicked.
+    // clicked. Either this is a bug with ABS or I am missing something...
     ActionMode.setMultiChoiceMode(getListView(), getActivity(), this);
 
     switch (item.getItemId()) {
@@ -175,7 +228,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   /**********************/
 
   private static final int TEAM_LOADER_ID = 0x01;
-  private static final String[] PROJECTION = new String[] { Teams._ID, Teams.NUMBER, Teams.PHOTO };
+  private static final String[] PROJ = new String[] { Teams._ID, Teams.NUMBER, Teams.PHOTO };
   private static final String DEFAULT_SORT = Teams.NUMBER + " COLLATE LOCALIZED ASC";
   private String mFilter;
 
@@ -183,8 +236,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     String where = TextUtils.isEmpty(mFilter) ? null : Teams.NUMBER + " LIKE ?";
     String[] whereArgs = TextUtils.isEmpty(mFilter) ? null : new String[] { mFilter + "%" };
-    return new CursorLoader(getActivity(), Teams.CONTENT_URI, PROJECTION, where, whereArgs,
-        DEFAULT_SORT);
+    return new CursorLoader(getActivity(), Teams.CONTENT_URI, PROJ, where, whereArgs, DEFAULT_SORT);
   }
 
   @Override
@@ -225,7 +277,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
                   String team = edit.getText().toString();
                   ContentValues values = new ContentValues();
                   values.put(Teams.NUMBER, team);
-                  DatabaseUtil.insertTeam(getActivity(), values);
+                  StorageUtil.insertTeam(getActivity(), values);
                 }
               })
           .setNegativeButton(R.string.cancel,
@@ -277,7 +329,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
               new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int whichButton) {
-                  DatabaseUtil.deleteTeams(getActivity(), ids);
+                  StorageUtil.deleteTeams(getActivity(), ids);
                 }
               })
           .setNegativeButton(R.string.cancel,
