@@ -6,8 +6,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 // For large screens
 public class TeamGridFragment extends SherlockFragment {
+
+  @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamGridFragment.class);
-
-
-
 }

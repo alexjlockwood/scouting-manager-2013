@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">Scouting Manager</string>
-
-    <!-- Messages -->
-    <string name="message_no_teams">No teams!</string>
-
     <!-- Common -->
+    <string name="app_name">Scouting Manager</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+
+    <!-- Team List -->
+    <string name="toggle_off_team">Team</string>
+    <string name="toggle_on_match">Match</string>
+    <string name="message_no_teams">No teams!</string>
 
     <!-- Dialogs -->
     <string name="title_add_team">Add Team</string>
@@ -29,6 +30,7 @@
     <string name="menu_search_team_hint">Search for team</string>
     <string name="menu_export">Export</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_take_picture">Take Picture</string>
 
     <plurals name="title_selected_teams">
         <item quantity="one">1 team selected</item>
@@ -42,5 +44,6 @@
 
     <!-- Camera -->
     <string name="camera_storage_directory_name">team_pictures</string>
+    <string name="camera_take_picture_failed">Unable to take team picture.</string>
 
 </resources>

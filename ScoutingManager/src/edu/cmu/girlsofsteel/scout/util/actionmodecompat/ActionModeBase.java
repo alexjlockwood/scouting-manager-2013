@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -48,6 +49,7 @@ class ActionModeBase extends ActionMode implements DialogInterface.OnClickListen
     return actionMode;
   }
 
+  @SuppressLint("CommitTransaction")
   void startInternal() {
     mMenu = new SimpleMenu(mActivity);
     mCallback.onCreateActionMode(this, mMenu);

@@ -21,6 +21,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/team_list_row_photo"
-        android:textSize="22sp" />
+        android:textSize="22sp"
+        tools:ignore="SelectableText" />
 
 </RelativeLayout>

@@ -5,12 +5,7 @@
         android:id="@+id/cab_take_team_picture"
         android:icon="@drawable/ic_menu_access_camera"
         android:showAsAction="ifRoom|withText"
-        android:title="Take picture"/>
-    <item
-        android:id="@+id/cab_action_export"
-        android:icon="@drawable/ic_menu_import_export"
-        android:showAsAction="ifRoom|withText"
-        android:title="@string/menu_export"/>
+        android:title="@string/menu_take_picture"/>
     <item
         android:id="@+id/cab_action_delete"
         android:icon="@drawable/ic_menu_delete"

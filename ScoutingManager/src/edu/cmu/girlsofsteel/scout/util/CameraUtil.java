@@ -34,9 +34,9 @@ public final class CameraUtil {
   @SuppressLint("InlinedApi")
   public static boolean hasCameraFeature(Context ctx) {
     PackageManager pm = ctx.getPackageManager();
-    if (UIUtil.hasJellyBeanMR1()) {
+    if (CompatUtil.hasJellyBeanMR1()) {
       return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
-    } else if (UIUtil.hasGingerbread()) {
+    } else if (CompatUtil.hasGingerbread()) {
       return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
           pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
     } else {

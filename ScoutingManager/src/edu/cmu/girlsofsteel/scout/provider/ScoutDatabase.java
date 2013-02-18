@@ -40,14 +40,14 @@ public class ScoutDatabase extends SQLiteOpenHelper {
   public void onCreate(SQLiteDatabase db) {
     db.execSQL("CREATE TABLE " + Tables.TEAMS + " ("
         + Teams._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + Teams.NUMBER + " INTEGER NOT NULL,"
+        + Teams.NUMBER + " TEXT NOT NULL,"
         + Teams.NAME + " TEXT,"
         + Teams.PHOTO + " TEXT,"
         + "UNIQUE (" + Teams.NUMBER + ") ON CONFLICT IGNORE);");
 
     db.execSQL("CREATE TABLE " + Tables.MATCHES + " ("
         + Matches._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + Matches.NUMBER + " INTEGER NOT NULL,"
+        + Matches.NUMBER + " TEXT NOT NULL,"
         + "UNIQUE (" + Matches.NUMBER + ") ON CONFLICT IGNORE);");
 
     db.execSQL("CREATE TABLE " + Tables.TEAM_MATCHES + " ("
