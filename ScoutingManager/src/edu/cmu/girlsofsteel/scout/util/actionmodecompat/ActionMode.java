@@ -6,7 +6,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import edu.cmu.girlsofsteel.scout.util.UIUtils;
+import edu.cmu.girlsofsteel.scout.util.UIUtil;
 
 /**
  * A compatibility shim for {@link android.view.ActionMode} that shows context
@@ -16,7 +16,7 @@ public abstract class ActionMode {
   private Object mTag;
 
   public static ActionMode start(FragmentActivity activity, Callback callback) {
-    if (UIUtils.hasHoneycomb()) {
+    if (UIUtil.hasHoneycomb()) {
       return ActionModeHoneycomb.startInternal(activity, callback);
     } else {
       return ActionModeBase.startInternal(activity, callback);
@@ -25,7 +25,7 @@ public abstract class ActionMode {
 
   public static void setMultiChoiceMode(ListView listView, FragmentActivity activity,
       MultiChoiceModeListener listener) {
-    if (UIUtils.hasHoneycomb()) {
+    if (UIUtil.hasHoneycomb()) {
       ActionModeHoneycomb.beginMultiChoiceMode(listView, activity, listener);
     } else {
       ActionModeBase.beginMultiChoiceMode(listView, activity, listener);

@@ -39,5 +39,8 @@
     <string name="export_dir_name">scouting_manager</string>
     <string name="export_file_name">csvfile.csv</string>
     <string name="export_not_mounted">External storage not mounted.</string>
-    
+
+    <!-- Camera -->
+    <string name="camera_storage_directory_name">team_pictures</string>
+
 </resources>

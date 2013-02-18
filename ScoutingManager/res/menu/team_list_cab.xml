@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/cab_take_team_picture"
+        android:icon="@drawable/ic_menu_access_camera"
+        android:showAsAction="ifRoom|withText"
+        android:title="Take picture"/>
+    <item
         android:id="@+id/cab_action_export"
         android:icon="@drawable/ic_menu_import_export"
         android:showAsAction="ifRoom|withText"

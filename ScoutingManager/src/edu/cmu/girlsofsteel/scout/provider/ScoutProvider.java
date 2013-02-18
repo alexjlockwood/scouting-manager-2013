@@ -1,5 +1,6 @@
 package edu.cmu.girlsofsteel.scout.provider;
 
+import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGI;
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGV;
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 
@@ -235,7 +236,7 @@ public class ScoutProvider extends ContentProvider {
   @Override
   public int update(Uri uri, ContentValues values, String selection,
       String[] selectionArgs) {
-    LOGV(TAG, "update(uri=" + uri + ", values=" + values.toString() + ")");
+    LOGI(TAG, "update(uri=" + uri + ", values=" + values.toString() + ")");
 
     SQLiteDatabase db = mOpenHelper.getWritableDatabase();
     String table, where = null;

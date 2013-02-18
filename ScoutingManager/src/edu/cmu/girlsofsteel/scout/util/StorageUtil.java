@@ -22,7 +22,8 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 public final class StorageUtil {
 
   public static void insertTeam(Context ctx, ContentValues initialValues) {
-    AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) { };
+    AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) {
+    };
     handler.startInsert(-1, null, Teams.CONTENT_URI, initialValues);
   }
 
@@ -53,19 +54,19 @@ public final class StorageUtil {
   @TargetApi(Build.VERSION_CODES.GINGERBREAD)
   public static void setScoutMode(Context ctx, ScoutMode mode) {
     Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
-    // Store "true" for TEAM, "false" for MATCH
-    editor.putBoolean("scout_mode", mode == ScoutMode.TEAM);
-    if (UIUtils.hasGingerbread()) {
+    // Store "false" for TEAM, "true" for MATCH
+    editor.putBoolean("scout_mode", mode == ScoutMode.MATCH);
+    if (UIUtil.hasGingerbread()) {
       editor.apply();
     } else {
       editor.commit();
     }
   }
 
-  @TargetApi(Build.VERSION_CODES.GINGERBREAD)
   public static ScoutMode getScoutMode(Context ctx) {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-    return !prefs.getBoolean("scout_mode", false) ? ScoutMode.TEAM : ScoutMode.MATCH;
+    // Store "false" for TEAM, "true" for MATCH
+    return prefs.getBoolean("scout_mode", false) ? ScoutMode.MATCH : ScoutMode.TEAM;
   }
 
   private StorageUtil() {

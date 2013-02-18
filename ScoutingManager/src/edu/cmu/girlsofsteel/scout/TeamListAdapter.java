@@ -3,7 +3,11 @@ package edu.cmu.girlsofsteel.scout;
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.widget.ResourceCursorAdapter;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,36 +26,32 @@ public class TeamListAdapter extends ResourceCursorAdapter {
     ViewHolder holder = (ViewHolder) view.getTag();
     if (holder == null) {
       holder = new ViewHolder();
-
       // cache TextView ids
       holder.teamNum = (TextView) view.findViewById(R.id.team_list_row_number);
-      // holder.teamPhoto = (ImageView)
-      // view.findViewById(R.id.team_list_row_photo);
-
+      holder.teamPhoto = (ImageView) view.findViewById(R.id.team_list_row_photo);
       // cache column indices
       holder.teamNumCol = cur.getColumnIndexOrThrow(Teams.NUMBER);
-      // holder.teamPhotoCol = cur.getColumnIndexOrThrow(Teams.TEAM_PHOTO);
-
+      holder.teamPhotoCol = cur.getColumnIndexOrThrow(Teams.PHOTO);
       view.setTag(holder);
     }
 
-    holder.teamNum.setText("" + cur.getInt(holder.teamNumCol));
+    holder.teamNum.setText(cur.getString(holder.teamNumCol));
 
-    // String uri = cur.getString(holder.teamPhotoCol);
-    // if (!TextUtils.isEmpty(uri)) {
-    // long photoId = Long.parseLong(Uri.parse(uri).getLastPathSegment());
-    // Bitmap bitmap =
-    // MediaStore.Images.Thumbnails.getThumbnail(ctx.getContentResolver(),
-    // photoId, MediaStore.Images.Thumbnails.MICRO_KIND, null);
-    // holder.teamPhoto.setImageBitmap(bitmap);
-    // } else {
-    // holder.teamPhoto.setImageDrawable(ctx.getResources().getDrawable(R.drawable.ic_contact_picture));
-    // }
+    String uri = cur.getString(holder.teamPhotoCol);
+    if (!TextUtils.isEmpty(uri)) {
+      long photoId = Long.parseLong(Uri.parse(uri).getLastPathSegment());
+      Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(ctx.getContentResolver(), photoId,
+          MediaStore.Images.Thumbnails.MICRO_KIND, null);
+      holder.teamPhoto.setImageBitmap(bitmap);
+    } else {
+      holder.teamPhoto.setImageDrawable(ctx.getResources().getDrawable(
+          R.drawable.ic_contact_picture));
+    }
   }
 
   private static class ViewHolder {
-    TextView teamNum;
-    ImageView teamPhoto;
-    int teamNumCol, teamPhotoCol;
+    public TextView teamNum;
+    public ImageView teamPhoto;
+    public int teamNumCol, teamPhotoCol;
   }
 }

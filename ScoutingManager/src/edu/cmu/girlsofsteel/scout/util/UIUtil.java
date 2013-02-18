@@ -9,7 +9,7 @@ import android.view.View;
 /**
  * An assortment of UI helpers.
  */
-public final class UIUtils {
+public final class UIUtil {
 
   @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   public static void setActivatedCompat(View view, boolean activated) {
@@ -43,6 +43,10 @@ public final class UIUtils {
 
   public static boolean hasJellyBean() {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN;
+  }
+
+  public static boolean hasJellyBeanMR1() {
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1;
   }
 
   public static boolean isTablet(Context context) {

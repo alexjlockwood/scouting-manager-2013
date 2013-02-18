@@ -33,8 +33,8 @@ public final class LogUtil {
   }
 
   public static void LOGV(String tag, String message) {
-    if (Log.isLoggable(tag, Log.VERBOSE)) {
+    //if (Log.isLoggable(tag, Log.VERBOSE)) {
       Log.v(tag, message);
-    }
+    //}
   }
 }

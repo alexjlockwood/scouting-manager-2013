@@ -1,20 +1,32 @@
 package edu.cmu.girlsofsteel.scout;
 
+// TODO: figure out why ActionMode doesn't persist on config changes!
+// TODO: figure out how to save selected team ids across config changes!
+
+import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGE;
+import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGW;
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -43,21 +55,72 @@ import com.actionbarsherlock.widget.SearchView;
 
 import edu.cmu.girlsofsteel.scout.MainActivity.ScoutMode;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
+import edu.cmu.girlsofsteel.scout.util.CameraUtil;
+import edu.cmu.girlsofsteel.scout.util.CameraUtil.ScaleBitmapTask;
 import edu.cmu.girlsofsteel.scout.util.ExportDatabaseTask;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
-import edu.cmu.girlsofsteel.scout.util.UIUtils;
+import edu.cmu.girlsofsteel.scout.util.UIUtil;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.ActionMode;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 
 // For small screens
 public class TeamListFragment extends SherlockListFragment implements MultiChoiceModeListener,
     LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
-
   private static final String TAG = makeLogTag(TeamListFragment.class);
+
+  private static final String KEY_SELECTED_TEAM_IDS = "selected_team_ids";
+  private static final String KEY_CAMERA_TEAM_ID = "camera_team_id";
+  private static final String KEY_PHOTO_FILE_PATH = "photo_file_path";
+
   private TeamListAdapter mAdapter;
-  private Set<Integer> mSelectedPositions = new LinkedHashSet<Integer>();
   private CompoundButton mScoutModeView;
   private ScoutMode mScoutMode;
+
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (savedInstanceState != null) {
+      // Restore selected team ids
+      mSelectedTeamIds.clear();
+      long[] ids = savedInstanceState.getLongArray(KEY_SELECTED_TEAM_IDS);
+      if (ids != null) {
+        for (long id : ids) {
+          mSelectedTeamIds.add(id);
+        }
+      }
+
+      // Restore camera info/state
+      mTeamId = savedInstanceState.getLong(KEY_CAMERA_TEAM_ID);
+      String photoFilePath = savedInstanceState.getString(KEY_PHOTO_FILE_PATH);
+      if (photoFilePath != null) {
+        mPhotoFile = new File(photoFilePath);
+      }
+    }
+  }
+
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+
+    // Save selected team ids
+    if (mSelectedTeamIds.size() > 0) {
+      int numSelected = mSelectedTeamIds.size();
+      long[] ids = new long[numSelected];
+      Object[] temp = mSelectedTeamIds.toArray();
+      for (int i = 0; i < numSelected; i++) {
+        ids[i] = (Long) temp[i];
+      }
+      outState.putLongArray(KEY_SELECTED_TEAM_IDS, ids);
+
+      // Save camera info/state
+      if (mTeamId != -1) {
+        outState.putLong(KEY_CAMERA_TEAM_ID, mTeamId);
+      }
+      if (mPhotoFile != null) {
+        outState.putString(KEY_PHOTO_FILE_PATH, mPhotoFile.getPath());
+      }
+    }
+  }
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -79,9 +142,10 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     setEmptyText(getActivity().getString(R.string.message_no_teams));
     setHasOptionsMenu(true);
     getLoaderManager().initLoader(TEAM_LOADER_ID, null, this);
+
     ActionMode.setMultiChoiceMode(getListView(), activity, this);
 
-    if (UIUtils.hasICS()) {
+    if (UIUtil.hasICS()) {
       mScoutModeView = new Switch(activity);
       int padding = activity.getResources()
           .getDimensionPixelSize(R.dimen.action_bar_switch_padding);
@@ -103,14 +167,15 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
     mScoutMode = StorageUtil.getScoutMode(getActivity());
     mScoutModeView.setChecked(mScoutMode == ScoutMode.MATCH);
-
     mScoutModeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
           Toast.makeText(activity, "Match mode selected!", Toast.LENGTH_SHORT).show();
+          mScoutMode = ScoutMode.MATCH;
         } else {
           Toast.makeText(activity, "Team mode selected!", Toast.LENGTH_SHORT).show();
+          mScoutMode = ScoutMode.TEAM;
         }
       }
     });
@@ -119,25 +184,30 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   @Override
   public void onPause() {
     super.onPause();
-    // Save most recent scout mode to SharedPreferences
     StorageUtil.setScoutMode(getActivity(), mScoutMode);
   }
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
-    Toast.makeText(getActivity(), "Team clicked!", Toast.LENGTH_SHORT).show();
+    String toast = "Team clicked (" + (mScoutMode == ScoutMode.TEAM ? "team mode)" : "match mode)");
+    Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT).show();
   }
 
   /****************/
   /** ACTION BAR **/
   /****************/
 
+  @SuppressLint("InlinedApi")
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.team_list_actionbar, menu);
     SearchView searchView = (SearchView) menu.findItem(R.id.search_view).getActionView();
     searchView.setOnQueryTextListener(this);
-    searchView.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
+    int inputTypeCompat = InputType.TYPE_CLASS_NUMBER;
+    if (UIUtil.hasHoneycomb()) {
+      inputTypeCompat |= InputType.TYPE_NUMBER_VARIATION_NORMAL;
+    }
+    searchView.setInputType(inputTypeCompat);
     super.onCreateOptionsMenu(menu, inflater);
   }
 
@@ -156,23 +226,46 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   /** CONTEXTUAL ACTION BAR **/
   /***************************/
 
+  private List<Long> mSelectedTeamIds = new LinkedList<Long>();
+
+  private android.view.MenuItem mDeleteTeamMenuItem;
+  private android.view.MenuItem mImportExportMenuItem;
+  private android.view.MenuItem mTakePictureMenuItem;
+
   @Override
   public boolean onCreateActionMode(ActionMode mode, android.view.Menu menu) {
     android.view.MenuInflater inflater = mode.getMenuInflater();
     inflater.inflate(R.menu.team_list_cab, menu);
-    mSelectedPositions.clear();
+    mDeleteTeamMenuItem = menu.findItem(R.id.cab_action_delete);
+    mImportExportMenuItem = menu.findItem(R.id.cab_action_export);
+    mTakePictureMenuItem = menu.findItem(R.id.cab_take_team_picture);
+
+    // Display menu item iff camera is available
+    mTakePictureMenuItem.setVisible(CameraUtil.hasCamera(getActivity()));
+
+    // Handle coming back from configuration change
+    int numSelectedTeams = mSelectedTeamIds.size();
+    if (numSelectedTeams > 0) {
+      mode.setTitle(getResources().getQuantityString(R.plurals.title_selected_teams,
+          numSelectedTeams, numSelectedTeams));
+    }
     return true;
   }
 
   @Override
   public boolean onActionItemClicked(ActionMode mode, android.view.MenuItem item) {
-    long[] ids = getListView().getCheckedItemIds();
+    int numSelected = mSelectedTeamIds.size();
+    long[] ids = new long[numSelected];
+    Object[] temp = mSelectedTeamIds.toArray();
+    for (int i = 0; i < numSelected; i++) {
+      ids[i] = (Long) temp[i];
+    }
     mode.finish();
 
     // WARNING: This is a hack! When commenting out this line, the contextual
     // action bar will not close after the first time an action item has been
     // clicked. Either this is a bug with ABS or I am missing something...
-    ActionMode.setMultiChoiceMode(getListView(), getActivity(), this);
+    ActionMode.setMultiChoiceMode(getListView(), getSherlockActivity(), this);
 
     switch (item.getItemId()) {
       case R.id.cab_action_delete:
@@ -180,7 +273,14 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
         dialog.show(getFragmentManager(), DeleteTeamDialog.class.getSimpleName());
         return true;
       case R.id.cab_action_export:
-        new ExportDatabaseTask(getSherlockActivity()).execute(Teams.CONTENT_URI);
+        new ExportDatabaseTask(getActivity()).execute(Teams.CONTENT_URI);
+        return true;
+      case R.id.cab_take_team_picture:
+        if (ids.length != 1) {
+          LOGW(TAG, "Warning! Only one list item id should be selected!");
+        } else {
+          takeTeamPicture(ids[0]);
+        }
         return true;
     }
     return false;
@@ -189,13 +289,23 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   @Override
   public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
     if (checked) {
-      mSelectedPositions.add(position);
+      mSelectedTeamIds.add(id);
     } else {
-      mSelectedPositions.remove(position);
+      mSelectedTeamIds.remove(id);
     }
-    int numSelectedTeams = mSelectedPositions.size();
+
+    int numSelectedTeams = mSelectedTeamIds.size();
     mode.setTitle(getResources().getQuantityString(R.plurals.title_selected_teams,
         numSelectedTeams, numSelectedTeams));
+
+    if (numSelectedTeams == 1) {
+      mDeleteTeamMenuItem.setVisible(true);
+      mImportExportMenuItem.setVisible(true);
+      mTakePictureMenuItem.setVisible(CameraUtil.hasCamera(getActivity()));
+    } else {
+      // Hide camera icon if more than one team is selected
+      mTakePictureMenuItem.setVisible(false);
+    }
   }
 
   @Override
@@ -205,6 +315,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
   @Override
   public void onDestroyActionMode(ActionMode mode) {
+    mSelectedTeamIds.clear();
   }
 
   /*************************/
@@ -342,4 +453,36 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
           .create();
     }
   }
+
+  /****************************/
+  /** CAMERA & TEAM PICTURES **/
+  /****************************/
+
+  private static final int REQUEST_CODE_TAKE_TEAM_PICTURE = 1;
+
+  private File mPhotoFile = null;
+  private long mTeamId = 0L;
+
+  public void takeTeamPicture(long teamId) {
+    try {
+      mTeamId = teamId;
+      mPhotoFile = CameraUtil.createImageFile(getActivity());
+    } catch (IOException e) {
+      LOGE(TAG, "Could not create image file!");
+      return;
+    }
+
+    Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    takePicture.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mPhotoFile));
+    startActivityForResult(takePicture, REQUEST_CODE_TAKE_TEAM_PICTURE);
+  }
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_TAKE_TEAM_PICTURE) {
+      new ScaleBitmapTask(getActivity(), mPhotoFile, mTeamId).execute();
+    }
+  }
+
 }

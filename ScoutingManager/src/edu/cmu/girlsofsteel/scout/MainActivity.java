@@ -31,5 +31,4 @@ public class MainActivity extends SherlockFragmentActivity {
     getSupportMenuInflater().inflate(R.menu.activity_main, menu);
     return true;
   }
-
 }

@@ -43,17 +43,18 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + Teams.NUMBER + " INTEGER NOT NULL,"
         + Teams.NAME + " TEXT,"
         + Teams.PHOTO + " TEXT,"
-        + "UNIQUE (" + Teams.NUMBER + ") ON CONFLICT REPLACE);");
+        + "UNIQUE (" + Teams.NUMBER + ") ON CONFLICT IGNORE);");
 
     db.execSQL("CREATE TABLE " + Tables.MATCHES + " ("
         + Matches._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
         + Matches.NUMBER + " INTEGER NOT NULL,"
-        + "UNIQUE (" + Matches.NUMBER + ") ON CONFLICT REPLACE);");
+        + "UNIQUE (" + Matches.NUMBER + ") ON CONFLICT IGNORE);");
 
     db.execSQL("CREATE TABLE " + Tables.TEAM_MATCHES + " ("
         + TeamMatches._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
         + TeamMatches.MATCH_ID + " INTEGER NOT NULL " + References.MATCH_ID + ","
-        + TeamMatches.TEAM_ID + " INTEGER NOT NULL " + References.TEAM_ID + ");");
+        + TeamMatches.TEAM_ID + " INTEGER NOT NULL " + References.TEAM_ID + ","
+        + "UNIQUE (" + TeamMatches.MATCH_ID + "," + TeamMatches.TEAM_ID + ") ON CONFLICT IGNORE);");
   }
 
   /**
