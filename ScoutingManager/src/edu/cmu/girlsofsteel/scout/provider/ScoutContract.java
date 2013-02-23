@@ -12,29 +12,135 @@ import android.provider.BaseColumns;
  */
 public final class ScoutContract {
 
+  //@formatter:off
   /** Column names for teams table */
   interface TeamsColumns {
-    // The team's unique number
+
+    /** The team's unique number */
     String NUMBER = "team_number";
-    // The team's nickname
+    /** The team's nickname */
     String NAME = "team_name";
-    // The uri address for the team's photo
+    /** The uri address for the team's photo */
     String PHOTO = "team_photo";
+
+    /** Does the robot score on the low hoop? */
+    String ROBOT_CAN_SCORE_ON_LOW = "robot_can_score_on_low";
+    /** Does the robot score on the middle hoop? */
+    String ROBOT_CAN_SCORE_ON_MID = "robot_can_score_on_mid";
+    /** Does the robot score on the high hoop? */
+    String ROBOT_CAN_SCORE_ON_HIGH = "robot_can_score_on_high";
+
+    /** Can the robot climb? */
+    String ROBOT_CAN_CLIMB = "robot_can_climb";
+    /** Can the robot climb on level 1? */
+    String ROBOT_CAN_CLIMB_LEVEL_ONE = "robot_can_climb_level_one";
+    /** Can the robot climb on level 2? */
+    String ROBOT_CAN_CLIMB_LEVEL_TWO = "robot_can_climb_level_two";
+    /** Can the robot climb on level 3? */
+    String ROBOT_CAN_CLIMB_LEVEL_THREE = "robot_can_climb_level_three";
+    /** Can the robot help climb? */
+    String ROBOT_CAN_HELP_CLIMB = "robot_can_help_climb";
+
+    /** Can the robot go under the tower? */
+    String ROBOT_CAN_GO_UNDER_TOWER = "robot_go_under_tower";
+    /** How many driving gears does the robot have? */
+    String ROBOT_NUM_DRIVING_GEARS = "robot_num_driving_gears";
+    /**
+     * 0 - Basic tank drive (4 wheels)
+     * 1 - Basic tank drive (6 wheels)
+     * 2 - Basic tank drive (8 wheels)
+     * 3 - Basic tank drive (tank tread)
+     * 4 - Omni (kiwi)
+     * 5 - Omni (mecanum)
+     * 6 - Omni (swerve/crab)
+     * 7 - Other
+     */
+    String ROBOT_DRIVE_TRAIN = "robot_drive_train";
+    /**
+     * 0 - KoP
+     * 1 - plaction/traction
+     * 2 - pneumatic
+     * 3 - mecanum
+     * 4 - other
+     */
+    String ROBOT_TYPE_OF_WHEEL = "robot_type_of_wheel";
   }
 
   /** Column names for matches table */
   interface MatchesColumns {
-    // The match's unique number
+    /** The match's unique number */
     String NUMBER = "match_number";
   }
 
   /** Column names for team_matches table */
   interface TeamMatchesColumns {
-    // References '_id' in Teams table
+    /** References '_id' in Teams table */
     String TEAM_ID = "team_id";
-    // References '_id' in Matches table
+    /** References '_id' in Matches table */
     String MATCH_ID = "match_id";
+
+    String AUTO_SHOTS_MADE_LOW = "auto_shots_made_low";
+    String AUTO_SHOTS_MADE_MID = "auto_shots_made_mid";
+    String AUTO_SHOTS_MADE_HIGH = "auto_shots_made_high";
+    String TELE_SHOTS_MADE_LOW = "tele_shots_made_low";
+    String TELE_SHOTS_MADE_MID = "tele_shots_made_mid";
+    String TELE_SHOTS_MADE_HIGH = "tele_shots_made_high";
+
+    String SHOOTS_FROM_BACK_RIGHT = "shoots_from_back_right";
+    String SHOOTS_FROM_BACK_LEFT = "shoots_from_back_left";
+    String SHOOTS_FROM_FRONT_RIGHT = "shoots_from_front_right";
+    String SHOOTS_FROM_FRONT_LEFT = "shoots_from_front_left";
+    String SHOOTS_FROM_SIDE_RIGHT = "shoots_from_side_right";
+    String SHOOTS_FROM_SIDE_LEFT = "shoots_from_side_left";
+    String SHOOTS_FROM_FRONT = "shoots_from_front";
+    String SHOOTS_FROM_ANYWHERE = "shoots_from_anywhere";
+    String SHOOTS_FROM_OTHER = "shoots_from_other";
+
+    String TOWER_LEVEL_NONE = "tower_level_none";
+    String TOWER_LEVEL_ONE = "tower_level_one";
+    String TOWER_LEVEL_TWO = "tower_level_two";
+    String TOWER_LEVEL_THREE = "tower_level_three";
+    String TOWER_FELL_OFF = "tower_fell_off";
+
+    /**
+     * 0 - Impedes performance
+     * 1 - Neutral
+     * 2 - High scoring
+     */
+    String HUMAN_PLAYER_ABILITY = "human_player_ability";
+
+    String FRISBEES_FROM_FEEDER = "frisbees_from_feeder";
+    String FRISBEES_FROM_FLOOR = "frisbees_from_floor";
+
+    /**
+     * 0 - Defensive
+     * 1 - Neutral
+     * 2 - Offensive
+     */
+    String ROBOT_STRATEGY = "robot_strategy";
+
+    /**
+     * 0 - Slow
+     * 1 - Medium
+     * 2 - Fast
+     */
+    String ROBOT_SPEED = "robot_speed";
+
+    /**
+     * 0 - Low
+     * 1 - Medium
+     * 2 - High
+     */
+    String ROBOT_MANEUVERABILITY = "robot_maneuverability";
+
+    /**
+     * 0 - Low
+     * 1 - Medium
+     * 2 - High
+     */
+    String ROBOT_PENALTY = "robot_penalty";
   }
+  //@formatter:on
 
   public static final String AUTHORITY = "edu.cmu.girlsofsteel.scout";
   private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);

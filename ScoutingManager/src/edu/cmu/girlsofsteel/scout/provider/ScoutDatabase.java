@@ -40,20 +40,74 @@ public class ScoutDatabase extends SQLiteOpenHelper {
   public void onCreate(SQLiteDatabase db) {
     db.execSQL("CREATE TABLE " + Tables.TEAMS + " ("
         + Teams._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+
         + Teams.NUMBER + " TEXT NOT NULL,"
         + Teams.NAME + " TEXT,"
         + Teams.PHOTO + " TEXT,"
+
+        + Teams.ROBOT_CAN_SCORE_ON_LOW + " INTEGER,"
+        + Teams.ROBOT_CAN_SCORE_ON_MID + " INTEGER,"
+        + Teams.ROBOT_CAN_SCORE_ON_HIGH + " INTEGER,"
+
+        + Teams.ROBOT_CAN_CLIMB + " INTEGER,"
+        + Teams.ROBOT_CAN_CLIMB_LEVEL_ONE + " INTEGER,"
+        + Teams.ROBOT_CAN_CLIMB_LEVEL_TWO + " INTEGER,"
+        + Teams.ROBOT_CAN_CLIMB_LEVEL_THREE + " INTEGER,"
+        + Teams.ROBOT_CAN_HELP_CLIMB + " INTEGER,"
+
+        + Teams.ROBOT_CAN_GO_UNDER_TOWER + " INTEGER,"
+        + Teams.ROBOT_NUM_DRIVING_GEARS + " INTEGER,"
+        + Teams.ROBOT_DRIVE_TRAIN + " INTEGER,"
+        + Teams.ROBOT_TYPE_OF_WHEEL + " INTEGER,"
+
         + "UNIQUE (" + Teams.NUMBER + ") ON CONFLICT IGNORE);");
 
     db.execSQL("CREATE TABLE " + Tables.MATCHES + " ("
         + Matches._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+
         + Matches.NUMBER + " TEXT NOT NULL,"
+
         + "UNIQUE (" + Matches.NUMBER + ") ON CONFLICT IGNORE);");
 
     db.execSQL("CREATE TABLE " + Tables.TEAM_MATCHES + " ("
         + TeamMatches._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+
         + TeamMatches.MATCH_ID + " INTEGER NOT NULL " + References.MATCH_ID + ","
         + TeamMatches.TEAM_ID + " INTEGER NOT NULL " + References.TEAM_ID + ","
+
+        + TeamMatches.AUTO_SHOTS_MADE_LOW + " INTEGER,"
+        + TeamMatches.AUTO_SHOTS_MADE_MID + " INTEGER,"
+        + TeamMatches.AUTO_SHOTS_MADE_HIGH + " INTEGER,"
+        + TeamMatches.TELE_SHOTS_MADE_LOW + " INTEGER,"
+        + TeamMatches.TELE_SHOTS_MADE_MID + " INTEGER,"
+        + TeamMatches.TELE_SHOTS_MADE_HIGH + " INTEGER,"
+
+        + TeamMatches.SHOOTS_FROM_BACK_RIGHT + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_BACK_LEFT + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_FRONT_RIGHT + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_FRONT_LEFT + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_SIDE_RIGHT + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_SIDE_LEFT + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_FRONT + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_ANYWHERE + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_OTHER + " INTEGER,"
+
+        + TeamMatches.TOWER_LEVEL_NONE + " INTEGER,"
+        + TeamMatches.TOWER_LEVEL_ONE + " INTEGER,"
+        + TeamMatches.TOWER_LEVEL_TWO + " INTEGER,"
+        + TeamMatches.TOWER_LEVEL_THREE + " INTEGER,"
+        + TeamMatches.TOWER_FELL_OFF + " INTEGER,"
+
+        + TeamMatches.HUMAN_PLAYER_ABILITY + " INTEGER,"
+
+        + TeamMatches.FRISBEES_FROM_FEEDER + " INTEGER,"
+        + TeamMatches.FRISBEES_FROM_FLOOR + " INTEGER,"
+
+        + TeamMatches.ROBOT_STRATEGY + " INTEGER,"
+        + TeamMatches.ROBOT_SPEED + " INTEGER,"
+        + TeamMatches.ROBOT_MANEUVERABILITY + " INTEGER,"
+        + TeamMatches.ROBOT_PENALTY + " INTEGER,"
+
         + "UNIQUE (" + TeamMatches.MATCH_ID + "," + TeamMatches.TEAM_ID + ") ON CONFLICT IGNORE);");
   }
 
