@@ -10,7 +10,6 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -22,12 +21,9 @@ public class ScoutTeamFragment extends SherlockFragment implements
   @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
 
-  private TextView mTextView;
-
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_team_scout, container, false);
-    mTextView = (TextView) view.findViewById(R.id.example_text_view);
     return view;
   }
 
@@ -36,7 +32,6 @@ public class ScoutTeamFragment extends SherlockFragment implements
     super.onActivityCreated(savedInstanceState);
     getSherlockActivity().getSupportActionBar().setTitle(R.string.title_team_scout);
     getLoaderManager().initLoader(TEAM_LOADER_ID, getArguments(), this);
-    mTextView.setText("" + getArguments().getLong(TEAM_ID_ARG));
   }
 
   /**********************/

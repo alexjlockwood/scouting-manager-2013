@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
+import edu.cmu.girlsofsteel.scout.MainActivity.ScoutMode;
 import edu.cmu.girlsofsteel.scout.util.LogUtil;
 
 public class ScoutActivity extends SherlockFragmentActivity {

@@ -13,7 +13,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import edu.cmu.girlsofsteel.scout.ScoutMode;
+import edu.cmu.girlsofsteel.scout.MainActivity.ScoutMode;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
