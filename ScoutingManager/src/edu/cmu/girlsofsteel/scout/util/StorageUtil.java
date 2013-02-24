@@ -30,6 +30,15 @@ public final class StorageUtil {
   }
 
   /**
+   * Update a single team's record in the database. This method is asynchronous.
+   */
+  public static void updateTeam(Context ctx, long teamId, ContentValues values) {
+    AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) {
+    };
+    handler.startUpdate(-1, null, Teams.teamIdUri(teamId), values, null, null);
+  }
+
+  /**
    * Delete multiple teams from the database. This method is asynchronous.
    */
   public static void deleteTeams(final Context ctx, final long... teamIds) {

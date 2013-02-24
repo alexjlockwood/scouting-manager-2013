@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Switch xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toggle_goes_under_tower"
+    style="@style/team_input_main_view"
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:textOff="@string/no"
+    android:textOn="@string/yes" />

@@ -5,7 +5,9 @@
     <string name="app_name">Scouting Manager</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <!-- Titles -->
     <string name="title_team_scout">Team Scout</string>
     <string name="title_match_scout">Match Scout</string>
@@ -49,5 +51,48 @@
     <!-- Camera -->
     <string name="camera_storage_directory_name">team_pictures</string>
     <string name="camera_take_picture_failed">Unable to take team picture.</string>
+
+    <!-- Team Scout -->
+    <string name="team_name">Team name</string>
+    <string name="team_rank">Rank</string>
+    <string name="score">Score</string>
+    <string name="low">Low</string>
+    <string name="middle">Middle</string>
+    <string name="high">High</string>
+    <string name="climb">Climb</string>
+    <string name="not_available">N/A</string>
+    <string name="level_one">Level 1</string>
+    <string name="level_two">Level 2</string>
+    <string name="level_three">Level 3</string>
+    <string name="helps_climb">Helps Climb</string>
+    <string name="drive_train">Drive Train</string>
+    <string name="driving_gears">Driving Gears</string>
+    <string name="one">One</string>
+    <string name="multiple">Multiple</string>
+    
+    <string-array name="drive_options">
+        <item>None</item>
+        <item>4 Wheels</item>
+        <item>6 Wheels</item>
+        <item>8 Wheels</item>
+        <item>Tank Tread</item>
+        <item>Kiwi</item>
+        <item>Mecanum</item>
+        <item>Swerve/crab</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="wheel_type">Wheel Type</string>
+
+    <string-array name="wheel_options">
+        <item>None</item>
+        <item>KoP</item>
+        <item>Plaction/traction</item>
+        <item>Pneumatic</item>
+        <item>Mecanum</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="goes_under_tower">Goes Under Tower</string>
 
 </resources>

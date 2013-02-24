@@ -4,6 +4,7 @@ import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGE;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
@@ -21,13 +22,14 @@ public class ScoutActivity extends SherlockFragmentActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     if (getIntent() != null) {
       mTeamId = getIntent().getLongExtra(MainActivity.TEAM_ID_EXTRA, -1L);
-      boolean scoutMode = getIntent().getBooleanExtra(MainActivity.SCOUT_MODE_EXTRA, false);
-      mScoutMode = scoutMode ? ScoutMode.MATCH : ScoutMode.TEAM;
+      mScoutMode = getIntent().getBooleanExtra(MainActivity.SCOUT_MODE_EXTRA, false)
+          ? ScoutMode.MATCH : ScoutMode.TEAM;
     }
 
     if (mTeamId == -1L || mScoutMode == null) {
@@ -36,24 +38,18 @@ public class ScoutActivity extends SherlockFragmentActivity {
 
     FragmentManager fm = getSupportFragmentManager();
     if (fm.findFragmentById(android.R.id.content) == null) {
-      Fragment frag;
-      if (mScoutMode == ScoutMode.TEAM) {
-        frag = ScoutTeamFragment.newInstance(mTeamId);
-      } else {
-        frag = ScoutMatchFragment.newInstance(mTeamId);
-      }
+      Fragment frag = mScoutMode == ScoutMode.TEAM
+          ? ScoutTeamFragment.newInstance(mTeamId)
+          : ScoutMatchFragment.newInstance(mTeamId);
       fm.beginTransaction().add(android.R.id.content, frag).commit();
     }
   }
 
   @Override
   public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-    int menuId;
-    if (mScoutMode == ScoutMode.TEAM) {
-      menuId = R.menu.activity_team_scout;
-    } else {
-      menuId = R.menu.activity_match_scout;
-    }
+    int menuId = mScoutMode == ScoutMode.TEAM
+        ? R.menu.activity_team_scout
+        : R.menu.activity_match_scout;
     getSupportMenuInflater().inflate(menuId, menu);
     return true;
   }
@@ -62,8 +58,7 @@ public class ScoutActivity extends SherlockFragmentActivity {
   public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
     switch (item.getItemId()) {
       case android.R.id.home:
-        // NavUtils.navigateUpFromSameTask(this);
-        finish();
+        NavUtils.navigateUpFromSameTask(this);
         break;
     }
     return super.onOptionsItemSelected(item);
