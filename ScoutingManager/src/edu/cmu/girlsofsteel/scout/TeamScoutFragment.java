@@ -17,6 +17,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
 public class TeamScoutFragment extends SherlockFragment implements LoaderCallbacks<Cursor> {
+
   @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
 
@@ -43,8 +44,8 @@ public class TeamScoutFragment extends SherlockFragment implements LoaderCallbac
 
   private static final int TEAM_LOADER_ID = 0x01;
 
-  // private static final String[] PROJ = new String[] { Teams._ID,
-  // Teams.NUMBER, Teams.PHOTO };
+  // private static final String[] PROJECTION = { Teams._ID, Teams.NUMBER,
+  // Teams.PHOTO };
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -54,15 +55,18 @@ public class TeamScoutFragment extends SherlockFragment implements LoaderCallbac
 
   @Override
   public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-    populateViews(data);
+    populateTeamData(data);
   }
 
   @Override
   public void onLoaderReset(Loader<Cursor> data) {
   }
 
-  private void populateViews(Cursor data) {
-    // populate the screen with the data
+  private void populateTeamData(Cursor data) {
+    if (data.moveToFirst()) {
+      String teamNumber = data.getString(data.getColumnIndexOrThrow(Teams.NUMBER));
+      getSherlockActivity().getSupportActionBar().setSubtitle("Team " + teamNumber);
+    }
   }
 
   /*****************/

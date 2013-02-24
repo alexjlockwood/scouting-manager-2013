@@ -10,22 +10,19 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
 public class MatchScoutFragment extends SherlockFragment implements LoaderCallbacks<Cursor> {
+
   @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
-
-  private TextView mTextView;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_match_scout, container, false);
-    mTextView = (TextView) view.findViewById(R.id.example_text_view);
     return view;
   }
 
@@ -34,7 +31,6 @@ public class MatchScoutFragment extends SherlockFragment implements LoaderCallba
     super.onActivityCreated(savedInstanceState);
     getSherlockActivity().getSupportActionBar().setTitle(R.string.title_match_scout);
     getLoaderManager().initLoader(TEAM_LOADER_ID, getArguments(), this);
-    mTextView.setText("" + getArguments().getLong(TEAM_ID_ARG));
   }
 
   /**********************/
@@ -42,27 +38,52 @@ public class MatchScoutFragment extends SherlockFragment implements LoaderCallba
   /**********************/
 
   private static final int TEAM_LOADER_ID = 0x01;
-
-  // private static final String[] PROJ = new String[] { Teams._ID,
-  // Teams.NUMBER, Teams.PHOTO };
+  private static final int TEAM_MATCH_LOADER_ID = 0x02;
+  private static final String[] TEAM_PROJECTION = { Teams._ID, Teams.NUMBER };
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     long teamId = args.getLong(TEAM_ID_ARG);
-    return new CursorLoader(mActivity, Teams.teamIdUri(teamId), null, null, null, null);
+    switch (id) {
+      case TEAM_LOADER_ID:
+        return new CursorLoader(mActivity, Teams.teamIdUri(teamId), TEAM_PROJECTION, null, null,
+            null);
+      case TEAM_MATCH_LOADER_ID:
+        // TODO: implement this
+        return null;
+      default:
+        // Will never happen
+        return null;
+    }
   }
 
   @Override
   public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-    populateViews(data);
+    switch (loader.getId()) {
+      case TEAM_LOADER_ID:
+        populateTeamData(data);
+        break;
+      case TEAM_MATCH_LOADER_ID:
+        populateTeamMatchData(data);
+        break;
+    }
   }
 
   @Override
   public void onLoaderReset(Loader<Cursor> data) {
   }
 
-  private void populateViews(Cursor data) {
-    // populate the screen with the data
+  private void populateTeamData(Cursor data) {
+    if (data.moveToFirst()) {
+      String teamNumber = data.getString(data.getColumnIndexOrThrow(Teams.NUMBER));
+      getSherlockActivity().getSupportActionBar().setSubtitle("Team " + teamNumber);
+    }
+  }
+
+  private void populateTeamMatchData(Cursor data) {
+    if (data.moveToFirst()) {
+      // TODO: implement this
+    }
   }
 
   /*****************/

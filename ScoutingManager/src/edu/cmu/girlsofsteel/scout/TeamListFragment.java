@@ -371,7 +371,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
               new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int whichButton) {
-                  String team = edit.getText().toString();
+                  int team = Integer.valueOf(edit.getText().toString());
                   ContentValues values = new ContentValues();
                   values.put(Teams.NUMBER, team);
                   StorageUtil.insertTeam(getActivity(), values);
