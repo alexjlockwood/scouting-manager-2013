@@ -25,7 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.InputType;
@@ -49,7 +49,6 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
-import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.CameraUtil;
@@ -60,7 +59,7 @@ import edu.cmu.girlsofsteel.scout.util.actionmodecompat.ActionMode;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 
 public class TeamListFragment extends SherlockListFragment implements MultiChoiceModeListener,
-    LoaderCallbacks<Cursor>, OnQueryTextListener {
+    LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
   private static final String TAG = makeLogTag(TeamListFragment.class);
 
   private static final String KEY_SELECTED_TEAM_IDS = "selected_team_ids";

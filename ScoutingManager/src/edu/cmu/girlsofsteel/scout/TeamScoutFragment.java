@@ -4,7 +4,7 @@ import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -16,7 +16,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
-public class TeamScoutFragment extends SherlockFragment implements LoaderCallbacks<Cursor> {
+public class TeamScoutFragment extends SherlockFragment implements
+    LoaderManager.LoaderCallbacks<Cursor> {
 
   @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
