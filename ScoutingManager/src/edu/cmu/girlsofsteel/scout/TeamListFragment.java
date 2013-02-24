@@ -14,11 +14,14 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -28,6 +31,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.ResourceCursorAdapter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -37,8 +41,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -68,7 +74,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
   private TeamListAdapter mAdapter;
   private CompoundButton mScoutModeView;
-  private ScoutMode mScoutMode;
 
   // TODO: figure out why ActionMode doesn't persist on config changes!
   // TODO: figure out how to save selected team ids across config changes!
@@ -158,13 +163,11 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
         ActionBar.LayoutParams.WRAP_CONTENT,
         Gravity.CENTER_VERTICAL | Gravity.END));
 
-    mScoutMode = StorageUtil.getScoutMode(mActivity);
-    mScoutModeView.setChecked(mScoutMode == ScoutMode.MATCH);
+    mScoutModeView.setChecked(StorageUtil.getScoutMode(mActivity) == ScoutMode.MATCH);
     mScoutModeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        mScoutMode = (isChecked) ? ScoutMode.MATCH : ScoutMode.TEAM;
-        StorageUtil.setScoutMode(mActivity, mScoutMode);
+        StorageUtil.setScoutMode(mActivity, isChecked ? ScoutMode.MATCH : ScoutMode.TEAM);
       }
     });
 
@@ -173,13 +176,9 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
   @Override
   public void onListItemClick(ListView lv, View v, int position, long id) {
-    Intent intent;
-    if (mScoutMode == ScoutMode.TEAM) {
-      intent = new Intent(mActivity, TeamScoutActivity.class);
-    } else {
-      intent = new Intent(mActivity, MatchScoutActivity.class);
-    }
+    Intent intent = new Intent(mActivity, ScoutActivity.class);
     intent.putExtra(MainActivity.TEAM_ID_EXTRA, id);
+    intent.putExtra(MainActivity.SCOUT_MODE_EXTRA, mScoutModeView.isChecked());
     startActivity(intent);
   }
 
@@ -482,5 +481,57 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   public void onAttach(Activity activity) {
     super.onAttach(activity);
     mActivity = activity;
+  }
+
+  /***********************/
+  /** Team List Adapter **/
+  /***********************/
+
+  private static class TeamListAdapter extends ResourceCursorAdapter {
+
+    @SuppressWarnings("unused")
+    private static final String TAG = makeLogTag(TeamListAdapter.class);
+    private ContentResolver mContentResolver;
+
+    public TeamListAdapter(Context ctx) {
+      super(ctx, R.layout.team_list_row, null, 0);
+      mContentResolver = ctx.getContentResolver();
+    }
+
+    @Override
+    public void bindView(View view, Context ctx, Cursor cur) {
+      ViewHolder holder = (ViewHolder) view.getTag();
+      if (holder == null) {
+        holder = new ViewHolder();
+
+        // cache TextView ids
+        holder.teamNum = (TextView) view.findViewById(R.id.team_list_row_number);
+        holder.teamPhoto = (ImageView) view.findViewById(R.id.team_list_row_photo);
+
+        // cache column indices
+        holder.teamNumCol = cur.getColumnIndexOrThrow(Teams.NUMBER);
+        holder.teamPhotoCol = cur.getColumnIndexOrThrow(Teams.PHOTO);
+        view.setTag(holder);
+      }
+
+      holder.teamNum.setText(cur.getString(holder.teamNumCol));
+
+      String uri = cur.getString(holder.teamPhotoCol);
+      if (!TextUtils.isEmpty(uri)) {
+        long photoId = Long.parseLong(Uri.parse(uri).getLastPathSegment());
+        Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(mContentResolver, photoId,
+            MediaStore.Images.Thumbnails.MICRO_KIND, null);
+        holder.teamPhoto.setImageBitmap(bitmap);
+      } else {
+        Resources res = ctx.getResources();
+        holder.teamPhoto.setImageDrawable(res.getDrawable(R.drawable.ic_contact_picture));
+      }
+    }
+
+    private static class ViewHolder {
+      public TextView teamNum;
+      public ImageView teamPhoto;
+      public int teamNumCol, teamPhotoCol;
+    }
   }
 }

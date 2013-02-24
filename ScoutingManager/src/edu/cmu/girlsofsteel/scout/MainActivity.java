@@ -14,12 +14,17 @@ public class MainActivity extends SherlockFragmentActivity {
   private static final String TAG = LogUtil.makeLogTag(MainActivity.class);
 
   // Used to pass team ids to the next activity
-  public static final String TEAM_ID_EXTRA = "team_id_extra";
+  static final String TEAM_ID_EXTRA = "team_id_extra";
+
+  // Used to pass the current scout mode to the next activity
+  static final String SCOUT_MODE_EXTRA = "scout_mode_extra";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    getSupportActionBar().setHomeButtonEnabled(false);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
   }
 
   @Override
