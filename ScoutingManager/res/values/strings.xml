@@ -5,6 +5,10 @@
     <string name="app_name">Scouting Manager</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    
+    <!-- Titles -->
+    <string name="title_team_scout">Team Scout</string>
+    <string name="title_match_scout">Match Scout</string>
 
     <!-- Team List -->
     <string name="toggle_off_team">Team</string>

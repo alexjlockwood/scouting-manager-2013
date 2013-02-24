@@ -32,6 +32,8 @@
         </activity>
         <activity android:name="edu.cmu.girlsofsteel.scout.TeamScoutActivity" >
         </activity>
+        <activity android:name="edu.cmu.girlsofsteel.scout.MatchScoutActivity" >
+        </activity>
 
         <!-- Content Provider -->
         <provider

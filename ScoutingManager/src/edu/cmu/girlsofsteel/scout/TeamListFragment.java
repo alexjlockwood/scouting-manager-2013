@@ -51,7 +51,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
-import edu.cmu.girlsofsteel.scout.MainActivity.ScoutMode;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.CameraUtil;
 import edu.cmu.girlsofsteel.scout.util.CameraUtil.ScaleBitmapTask;
@@ -165,13 +164,8 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     mScoutModeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
       @Override
       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-          Toast.makeText(activity, "Match mode selected!", Toast.LENGTH_SHORT).show();
-          mScoutMode = ScoutMode.MATCH;
-        } else {
-          Toast.makeText(activity, "Team mode selected!", Toast.LENGTH_SHORT).show();
-          mScoutMode = ScoutMode.TEAM;
-        }
+        mScoutMode = (isChecked) ? ScoutMode.MATCH : ScoutMode.TEAM;
+        StorageUtil.setScoutMode(mActivity, mScoutMode);
       }
     });
 
@@ -179,22 +173,15 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   }
 
   @Override
-  public void onPause() {
-    super.onPause();
-    StorageUtil.setScoutMode(mActivity, mScoutMode);
-  }
-
-  @Override
   public void onListItemClick(ListView lv, View v, int position, long id) {
+    Intent intent;
     if (mScoutMode == ScoutMode.TEAM) {
-      // Launch team scout activity
-      Intent intent = new Intent(mActivity, TeamScoutActivity.class);
-      intent.putExtra(MainActivity.TEAM_ID_EXTRA, id);
-      startActivity(intent);
+      intent = new Intent(mActivity, TeamScoutActivity.class);
     } else {
-      // Launch match scout activity
-      Toast.makeText(mActivity, "Team clicked (match mode)", Toast.LENGTH_SHORT).show();
+      intent = new Intent(mActivity, MatchScoutActivity.class);
     }
+    intent.putExtra(MainActivity.TEAM_ID_EXTRA, id);
+    startActivity(intent);
   }
 
   /****************/
@@ -375,9 +362,9 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-      final LayoutInflater factory = LayoutInflater.from(mActivity);
+      final LayoutInflater factory = LayoutInflater.from(getActivity());
       final EditText edit = (EditText) factory.inflate(R.layout.dialog_add_team, null);
-      final Dialog dialog = new AlertDialog.Builder(mActivity)
+      final Dialog dialog = new AlertDialog.Builder(getActivity())
           .setTitle(R.string.title_add_team)
           .setView(edit)
           .setPositiveButton(R.string.ok,
@@ -387,7 +374,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
                   String team = edit.getText().toString();
                   ContentValues values = new ContentValues();
                   values.put(Teams.NUMBER, team);
-                  StorageUtil.insertTeam(mActivity, values);
+                  StorageUtil.insertTeam(getActivity(), values);
                 }
               })
           .setNegativeButton(R.string.cancel,
@@ -433,14 +420,14 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
       final long[] ids = getArguments().getLongArray(KEY_IDS);
       String title = res.getQuantityString(R.plurals.title_delete_teams, ids.length);
       String msg = res.getQuantityString(R.plurals.message_delete_teams, ids.length, ids.length);
-      return new AlertDialog.Builder(mActivity)
+      return new AlertDialog.Builder(getActivity())
           .setTitle(title)
           .setMessage(msg)
           .setPositiveButton(R.string.ok,
               new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int whichButton) {
-                  StorageUtil.deleteTeams(mActivity, ids);
+                  StorageUtil.deleteTeams(getActivity(), ids);
                 }
               })
           .setNegativeButton(R.string.cancel,
@@ -490,7 +477,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   /*****************/
 
   // Hold a reference to the underlying Activity for convenience
-  private static Activity mActivity;
+  private Activity mActivity;
 
   @Override
   public void onAttach(Activity activity) {

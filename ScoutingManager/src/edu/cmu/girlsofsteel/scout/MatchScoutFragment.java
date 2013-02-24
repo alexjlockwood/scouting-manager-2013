@@ -16,7 +16,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
-public class TeamScoutFragment extends SherlockFragment implements LoaderCallbacks<Cursor> {
+public class MatchScoutFragment extends SherlockFragment implements LoaderCallbacks<Cursor> {
   @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
 
@@ -24,7 +24,7 @@ public class TeamScoutFragment extends SherlockFragment implements LoaderCallbac
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View view = inflater.inflate(R.layout.fragment_team_scout, container, false);
+    View view = inflater.inflate(R.layout.fragment_match_scout, container, false);
     mTextView = (TextView) view.findViewById(R.id.example_text_view);
     return view;
   }
@@ -32,7 +32,7 @@ public class TeamScoutFragment extends SherlockFragment implements LoaderCallbac
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    getSherlockActivity().getSupportActionBar().setTitle(R.string.title_team_scout);
+    getSherlockActivity().getSupportActionBar().setTitle(R.string.title_match_scout);
     getLoaderManager().initLoader(TEAM_LOADER_ID, getArguments(), this);
     mTextView.setText("" + getArguments().getLong(TEAM_ID_ARG));
   }
@@ -71,8 +71,8 @@ public class TeamScoutFragment extends SherlockFragment implements LoaderCallbac
 
   private static final String TEAM_ID_ARG = "team_id_arg";
 
-  public static TeamScoutFragment newInstance(long teamId) {
-    TeamScoutFragment frag = new TeamScoutFragment();
+  public static MatchScoutFragment newInstance(long teamId) {
+    MatchScoutFragment frag = new MatchScoutFragment();
     Bundle args = new Bundle();
     args.putLong(TEAM_ID_ARG, teamId);
     frag.setArguments(args);

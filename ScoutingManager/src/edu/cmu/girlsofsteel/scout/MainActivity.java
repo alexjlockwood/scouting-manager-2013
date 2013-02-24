@@ -37,13 +37,4 @@ public class MainActivity extends SherlockFragmentActivity {
     }
     return super.onOptionsItemSelected(item);
   }
-
-  /**
-   * Defines an enum type to determine whether the application is in
-   * "team scouting mode" or "match scouting mode".
-   */
-  public static enum ScoutMode {
-    TEAM,
-    MATCH,
-  }
 }

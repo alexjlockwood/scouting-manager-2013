@@ -8,10 +8,10 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import edu.cmu.girlsofsteel.scout.util.LogUtil;
 
-public class TeamScoutActivity extends SherlockFragmentActivity {
+public class MatchScoutActivity extends SherlockFragmentActivity {
 
   // @SuppressWarnings("unused")
-  private static final String TAG = LogUtil.makeLogTag(TeamScoutActivity.class);
+  private static final String TAG = LogUtil.makeLogTag(MatchScoutActivity.class);
 
   private long mTeamId = -1L;
 
@@ -28,14 +28,14 @@ public class TeamScoutActivity extends SherlockFragmentActivity {
 
     FragmentManager fm = getSupportFragmentManager();
     if (fm.findFragmentById(android.R.id.content) == null) {
-      TeamScoutFragment frag = TeamScoutFragment.newInstance(mTeamId);
+      MatchScoutFragment frag = MatchScoutFragment.newInstance(mTeamId);
       fm.beginTransaction().add(android.R.id.content, frag).commit();
     }
   }
 
   @Override
   public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-    getSupportMenuInflater().inflate(R.menu.activity_team_scout, menu);
+    getSupportMenuInflater().inflate(R.menu.activity_match_scout, menu);
     return true;
   }
 
