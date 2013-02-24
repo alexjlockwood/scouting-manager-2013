@@ -25,7 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.InputType;
@@ -49,19 +49,19 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
+import com.actionbarsherlock.widget.SearchView.OnQueryTextListener;
 
 import edu.cmu.girlsofsteel.scout.MainActivity.ScoutMode;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.CameraUtil;
 import edu.cmu.girlsofsteel.scout.util.CameraUtil.ScaleBitmapTask;
-import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 import edu.cmu.girlsofsteel.scout.util.CompatUtil;
+import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.ActionMode;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 
 public class TeamListFragment extends SherlockListFragment implements MultiChoiceModeListener,
-    LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
-
+    LoaderCallbacks<Cursor>, OnQueryTextListener {
   private static final String TAG = makeLogTag(TeamListFragment.class);
 
   private static final String KEY_SELECTED_TEAM_IDS = "selected_team_ids";
@@ -71,15 +71,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   private TeamListAdapter mAdapter;
   private CompoundButton mScoutModeView;
   private ScoutMode mScoutMode;
-
-  // Hold a reference to the underlying Activity for convenience
-  private static Activity mActivity;
-
-  @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    mActivity = activity;
-  }
 
   // TODO: figure out why ActionMode doesn't persist on config changes!
   // TODO: figure out how to save selected team ids across config changes!
@@ -195,8 +186,15 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
   @Override
   public void onListItemClick(ListView lv, View v, int position, long id) {
-    String scoutMode = (mScoutMode == ScoutMode.TEAM) ? "(team mode)" : "(match mode)";
-    Toast.makeText(mActivity, "Team clicked " + scoutMode, Toast.LENGTH_SHORT).show();
+    if (mScoutMode == ScoutMode.TEAM) {
+      // Launch team scout activity
+      Intent intent = new Intent(mActivity, TeamScoutActivity.class);
+      intent.putExtra(MainActivity.TEAM_ID_EXTRA, id);
+      startActivity(intent);
+    } else {
+      // Launch match scout activity
+      Toast.makeText(mActivity, "Team clicked (match mode)", Toast.LENGTH_SHORT).show();
+    }
   }
 
   /****************/
@@ -485,5 +483,18 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_TAKE_TEAM_PICTURE) {
       new ScaleBitmapTask(mActivity, mPhotoFile, mTeamId).execute();
     }
+  }
+
+  /*****************/
+  /** OTHER STUFF **/
+  /*****************/
+
+  // Hold a reference to the underlying Activity for convenience
+  private static Activity mActivity;
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    mActivity = activity;
   }
 }

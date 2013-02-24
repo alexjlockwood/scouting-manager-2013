@@ -45,6 +45,7 @@ public final class ScoutContract {
     String ROBOT_CAN_GO_UNDER_TOWER = "robot_go_under_tower";
     /** How many driving gears does the robot have? */
     String ROBOT_NUM_DRIVING_GEARS = "robot_num_driving_gears";
+
     /**
      * 0 - Basic tank drive (4 wheels)
      * 1 - Basic tank drive (6 wheels)
@@ -56,6 +57,7 @@ public final class ScoutContract {
      * 7 - Other
      */
     String ROBOT_DRIVE_TRAIN = "robot_drive_train";
+
     /**
      * 0 - KoP
      * 1 - plaction/traction

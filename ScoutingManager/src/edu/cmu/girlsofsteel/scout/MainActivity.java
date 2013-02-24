@@ -13,6 +13,9 @@ public class MainActivity extends SherlockFragmentActivity {
   @SuppressWarnings("unused")
   private static final String TAG = LogUtil.makeLogTag(MainActivity.class);
 
+  // Used to pass team ids to the next activity
+  public static final String TEAM_ID_EXTRA = "team_id_extra";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -21,7 +24,6 @@ public class MainActivity extends SherlockFragmentActivity {
 
   @Override
   public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
     getSupportMenuInflater().inflate(R.menu.activity_main, menu);
     return true;
   }
