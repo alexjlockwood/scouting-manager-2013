@@ -12,12 +12,8 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -35,12 +31,8 @@ import android.support.v4.widget.ResourceCursorAdapter;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Switch;
@@ -65,10 +57,17 @@ import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.ActionMode;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 
+/**
+ * {@link TeamListFragment} displays the all of the teams currently in the
+ * database. It's parent activity is the {@link MainActivity}. It's view is seen
+ * by the user as the application's "home screen".
+ *
+ * @author Alex Lockwood
+ */
 public class TeamListFragment extends SherlockListFragment implements MultiChoiceModeListener,
     LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
-  private static final String TAG = makeLogTag(TeamListFragment.class);
 
+  private static final String TAG = makeLogTag(TeamListFragment.class);
   private static final String KEY_SELECTED_TEAM_IDS = "selected_team_ids";
   private static final String KEY_CAMERA_TEAM_ID = "camera_team_id";
   private static final String KEY_PHOTO_FILE_PATH = "photo_file_path";
@@ -131,6 +130,13 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     getListView().setCacheColorHint(Color.WHITE);
   }
 
+  // TODO: figure out if Gravity.END will cause compat issues!
+  // TODO: figure out if Gravity.END will cause compat issues!
+  // TODO: figure out if Gravity.END will cause compat issues!
+  // TODO: figure out if Gravity.END will cause compat issues!
+  // TODO: figure out if Gravity.END will cause compat issues!
+  // TODO: figure out if Gravity.END will cause compat issues!
+
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
@@ -151,10 +157,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
       ((ToggleButton) mScoutModeView).setTextOff(getString(R.string.toggle_off_team));
       ((ToggleButton) mScoutModeView).setTextOn(getString(R.string.toggle_on_match));
     }
-
-    // int padding =
-    // getResources().getDimensionPixelSize(R.dimen.action_bar_switch_padding);
-    // mScoutModeView.setPadding(0, 0, padding, 0);
 
     final SherlockFragmentActivity activity = (SherlockFragmentActivity) mActivity;
     activity.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
@@ -177,9 +179,15 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
   @Override
   public void onListItemClick(ListView lv, View v, int position, long id) {
-    Intent intent = new Intent(mActivity, ScoutActivity.class);
-    intent.putExtra(MainActivity.TEAM_ID_EXTRA, id);
-    intent.putExtra(MainActivity.SCOUT_MODE_EXTRA, mScoutModeView.isChecked());
+    Intent intent;
+    if (!mScoutModeView.isChecked()) {
+      // Team scout mode
+      intent = new Intent(mActivity, ScoutTeamActivity.class);
+    } else {
+      // Match scout mode
+      intent = new Intent(mActivity, ScoutMatchActivity.class);
+    }
+    intent.putExtra(MainActivity.ARG_TEAM_ID, id);
     startActivity(intent);
   }
 
@@ -198,6 +206,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
       inputTypeCompat |= InputType.TYPE_NUMBER_VARIATION_NORMAL;
     }
     searchView.setInputType(inputTypeCompat);
+    searchView.setQueryHint(mActivity.getString(R.string.menu_search_team_hint));
     super.onCreateOptionsMenu(menu, inflater);
   }
 
@@ -347,97 +356,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   @Override
   public void onLoaderReset(Loader<Cursor> data) {
     mAdapter.swapCursor(null);
-  }
-
-  /*********************/
-  /** ADD TEAM DIALOG **/
-  /*********************/
-
-  public static class AddTeamDialog extends DialogFragment {
-
-    public static AddTeamDialog newInstance() {
-      return new AddTeamDialog();
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-      final LayoutInflater factory = LayoutInflater.from(getActivity());
-      final EditText edit = (EditText) factory.inflate(R.layout.dialog_add_team, null);
-      final Dialog dialog = new AlertDialog.Builder(getActivity())
-          .setTitle(R.string.title_add_team)
-          .setView(edit)
-          .setPositiveButton(R.string.ok,
-              new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                  int team = Integer.valueOf(edit.getText().toString());
-                  ContentValues values = new ContentValues();
-                  values.put(Teams.NUMBER, team);
-                  StorageUtil.insertTeam(getActivity(), values);
-                }
-              })
-          .setNegativeButton(R.string.cancel,
-              new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                  // Do nothing
-                }
-              })
-          .create();
-      edit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-          if (hasFocus) {
-            Window window = dialog.getWindow();
-            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-          }
-        }
-      });
-      return dialog;
-    }
-  }
-
-  /************************/
-  /** DELETE TEAM DIALOG **/
-  /************************/
-
-  public static class DeleteTeamDialog extends DialogFragment {
-
-    private static final String KEY_IDS = "key_ids";
-
-    public static DeleteTeamDialog newInstance(long... ids) {
-      DeleteTeamDialog dialog = new DeleteTeamDialog();
-      Bundle args = new Bundle();
-      args.putLongArray(KEY_IDS, ids);
-      dialog.setArguments(args);
-      return dialog;
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-      Resources res = getResources();
-      final long[] ids = getArguments().getLongArray(KEY_IDS);
-      String title = res.getQuantityString(R.plurals.title_delete_teams, ids.length);
-      String msg = res.getQuantityString(R.plurals.message_delete_teams, ids.length, ids.length);
-      return new AlertDialog.Builder(getActivity())
-          .setTitle(title)
-          .setMessage(msg)
-          .setPositiveButton(R.string.ok,
-              new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                  StorageUtil.deleteTeams(getActivity(), ids);
-                }
-              })
-          .setNegativeButton(R.string.cancel,
-              new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int whichButton) {
-                  // Do nothing
-                }
-              })
-          .create();
-    }
   }
 
   /****************************/

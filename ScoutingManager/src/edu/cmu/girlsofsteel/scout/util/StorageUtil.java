@@ -23,10 +23,19 @@ public final class StorageUtil {
   /**
    * Insert a single team into the database. This method is asynchronous.
    */
-  public static void insertTeam(Context ctx, ContentValues initialValues) {
+  public static void insertTeam(Context ctx, ContentValues values) {
     AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) {
     };
-    handler.startInsert(-1, null, Teams.CONTENT_URI, initialValues);
+    handler.startInsert(-1, null, Teams.CONTENT_URI, values);
+  }
+
+  /**
+   * Insert a single team match into the database. This method is asynchronous.
+   */
+  public static void insertTeamMatch(Context ctx, ContentValues values) {
+    AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) {
+    };
+    handler.startInsert(-1, null, TeamMatches.CONTENT_URI, values);
   }
 
   /**
@@ -42,6 +51,21 @@ public final class StorageUtil {
    * Delete multiple teams from the database. This method is asynchronous.
    */
   public static void deleteTeams(final Context ctx, final long... teamIds) {
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
+    // TODO: delete foreign key references
     // TODO: delete foreign key references
     // TODO: delete foreign key references
     // TODO: delete foreign key references

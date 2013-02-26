@@ -1,23 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <LinearLayout
-        android:id="@+id/Team_Input_Screen"
+        android:id="@+id/match_input_screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp" >
+        android:paddingBottom="8dp"
+        android:paddingRight="8dp" >
 
         <TextView
-            android:id="@+id/example_text_view"
+            android:id="@+id/textview_tower_level"
+            style="@style/team_input_main_header"
+            android:text="@string/tower_level" />
+
+        <LinearLayout
+            style="@style/team_input_main_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="example!" />
+            android:orientation="horizontal" >
+
+            <CheckBox
+                android:id="@+id/checkbox_level_one"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/level_one" />
+
+            <CheckBox
+                android:id="@+id/checkbox_level_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/level_two" />
+
+            <CheckBox
+                android:id="@+id/checkbox_level_three"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/level_three" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textview_fell_off_tower"
+            style="@style/team_input_main_header"
+            android:text="@string/fell_off_tower" />
+
+        <include layout="@layout/compat_fell_off_tower" />
     </LinearLayout>
 
 </ScrollView>

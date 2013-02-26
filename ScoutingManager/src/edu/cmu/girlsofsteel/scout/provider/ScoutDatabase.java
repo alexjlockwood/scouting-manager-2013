@@ -5,9 +5,15 @@ import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Matches;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
+
+// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
+// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
+// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
+// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
+// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
+// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
 
 /**
  * This class is responsible for the creation of the database. The ScoutProvider
@@ -23,13 +29,11 @@ public class ScoutDatabase extends SQLiteOpenHelper {
   interface Tables {
     String TEAMS = "teams";
     String TEAM_MATCHES = "team_matches";
-    String MATCHES = "matches";
   }
 
   /** {@code REFERENCES} clauses. */
   private interface References {
     String TEAM_ID = "REFERENCES " + Tables.TEAMS + "(" + Teams._ID + ")";
-    String MATCH_ID = "REFERENCES " + Tables.MATCHES + "(" + Matches._ID + ")";
   }
 
   public ScoutDatabase(Context context) {
@@ -49,7 +53,7 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + Teams.ROBOT_CAN_SCORE_ON_MID + " INTEGER,"
         + Teams.ROBOT_CAN_SCORE_ON_HIGH + " INTEGER,"
 
-        + Teams.ROBOT_CAN_CLIMB + " INTEGER,"
+        // + Teams.ROBOT_CAN_CLIMB + " INTEGER,"
         + Teams.ROBOT_CAN_CLIMB_LEVEL_ONE + " INTEGER,"
         + Teams.ROBOT_CAN_CLIMB_LEVEL_TWO + " INTEGER,"
         + Teams.ROBOT_CAN_CLIMB_LEVEL_THREE + " INTEGER,"
@@ -62,18 +66,11 @@ public class ScoutDatabase extends SQLiteOpenHelper {
 
         + "UNIQUE (" + Teams.NUMBER + ") ON CONFLICT IGNORE);");
 
-    db.execSQL("CREATE TABLE " + Tables.MATCHES + " ("
-        + Matches._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-
-        + Matches.NUMBER + " INTEGER NOT NULL,"
-
-        + "UNIQUE (" + Matches.NUMBER + ") ON CONFLICT IGNORE);");
-
     db.execSQL("CREATE TABLE " + Tables.TEAM_MATCHES + " ("
         + TeamMatches._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 
-        + TeamMatches.MATCH_ID + " INTEGER NOT NULL " + References.MATCH_ID + ","
         + TeamMatches.TEAM_ID + " INTEGER NOT NULL " + References.TEAM_ID + ","
+        + TeamMatches.MATCH_NUMBER + " INTEGER NOT NULL, "
 
         + TeamMatches.AUTO_SHOTS_MADE_LOW + " INTEGER,"
         + TeamMatches.AUTO_SHOTS_MADE_MID + " INTEGER,"
@@ -92,7 +89,7 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.SHOOTS_FROM_ANYWHERE + " INTEGER,"
         + TeamMatches.SHOOTS_FROM_OTHER + " INTEGER,"
 
-        + TeamMatches.TOWER_LEVEL_NONE + " INTEGER,"
+        // + TeamMatches.TOWER_LEVEL_NONE + " INTEGER,"
         + TeamMatches.TOWER_LEVEL_ONE + " INTEGER,"
         + TeamMatches.TOWER_LEVEL_TWO + " INTEGER,"
         + TeamMatches.TOWER_LEVEL_THREE + " INTEGER,"
@@ -108,7 +105,8 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.ROBOT_MANEUVERABILITY + " INTEGER,"
         + TeamMatches.ROBOT_PENALTY + " INTEGER,"
 
-        + "UNIQUE (" + TeamMatches.MATCH_ID + "," + TeamMatches.TEAM_ID + ") ON CONFLICT IGNORE);");
+        + "UNIQUE (" + TeamMatches.MATCH_NUMBER + "," + TeamMatches.TEAM_ID
+        + ") ON CONFLICT IGNORE);");
   }
 
   /**

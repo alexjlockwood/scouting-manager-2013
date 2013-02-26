@@ -31,7 +31,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.cmu.girlsofsteel.scout.ScoutActivity"
+            android:name="edu.cmu.girlsofsteel.scout.ScoutTeamActivity"
+            android:label="@string/title_team_scout"
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.cmu.girlsofsteel.scout.MainActivity" >
+            </meta-data>
+        </activity>
+        <activity
+            android:name="edu.cmu.girlsofsteel.scout.ScoutMatchActivity"
+            android:label="@string/title_match_scout"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

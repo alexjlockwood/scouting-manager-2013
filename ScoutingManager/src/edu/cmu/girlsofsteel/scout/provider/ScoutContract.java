@@ -31,7 +31,7 @@ public final class ScoutContract {
     String ROBOT_CAN_SCORE_ON_HIGH = "robot_can_score_on_high";
 
     /** Can the robot climb? */
-    String ROBOT_CAN_CLIMB = "robot_can_climb";
+    // String ROBOT_CAN_CLIMB = "robot_can_climb";
     /** Can the robot climb on level 1? */
     String ROBOT_CAN_CLIMB_LEVEL_ONE = "robot_can_climb_level_one";
     /** Can the robot climb on level 2? */
@@ -79,7 +79,9 @@ public final class ScoutContract {
     /** References '_id' in Teams table */
     String TEAM_ID = "team_id";
     /** References '_id' in Matches table */
-    String MATCH_ID = "match_id";
+    //String MATCH_ID = "match_id";
+    /** References 'number' in Matches table */
+    String MATCH_NUMBER = "match_number";
 
     String AUTO_SHOTS_MADE_LOW = "auto_shots_made_low";
     String AUTO_SHOTS_MADE_MID = "auto_shots_made_mid";
@@ -98,10 +100,10 @@ public final class ScoutContract {
     String SHOOTS_FROM_ANYWHERE = "shoots_from_anywhere";
     String SHOOTS_FROM_OTHER = "shoots_from_other";
 
-    String TOWER_LEVEL_NONE = "tower_level_none";
     String TOWER_LEVEL_ONE = "tower_level_one";
     String TOWER_LEVEL_TWO = "tower_level_two";
     String TOWER_LEVEL_THREE = "tower_level_three";
+
     String TOWER_FELL_OFF = "tower_fell_off";
 
     /**
@@ -147,7 +149,7 @@ public final class ScoutContract {
   public static final String AUTHORITY = "edu.cmu.girlsofsteel.scout";
   private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
   private static final String PATH_TEAMS = "teams";
-  private static final String PATH_MATCHES = "matches";
+  // private static final String PATH_MATCHES = "matches";
   private static final String PATH_TEAM_MATCHES = "team_matches";
 
   /**
@@ -171,26 +173,6 @@ public final class ScoutContract {
   }
 
   /**
-   * Matches table contract. This table store matches and information about the
-   * matches.
-   */
-  public static final class Matches implements BaseColumns, MatchesColumns {
-    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.scout.match";
-    public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.scout.match";
-
-    // Get all matches
-    public static final Uri CONTENT_URI = BASE_URI.buildUpon().appendPath(PATH_MATCHES).build();
-
-    // Get a single match
-    public static Uri matchIdUri(long matchId) {
-      return CONTENT_URI.buildUpon().appendPath("" + matchId).build();
-    }
-
-    private Matches() {
-    }
-  }
-
-  /**
    * The "team_match" table provides information on how a specific team
    * performed while competing during a given match. This class contains no
    * methods, but implements BaseColumns and TeamMatchesColumns for public
@@ -206,7 +188,7 @@ public final class ScoutContract {
         .build();
 
     // Get all team-matches for a team
-    public static Uri matchTeamIdUri(long teamId) {
+    public static Uri teamIdUri(long teamId) {
       return CONTENT_URI.buildUpon().appendPath(PATH_TEAMS).appendPath("" + teamId).build();
     }
 

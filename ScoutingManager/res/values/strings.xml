@@ -16,9 +16,11 @@
     <string name="toggle_off_team">Team</string>
     <string name="toggle_on_match">Match</string>
     <string name="message_no_teams">No teams!</string>
+    <string name="message_no_matches">No matches!</string>
 
     <!-- Dialogs -->
     <string name="title_add_team">Add Team</string>
+    <string name="title_add_match">Add Match</string>
 
     <plurals name="title_delete_teams">
         <item quantity="one">Delete team?</item>
@@ -31,9 +33,11 @@
 
     <!-- Menu -->
     <string name="menu_add_team">Add Team</string>
+    <string name="menu_add_match">Add Match</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_search">Search</string>
-    <string name="menu_search_team_hint">Search for team</string>
+    <string name="menu_match_number_hint">Match #</string>
+    <string name="menu_search_team_hint">Search for team…</string>
     <string name="menu_export">Export</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_take_picture">Take Picture</string>
@@ -58,6 +62,7 @@
     <string name="score">Score</string>
     <string name="low">Low</string>
     <string name="middle">Middle</string>
+    <string name="medium">Medium</string>
     <string name="high">High</string>
     <string name="climb">Climb</string>
     <string name="not_available">N/A</string>
@@ -69,7 +74,7 @@
     <string name="driving_gears">Driving Gears</string>
     <string name="one">One</string>
     <string name="multiple">Multiple</string>
-    
+
     <string-array name="drive_options">
         <item>None</item>
         <item>4 Wheels</item>
@@ -94,5 +99,22 @@
     </string-array>
 
     <string name="goes_under_tower">Goes Under Tower</string>
+
+    <!-- Match Scout -->
+    <string name="tower_level">Tower Level</string>
+    <string name="fell_off_tower">Fell Off Tower?</string>
+    <string name="human_player_ability">Human Player Ability</string>
+    <string name="high_scoring">High Scoring</string>
+    <string name="neutral">neutral</string>
+    <string name="impedes_performance">Impedes Performance</string>
+    <string name="frisbees_from_where">Frisbees From Where?</string>
+    <string name="feeder">Feeder</string>
+    <string name="floor">Floor</string>
+    <string name="strategy">Strategy</string>
+    <string name="offense">Offense</string>
+    <string name="defense">Defense</string>
+    <string name="speed">Speed</string>
+    <string name="maneuverability">Maneuverability</string>
+    <string name="penalty">Penalty</string>
 
 </resources>

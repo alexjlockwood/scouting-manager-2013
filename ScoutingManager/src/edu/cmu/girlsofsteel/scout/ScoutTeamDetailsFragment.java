@@ -27,14 +27,22 @@ import com.actionbarsherlock.app.SherlockFragment;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
-public class ScoutTeamFragment extends SherlockFragment implements
+/**
+ * {@link ScoutMatchDetailsFragment} displays the team details for a particular
+ * team. It's parent activity is the {@link ScoutTeamActivity}.
+ *
+ * This fragment requires a valid team id in order to function properly.
+ *
+ * @author Alex Lockwood
+ */
+public class ScoutTeamDetailsFragment extends SherlockFragment implements
     LoaderManager.LoaderCallbacks<Cursor> {
 
   @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(TeamListFragment.class);
 
   private ImageView mTeamPicture;
-  private EditText mTeamName, mTeamRank;
+  private EditText mTeamName/* , mTeamRank */;
   private CheckBox mScoreLow, mScoreMid, mScoreHigh;
   private CheckBox mClimbLevelOne, mClimbLevelTwo, mClimbLevelThree;
   private CompoundButton mHelpsClimb, mDrivingGears, mGoesUnderTower;
@@ -46,7 +54,7 @@ public class ScoutTeamFragment extends SherlockFragment implements
 
     mTeamPicture = (ImageView) view.findViewById(R.id.team_picture);
     mTeamName = (EditText) view.findViewById(R.id.team_name);
-    mTeamRank = (EditText) view.findViewById(R.id.team_rank);
+    /* mTeamRank = (EditText) view.findViewById(R.id.team_rank); */
 
     mScoreLow = (CheckBox) view.findViewById(R.id.checkbox_low_goal);
     mScoreMid = (CheckBox) view.findViewById(R.id.checkbox_mid_goal);
@@ -69,7 +77,6 @@ public class ScoutTeamFragment extends SherlockFragment implements
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
-    getSherlockActivity().getSupportActionBar().setTitle(R.string.title_team_scout);
     getLoaderManager().initLoader(TEAM_LOADER_ID, getArguments(), this);
   }
 
@@ -87,8 +94,8 @@ public class ScoutTeamFragment extends SherlockFragment implements
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    Uri uri = Teams.teamIdUri(args.getLong(TEAM_ID_ARG));
-    return new CursorLoader(mActivity, uri, null, null, null, null);
+    long teamId = args.getLong(MainActivity.ARG_TEAM_ID);
+    return new CursorLoader(mActivity, Teams.teamIdUri(teamId), null, null, null, null);
   }
 
   @Override
@@ -167,6 +174,7 @@ public class ScoutTeamFragment extends SherlockFragment implements
   }
 
   private void saveTeamData() {
+    long teamId = getArguments().getLong(MainActivity.ARG_TEAM_ID);
     ContentValues values = new ContentValues();
     values.put(Teams.NAME, mTeamName.getText().toString());
     values.put(Teams.ROBOT_CAN_SCORE_ON_LOW, mScoreLow.isChecked() ? 1 : 0);
@@ -180,22 +188,12 @@ public class ScoutTeamFragment extends SherlockFragment implements
     values.put(Teams.ROBOT_DRIVE_TRAIN, mDriveTrain.getSelectedItemPosition());
     values.put(Teams.ROBOT_TYPE_OF_WHEEL, mWheelType.getSelectedItemPosition());
     values.put(Teams.ROBOT_CAN_GO_UNDER_TOWER, mGoesUnderTower.isChecked() ? 1 : 0);
-    StorageUtil.updateTeam(mActivity, getArguments().getLong(TEAM_ID_ARG), values);
+    StorageUtil.updateTeam(mActivity, teamId, values);
   }
 
   /*****************/
   /** OTHER STUFF **/
   /*****************/
-
-  private static final String TEAM_ID_ARG = "team_id_arg";
-
-  public static ScoutTeamFragment newInstance(long teamId) {
-    ScoutTeamFragment frag = new ScoutTeamFragment();
-    Bundle args = new Bundle();
-    args.putLong(TEAM_ID_ARG, teamId);
-    frag.setArguments(args);
-    return frag;
-  }
 
   // Hold a reference to the underlying Activity for convenience
   private static Activity mActivity;
