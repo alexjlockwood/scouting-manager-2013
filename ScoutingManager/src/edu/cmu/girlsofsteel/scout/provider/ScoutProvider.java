@@ -134,8 +134,7 @@ public class ScoutProvider extends ContentProvider {
       case TEAM_MATCHES: {
         long newId = db.insert(Tables.TEAM_MATCHES, null, values);
         if (newId > 0) {
-          Uri newUri = TeamMatches.CONTENT_URI.buildUpon()
-              .appendPath("" + newId).build();
+          Uri newUri = TeamMatches.CONTENT_URI.buildUpon().appendPath("" + newId).build();
           getContext().getContentResolver().notifyChange(newUri, null);
           return newUri;
         }
