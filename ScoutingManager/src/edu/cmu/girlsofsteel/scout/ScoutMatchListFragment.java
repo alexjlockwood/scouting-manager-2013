@@ -3,15 +3,17 @@ package edu.cmu.girlsofsteel.scout;
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.ResourceCursorAdapter;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -34,8 +36,7 @@ public class ScoutMatchListFragment extends SherlockListFragment implements
 
   @SuppressWarnings("unused")
   private static final String TAG = makeLogTag(ScoutMatchListFragment.class);
-  private static final int TEAM_MATCH_LOADER_ID = 0x01;
-  private SimpleCursorAdapter mAdapter;
+  private MatchListAdapter mAdapter;
 
   @SuppressLint("InlinedApi")
   @Override
@@ -46,8 +47,7 @@ public class ScoutMatchListFragment extends SherlockListFragment implements
     int layout = CompatUtil.hasHoneycomb() ? android.R.layout.simple_list_item_activated_1
         : android.R.layout.simple_list_item_1;
 
-    mAdapter = new SimpleCursorAdapter(mActivity, layout, null,
-        new String[] { TeamMatches.MATCH_NUMBER }, new int[] { android.R.id.text1 }, 0);
+    mAdapter = new MatchListAdapter(mActivity, layout);
 
     setListAdapter(mAdapter);
     setListShown(false);
@@ -87,8 +87,8 @@ public class ScoutMatchListFragment extends SherlockListFragment implements
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_add_match:
-        long teamId = ((ScoutMatchActivity) mActivity).getIntent().getExtras()
-            .getLong(MainActivity.ARG_TEAM_ID);
+        Bundle args = ((ScoutMatchActivity) mActivity).getIntent().getExtras();
+        long teamId = args.getLong(MainActivity.ARG_TEAM_ID);
         DialogFragment dialog = AddMatchDialog.newInstance(teamId);
         dialog.show(getFragmentManager(), AddMatchDialog.class.getSimpleName());
         return true;
@@ -100,11 +100,16 @@ public class ScoutMatchListFragment extends SherlockListFragment implements
   /** LOADER CALLBACKS **/
   /**********************/
 
+  private static final int TEAM_MATCH_LOADER_ID = 1;
+  private static final String[] PROJECTION = { TeamMatches._ID, TeamMatches.TEAM_ID,
+      TeamMatches.MATCH_NUMBER };
+  private static final String DEFAULT_SORT = TeamMatches.MATCH_NUMBER + " COLLATE LOCALIZED ASC";
+
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     long teamId = args.getLong(MainActivity.ARG_TEAM_ID);
-    return new CursorLoader(mActivity, TeamMatches.CONTENT_URI, null,
-        TeamMatches.TEAM_ID + "=?", new String[] { "" + teamId }, null);
+    return new CursorLoader(mActivity, TeamMatches.CONTENT_URI, PROJECTION,
+        TeamMatches.TEAM_ID + "=?", new String[] { "" + teamId }, DEFAULT_SORT);
   }
 
   @Override
@@ -151,5 +156,38 @@ public class ScoutMatchListFragment extends SherlockListFragment implements
   public interface OnMatchSelectedListener {
     /** Called by ScoutMatchListFragment when a list item is selected */
     public void onMatchSelected(long teamMatchId);
+  }
+
+  /************************/
+  /** MATCH LIST ADAPTER **/
+  /************************/
+
+  private static class MatchListAdapter extends ResourceCursorAdapter {
+
+    public MatchListAdapter(Context ctx, int layout) {
+      super(ctx, layout, null, 0);
+    }
+
+    @Override
+    public void bindView(View view, Context ctx, Cursor cur) {
+      ViewHolder holder = (ViewHolder) view.getTag();
+      if (holder == null) {
+        holder = new ViewHolder();
+
+        // cache TextView ids
+        holder.matchNum = (TextView) view.findViewById(android.R.id.text1);
+
+        // cache column indices
+        holder.matchNumCol = cur.getColumnIndexOrThrow(TeamMatches.MATCH_NUMBER);
+        view.setTag(holder);
+      }
+
+      holder.matchNum.setText("Match " + cur.getString(holder.matchNumCol));
+    }
+
+    private static class ViewHolder {
+      TextView matchNum;
+      int matchNumCol;
+    }
   }
 }

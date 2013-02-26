@@ -27,8 +27,8 @@
         <item quantity="other">Delete teams?</item>
     </plurals>
     <plurals name="message_delete_teams">
-        <item quantity="one">Permanently delete %d team?</item>
-        <item quantity="other">Permanently delete %d teams?</item>
+        <item quantity="one">One team will be deleted.</item>
+        <item quantity="other">%d teams will be deleted.</item>
     </plurals>
 
     <!-- Menu -->

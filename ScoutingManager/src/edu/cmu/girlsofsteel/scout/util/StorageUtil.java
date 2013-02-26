@@ -51,26 +51,6 @@ public final class StorageUtil {
    * Delete multiple teams from the database. This method is asynchronous.
    */
   public static void deleteTeams(final Context ctx, final long... teamIds) {
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
-    // TODO: delete foreign key references
     new Thread() {
       @Override
       public void run() {

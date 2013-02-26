@@ -71,7 +71,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   private static final String KEY_SELECTED_TEAM_IDS = "selected_team_ids";
   private static final String KEY_CAMERA_TEAM_ID = "camera_team_id";
   private static final String KEY_PHOTO_FILE_PATH = "photo_file_path";
-
   private TeamListAdapter mAdapter;
   private CompoundButton mScoutModeView;
 
@@ -331,8 +330,8 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   /** LOADER CALLBACKS **/
   /**********************/
 
-  private static final int TEAM_LOADER_ID = 0x01;
-  private static final String[] PROJ = new String[] { Teams._ID, Teams.NUMBER, Teams.PHOTO };
+  private static final int TEAM_LOADER_ID = 1;
+  private static final String[] PROJ = { Teams._ID, Teams.NUMBER, Teams.PHOTO };
   private static final String DEFAULT_SORT = Teams.NUMBER + " COLLATE LOCALIZED ASC";
   private String mFilter;
 
@@ -403,13 +402,10 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   }
 
   /***********************/
-  /** Team List Adapter **/
+  /** TEAM LIST ADAPTER **/
   /***********************/
 
   private static class TeamListAdapter extends ResourceCursorAdapter {
-
-    @SuppressWarnings("unused")
-    private static final String TAG = makeLogTag(TeamListAdapter.class);
     private ContentResolver mContentResolver;
 
     public TeamListAdapter(Context ctx) {
@@ -448,9 +444,9 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     }
 
     private static class ViewHolder {
-      public TextView teamNum;
-      public ImageView teamPhoto;
-      public int teamNumCol, teamPhotoCol;
+      TextView teamNum;
+      ImageView teamPhoto;
+      int teamNumCol, teamPhotoCol;
     }
   }
 }

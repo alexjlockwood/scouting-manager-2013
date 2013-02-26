@@ -170,7 +170,6 @@ public class ScoutTeamDetailsFragment extends SherlockFragment implements
       int goesUnderTower = data.getInt(data.getColumnIndexOrThrow(Teams.ROBOT_CAN_GO_UNDER_TOWER));
       mGoesUnderTower.setChecked(goesUnderTower != 0);
     }
-    data.close();
   }
 
   private void saveTeamData() {
