@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.cmu.girlsofsteel.scout.ScoutTeamActivity"
+            android:name="edu.cmu.girlsofsteel.scout.TeamScoutActivity"
             android:label="@string/title_team_scout"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
@@ -40,7 +40,7 @@
             </meta-data>
         </activity>
         <activity
-            android:name="edu.cmu.girlsofsteel.scout.ScoutMatchActivity"
+            android:name="edu.cmu.girlsofsteel.scout.MatchScoutActivity"
             android:label="@string/title_match_scout"
             android:windowSoftInputMode="stateHidden" >
             <meta-data

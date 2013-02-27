@@ -46,6 +46,10 @@
         <item quantity="one">1 team selected</item>
         <item quantity="other"><xliff:g id="num_teams">%1$d</xliff:g> teams selected</item>
     </plurals>
+    <plurals name="title_selected_matches">
+        <item quantity="one">1 match selected</item>
+        <item quantity="other"><xliff:g id="num_matches">%1$d</xliff:g> matches selected</item>
+    </plurals>
 
     <!-- Disk Storage -->
     <string name="export_dir_name">scouting_manager</string>

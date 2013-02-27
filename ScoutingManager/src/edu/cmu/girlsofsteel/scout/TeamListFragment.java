@@ -49,6 +49,8 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.SearchView;
 
 import edu.cmu.girlsofsteel.scout.MainActivity.ScoutMode;
+import edu.cmu.girlsofsteel.scout.dialogs.AddTeamDialog;
+import edu.cmu.girlsofsteel.scout.dialogs.DeleteTeamDialog;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.CameraUtil;
 import edu.cmu.girlsofsteel.scout.util.CameraUtil.ScaleBitmapTask;
@@ -140,12 +142,12 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+    setHasOptionsMenu(true);
     mAdapter = new TeamListAdapter(mActivity);
     setListAdapter(mAdapter);
     setListShown(false);
     setEmptyText(mActivity.getString(R.string.message_no_teams));
     getLoaderManager().initLoader(TEAM_LOADER_ID, null, this);
-    setHasOptionsMenu(true);
 
     if (CompatUtil.hasICS()) {
       mScoutModeView = new Switch(mActivity);
@@ -178,14 +180,9 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
 
   @Override
   public void onListItemClick(ListView lv, View v, int position, long id) {
-    Intent intent;
-    if (!mScoutModeView.isChecked()) {
-      // Team scout mode
-      intent = new Intent(mActivity, ScoutTeamActivity.class);
-    } else {
-      // Match scout mode
-      intent = new Intent(mActivity, ScoutMatchActivity.class);
-    }
+    Intent intent = mScoutModeView.isChecked()
+        ? new Intent(mActivity, MatchScoutActivity.class)
+        : new Intent(mActivity, TeamScoutActivity.class);
     intent.putExtra(MainActivity.ARG_TEAM_ID, id);
     startActivity(intent);
   }
@@ -225,14 +222,12 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   /***************************/
 
   private List<Long> mSelectedTeamIds = new LinkedList<Long>();
-  private android.view.MenuItem mDeleteTeamMenuItem;
   private android.view.MenuItem mTakePictureMenuItem;
 
   @Override
   public boolean onCreateActionMode(ActionMode mode, android.view.Menu menu) {
     android.view.MenuInflater inflater = mode.getMenuInflater();
     inflater.inflate(R.menu.team_list_cab, menu);
-    mDeleteTeamMenuItem = menu.findItem(R.id.cab_action_delete);
     mTakePictureMenuItem = menu.findItem(R.id.cab_take_team_picture);
 
     // Handle coming back from configuration change
@@ -292,7 +287,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
         numSelectedTeams, numSelectedTeams));
 
     if (numSelectedTeams == 1) {
-      mDeleteTeamMenuItem.setVisible(true);
       mTakePictureMenuItem.setVisible(CameraUtil.hasCamera(mActivity));
     } else {
       // Can't take picture if more than one team is selected
@@ -418,12 +412,8 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
       ViewHolder holder = (ViewHolder) view.getTag();
       if (holder == null) {
         holder = new ViewHolder();
-
-        // cache TextView ids
         holder.teamNum = (TextView) view.findViewById(R.id.team_list_row_number);
         holder.teamPhoto = (ImageView) view.findViewById(R.id.team_list_row_photo);
-
-        // cache column indices
         holder.teamNumCol = cur.getColumnIndexOrThrow(Teams.NUMBER);
         holder.teamPhotoCol = cur.getColumnIndexOrThrow(Teams.PHOTO);
         view.setTag(holder);

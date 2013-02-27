@@ -48,6 +48,16 @@ public final class StorageUtil {
   }
 
   /**
+   * Delete a single team match from the database. This method is asynchronous.
+   */
+  public static void deleteTeamMatch(Context ctx, long teamMatchId) {
+    AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) {
+    };
+    handler.startDelete(-1, null, TeamMatches.CONTENT_URI, TeamMatches._ID + "=?",
+        new String[] { "" + teamMatchId });
+  }
+
+  /**
    * Delete multiple teams from the database. This method is asynchronous.
    */
   public static void deleteTeams(final Context ctx, final long... teamIds) {
