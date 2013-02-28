@@ -157,8 +157,7 @@ public class ScoutProvider extends ContentProvider {
   }
 
   @Override
-  public Cursor query(Uri uri, String[] projection, String where,
-      String[] whereArgs, String sortOrder) {
+  public Cursor query(Uri uri, String[] projection, String where, String[] whereArgs, String sortOrder) {
     LOGV(TAG, "query(uri=" + uri + ", proj=" + Arrays.toString(projection) + ", where=" + where
         + ", whereArgs=" + Arrays.toString(whereArgs) + ", sortOrder=" + sortOrder + ")");
 
@@ -182,15 +181,13 @@ public class ScoutProvider extends ContentProvider {
         throw new UnsupportedOperationException("Unknown URI: " + uri);
     }
 
-    Cursor cur = qb.query(mOpenHelper.getReadableDatabase(), projection, where, whereArgs, null,
-        null, sortOrder);
+    Cursor cur = qb.query(mOpenHelper.getReadableDatabase(), projection, where, whereArgs, null, null, sortOrder);
     cur.setNotificationUri(getContext().getContentResolver(), uri);
     return cur;
   }
 
   @Override
-  public int update(Uri uri, ContentValues values, String selection,
-      String[] selectionArgs) {
+  public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
     LOGI(TAG, "update(uri=" + uri + ", values=" + values.toString() + ")");
 
     SQLiteDatabase db = mOpenHelper.getWritableDatabase();

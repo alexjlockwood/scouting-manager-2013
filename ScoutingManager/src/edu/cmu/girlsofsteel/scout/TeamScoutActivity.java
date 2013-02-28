@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-
-import edu.cmu.girlsofsteel.scout.util.LogUtil;
+import com.actionbarsherlock.view.MenuItem;
 
 /**
  * {@link TeamScoutActivity} is the base activity for team-scouting. It displays
@@ -19,23 +17,19 @@ import edu.cmu.girlsofsteel.scout.util.LogUtil;
  * @author Alex Lockwood
  */
 public class TeamScoutActivity extends SherlockFragmentActivity {
-
-  @SuppressWarnings("unused")
-  private static final String TAG = LogUtil.makeLogTag(TeamScoutActivity.class);
-  private static final String ARG_TEAM_ID = MainActivity.ARG_TEAM_ID;
+  // private static final String TAG = LogUtil.makeLogTag(TeamScoutActivity.class);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if (getIntent() == null || getIntent().getLongExtra(ARG_TEAM_ID, -1) == -1) {
+    if (getIntent() == null || getIntent().getLongExtra(MainActivity.ARG_TEAM_ID, -1) == -1) {
       throw new RuntimeException("This activity requires a valid team id in order to function!");
     }
 
     // Enable up navigation
-    ActionBar actionBar = getSupportActionBar();
-    actionBar.setHomeButtonEnabled(true);
-    actionBar.setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setHomeButtonEnabled(true);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     // Add the ScoutTeamDetailFragment as the activity's sole content
     FragmentManager fm = getSupportFragmentManager();
@@ -47,7 +41,7 @@ public class TeamScoutActivity extends SherlockFragmentActivity {
   }
 
   @Override
-  public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+  public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case android.R.id.home:
         NavUtils.navigateUpFromSameTask(this);

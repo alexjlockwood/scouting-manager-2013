@@ -11,12 +11,10 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import edu.cmu.girlsofsteel.scout.dialogs.DeleteMatchDialog;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
-import edu.cmu.girlsofsteel.scout.util.LogUtil;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
 /**
@@ -35,15 +33,15 @@ import edu.cmu.girlsofsteel.scout.util.StorageUtil;
  *
  * @author Alex Lockwood
  */
-public class MatchScoutActivity extends SherlockFragmentActivity implements
-    LoaderManager.LoaderCallbacks<Cursor>, MatchListFragment.OnMatchSelectedListener,
-    MatchDetailsFragment.OnMatchDeletedListener {
+public class MatchScoutActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,
+    MatchListFragment.OnMatchSelectedListener, MatchDetailsFragment.OnMatchDeletedListener {
+  // private static final String TAG = makeLogTag(MatchScoutActivity.class);
 
-  @SuppressWarnings("unused")
-  private static final String TAG = LogUtil.makeLogTag(MatchScoutActivity.class);
-  // Used to pass team match ids to the ScoutMatchDetailsFragment
+  /** Used to pass team match ids to the {@link ScoutMatchDetailsFragment}. */
   static final String ARG_TEAM_MATCH_ID = "team_match_id";
-  private static final String ARG_TEAM_ID = MainActivity.ARG_TEAM_ID;
+
+  private static final int TEAM_LOADER_ID = 1;
+  private static final String[] PROJECTION = { Teams._ID, Teams.NUMBER };
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -51,12 +49,10 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements
     setContentView(R.layout.activity_match_scout);
 
     // Enable up navigation
-    ActionBar actionBar = getSupportActionBar();
-    actionBar.setHomeButtonEnabled(true);
-    actionBar.setDisplayHomeAsUpEnabled(true);
+    getSupportActionBar().setHomeButtonEnabled(true);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    Bundle args = getIntent().getExtras();
-    getSupportLoaderManager().initLoader(TEAM_LOADER_ID, args, this);
+    getSupportLoaderManager().initLoader(TEAM_LOADER_ID, getIntent().getExtras(), this);
 
     // Check whether the activity is using the layout version with the
     // fragment_container FrameLayout. If so, we must add the first fragment.
@@ -71,19 +67,16 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements
 
       // Add the fragment to the 'fragment_container' FrameLayout
       MatchListFragment listFragment = new MatchListFragment();
-      listFragment.setArguments(args);
+      listFragment.setArguments(getIntent().getExtras());
       FragmentManager fm = getSupportFragmentManager();
       fm.beginTransaction().add(R.id.fragment_container, listFragment).commit();
     }
   }
 
-  /**
-   * Called when the user selects a match in the {@link MatchListFragment}.
-   */
   @Override
   public void onMatchSelected(long teamMatchId) {
-    MatchDetailsFragment detailsFrag = (MatchDetailsFragment) getSupportFragmentManager()
-        .findFragmentById(R.id.match_details_fragment);
+    MatchDetailsFragment detailsFrag = (MatchDetailsFragment) getSupportFragmentManager().findFragmentById(
+        R.id.match_details_fragment);
 
     if (detailsFrag != null) {
       // If details frag is available, we're in two-pane layout. Tell the
@@ -114,9 +107,32 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements
     if (fm.getBackStackEntryCount() > 0) {
       fm.popBackStack();
     } else {
-      ((MatchDetailsFragment) fm.findFragmentById(R.id.match_details_fragment)).clearDetailsView();
+      MatchDetailsFragment detailsFrag = (MatchDetailsFragment) fm.findFragmentById(R.id.match_details_fragment);
+      detailsFrag.clearDetailsView();
     }
     StorageUtil.deleteTeamMatch(this, teamMatchId);
+  }
+
+  /**********************/
+  /** LOADER CALLBACKS **/
+  /**********************/
+
+  @Override
+  public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    long teamId = args.getLong(MainActivity.ARG_TEAM_ID);
+    return new CursorLoader(this, Teams.teamIdUri(teamId), PROJECTION, null, null, null);
+  }
+
+  @Override
+  public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    if (data.moveToFirst()) {
+      String teamNumber = data.getString(data.getColumnIndexOrThrow(Teams.NUMBER));
+      getSupportActionBar().setSubtitle("Team " + teamNumber);
+    }
+  }
+
+  @Override
+  public void onLoaderReset(Loader<Cursor> data) {
   }
 
   /****************/
@@ -136,30 +152,5 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements
         break;
     }
     return super.onOptionsItemSelected(item);
-  }
-
-  /**********************/
-  /** LOADER CALLBACKS **/
-  /**********************/
-
-  private static final int TEAM_LOADER_ID = 1;
-  private static final String[] PROJECTION = { Teams._ID, Teams.NUMBER };
-
-  @Override
-  public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-    long teamId = args.getLong(ARG_TEAM_ID);
-    return new CursorLoader(this, Teams.teamIdUri(teamId), PROJECTION, null, null, null);
-  }
-
-  @Override
-  public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-    if (data.moveToFirst()) {
-      String teamNumber = data.getString(data.getColumnIndexOrThrow(Teams.NUMBER));
-      getSupportActionBar().setSubtitle("Team " + teamNumber);
-    }
-  }
-
-  @Override
-  public void onLoaderReset(Loader<Cursor> data) {
   }
 }

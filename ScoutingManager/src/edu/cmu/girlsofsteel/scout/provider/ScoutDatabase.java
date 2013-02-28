@@ -105,8 +105,7 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.ROBOT_MANEUVERABILITY + " INTEGER,"
         + TeamMatches.ROBOT_PENALTY + " INTEGER,"
 
-        + "UNIQUE (" + TeamMatches.MATCH_NUMBER + "," + TeamMatches.TEAM_ID
-        + ") ON CONFLICT IGNORE);");
+        + "UNIQUE (" + TeamMatches.MATCH_NUMBER + "," + TeamMatches.TEAM_ID + ") ON CONFLICT IGNORE);");
   }
 
   /**

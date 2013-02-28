@@ -3,7 +3,6 @@ package edu.cmu.girlsofsteel.scout.dialogs;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import edu.cmu.girlsofsteel.scout.R;
@@ -23,10 +22,9 @@ public class DeleteTeamDialog extends DialogFragment {
 
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
-    Resources res = getResources();
     final long[] ids = getArguments().getLongArray(KEY_IDS);
-    String title = res.getQuantityString(R.plurals.title_delete_teams, ids.length);
-    String msg = res.getQuantityString(R.plurals.message_delete_teams, ids.length, ids.length);
+    String title = getResources().getQuantityString(R.plurals.title_delete_teams, ids.length);
+    String msg = getResources().getQuantityString(R.plurals.message_delete_teams, ids.length, ids.length);
     return new AlertDialog.Builder(getActivity())
         .setTitle(title)
         .setMessage(msg)

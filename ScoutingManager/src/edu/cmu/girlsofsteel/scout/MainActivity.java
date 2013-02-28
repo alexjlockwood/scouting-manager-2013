@@ -2,12 +2,9 @@ package edu.cmu.girlsofsteel.scout;
 
 import android.os.Bundle;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.ExportDatabaseTask;
-import edu.cmu.girlsofsteel.scout.util.LogUtil;
 
 /**
  * {@link MainActivity} is the main activity for the application. It displays a
@@ -16,12 +13,12 @@ import edu.cmu.girlsofsteel.scout.util.LogUtil;
  * @author Alex Lockwood
  */
 public class MainActivity extends SherlockFragmentActivity {
+  // private static final String TAG = LogUtil.makeLogTag(MainActivity.class);
 
-  @SuppressWarnings("unused")
-  private static final String TAG = LogUtil.makeLogTag(MainActivity.class);
-  // Used to pass team ids to the next activity
+  /** Used to pass team ids to the next activity. */
   static final String ARG_TEAM_ID = "team_id";
-  // Used to pass the current scout mode to the next activity
+
+  /** Used to pass the current scout mode to the next activity. */
   static final String ARG_SCOUT_MODE = "scout_mode";
 
   @Override
@@ -30,14 +27,9 @@ public class MainActivity extends SherlockFragmentActivity {
     setContentView(R.layout.activity_main);
 
     // Disable up navigation on the application's home screen
-    ActionBar actionBar = getSupportActionBar();
-    actionBar.setHomeButtonEnabled(false);
-    actionBar.setDisplayHomeAsUpEnabled(false);
+    getSupportActionBar().setHomeButtonEnabled(false);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(false);
   }
-
-  /****************/
-  /** ACTION BAR **/
-  /****************/
 
   @Override
   public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
@@ -49,18 +41,10 @@ public class MainActivity extends SherlockFragmentActivity {
   public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_export:
-        new ExportDatabaseTask(this).execute(Teams.CONTENT_URI);
+        // Export all database tables to CSV files on external storage
+        new ExportDatabaseTask(this).execute();
         return true;
     }
     return super.onOptionsItemSelected(item);
-  }
-
-  /**
-   * Defines an enum type to determine whether the application is in
-   * "team scouting mode" or "match scouting mode".
-   */
-  public static enum ScoutMode {
-    TEAM,
-    MATCH,
   }
 }

@@ -28,8 +28,8 @@ public class AddTeamDialog extends DialogFragment {
     final EditText edit = (EditText) factory.inflate(R.layout.dialog_single_edittext, null);
 
     // Force open soft input
-    InputMethodManager im = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
-    im.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    InputMethodManager imm = (InputMethodManager) ctx.getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
     return new AlertDialog.Builder(ctx)
         .setTitle(R.string.title_add_team)

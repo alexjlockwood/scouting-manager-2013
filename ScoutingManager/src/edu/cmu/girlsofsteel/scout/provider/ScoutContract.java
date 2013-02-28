@@ -184,8 +184,7 @@ public final class ScoutContract {
     public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.scout.team_match";
 
     // Get all team-matches
-    public static final Uri CONTENT_URI = BASE_URI.buildUpon().appendPath(PATH_TEAM_MATCHES)
-        .build();
+    public static final Uri CONTENT_URI = BASE_URI.buildUpon().appendPath(PATH_TEAM_MATCHES).build();
 
     // Get all team-matches for a team
     public static Uri teamIdUri(long teamId) {
@@ -194,8 +193,7 @@ public final class ScoutContract {
 
     // Get a single team-match
     public static Uri matchIdTeamIdUri(long matchId, long teamId) {
-      return CONTENT_URI.buildUpon().appendPath("" + matchId).appendPath(PATH_TEAMS)
-          .appendPath("" + teamId).build();
+      return CONTENT_URI.buildUpon().appendPath("" + matchId).appendPath(PATH_TEAMS).appendPath("" + teamId).build();
     }
 
     private TeamMatches() {

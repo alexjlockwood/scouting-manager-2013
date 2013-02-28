@@ -1,44 +1,46 @@
 package edu.cmu.girlsofsteel.scout.util;
 
+import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGE;
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 import android.widget.Toast;
 import au.com.bytecode.opencsv.CSVWriter;
 import edu.cmu.girlsofsteel.scout.R;
+import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
-public class ExportDatabaseTask extends AsyncTask<Uri, Void, String> {
+public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
 
   private static final String TAG = makeLogTag(ExportDatabaseTask.class);
-  private Activity mActivity;
+  private Context mCtx;
 
-  public ExportDatabaseTask(Activity activity) {
-    mActivity = activity;
+  public ExportDatabaseTask(Context ctx) {
+    mCtx = ctx.getApplicationContext();
   }
 
   @Override
-  protected String doInBackground(Uri... uris) {
+  protected String doInBackground(Void... args) {
+    Resources res = mCtx.getResources();
     if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-      return mActivity.getString(R.string.export_not_mounted);
+      return res.getString(R.string.export_not_mounted);
     }
-    String exportDirName = mActivity.getString(R.string.export_dir_name);
+    String exportDirName = res.getString(R.string.export_dir_name);
     File exportDir = new File(Environment.getExternalStorageDirectory(), exportDirName);
-    File file = new File(exportDir, mActivity.getString(R.string.export_file_name));
+    File file = new File(exportDir, res.getString(R.string.export_file_name));
     file.getParentFile().mkdir();
     try {
       file.createNewFile();
       CSVWriter writer = new CSVWriter(new FileWriter(file));
-      Cursor cur = mActivity.getContentResolver().query(uris[0], null, null, null, null);
+      Cursor cur = mCtx.getContentResolver().query(Teams.CONTENT_URI, null, null, null, null);
       if (cur.moveToFirst()) {
         String[] colNames = cur.getColumnNames();
         writer.writeNext(colNames);
@@ -53,23 +55,17 @@ public class ExportDatabaseTask extends AsyncTask<Uri, Void, String> {
       }
       writer.close();
       cur.close();
+      return res.getString(R.string.export_success);
     } catch (SQLException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      return "Could not export data.";
+      LOGE(TAG, ex.getMessage(), ex);
     } catch (IOException ex) {
-      Log.e(TAG, ex.getMessage(), ex);
-      return "Could not export data.";
+      LOGE(TAG, ex.getMessage(), ex);
     }
-
-    return null;
+    return res.getString(R.string.export_failed);
   }
 
   @Override
-  protected void onPostExecute(String msg) {
-    if (msg == null) {
-      Toast.makeText(mActivity, "Data written to external storage.", Toast.LENGTH_SHORT).show();
-    } else {
-      Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
-    }
+  protected void onPostExecute(String toastMsg) {
+    Toast.makeText(mCtx, toastMsg, Toast.LENGTH_SHORT).show();
   }
 }

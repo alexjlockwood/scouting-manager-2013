@@ -4,11 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import edu.cmu.girlsofsteel.scout.R;
 import edu.cmu.girlsofsteel.scout.MatchDetailsFragment.OnMatchDeletedListener;
+import edu.cmu.girlsofsteel.scout.R;
 
 public class DeleteMatchDialog extends DialogFragment {
 
@@ -24,10 +23,9 @@ public class DeleteMatchDialog extends DialogFragment {
 
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
-    Resources res = getResources();
     final long id = getArguments().getLong(KEY_ID);
-    String title = res.getQuantityString(R.plurals.title_delete_teams, 1);
-    String msg = res.getQuantityString(R.plurals.message_delete_teams, 1, 1);
+    String title = getResources().getQuantityString(R.plurals.title_delete_teams, 1);
+    String msg = getResources().getQuantityString(R.plurals.message_delete_teams, 1, 1);
     return new AlertDialog.Builder(getActivity())
         .setTitle(title)
         .setMessage(msg)

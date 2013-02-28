@@ -1,7 +1,5 @@
 package edu.cmu.girlsofsteel.scout;
 
-import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -28,8 +26,8 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
 /**
- * {@link MatchDetailsFragment} displays the team details for a particular
- * team. It's parent activity is the {@link TeamScoutActivity}.
+ * {@link MatchDetailsFragment} displays the team details for a particular team.
+ * It's parent activity is the {@link TeamScoutActivity}.
  *
  * This fragment requires a valid team id in order to function properly.
  *
@@ -37,9 +35,16 @@ import edu.cmu.girlsofsteel.scout.util.StorageUtil;
  */
 public class TeamDetailsFragment extends SherlockFragment implements
     LoaderManager.LoaderCallbacks<Cursor> {
+  // private static final String TAG = makeLogTag(TeamListFragment.class);
 
-  @SuppressWarnings("unused")
-  private static final String TAG = makeLogTag(TeamListFragment.class);
+  private static final int TEAM_LOADER_ID = 1;
+  private static final String[] PROJECTION = null;
+
+  // TODO: figure out if rank is necessary?
+  // TODO: figure out if rank is necessary?
+  // TODO: figure out if rank is necessary?
+  // TODO: figure out if rank is necessary?
+  // TODO: figure out if rank is necessary?
 
   private ImageView mTeamPicture;
   private EditText mTeamName/* , mTeamRank */;
@@ -54,7 +59,7 @@ public class TeamDetailsFragment extends SherlockFragment implements
 
     mTeamPicture = (ImageView) view.findViewById(R.id.team_picture);
     mTeamName = (EditText) view.findViewById(R.id.team_name);
-    /* mTeamRank = (EditText) view.findViewById(R.id.team_rank); */
+    // mTeamRank = (EditText) view.findViewById(R.id.team_rank);
 
     mScoreLow = (CheckBox) view.findViewById(R.id.checkbox_low_goal);
     mScoreMid = (CheckBox) view.findViewById(R.id.checkbox_mid_goal);
@@ -90,12 +95,10 @@ public class TeamDetailsFragment extends SherlockFragment implements
   /** LOADER CALLBACKS **/
   /**********************/
 
-  private static final int TEAM_LOADER_ID = 0x01;
-
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     long teamId = args.getLong(MainActivity.ARG_TEAM_ID);
-    return new CursorLoader(mActivity, Teams.teamIdUri(teamId), null, null, null, null);
+    return new CursorLoader(getActivity(), Teams.teamIdUri(teamId), PROJECTION, null, null, null);
   }
 
   @Override
@@ -107,11 +110,6 @@ public class TeamDetailsFragment extends SherlockFragment implements
   public void onLoaderReset(Loader<Cursor> data) {
   }
 
-  // TODO: figure out if rank is necessary?
-  // TODO: figure out if rank is necessary?
-  // TODO: figure out if rank is necessary?
-  // TODO: figure out if rank is necessary?
-  // TODO: figure out if rank is necessary?
   private void populateTeamData(Cursor data) {
     if (data.moveToFirst()) {
       // Team number
@@ -126,8 +124,8 @@ public class TeamDetailsFragment extends SherlockFragment implements
       String uri = data.getString(data.getColumnIndexOrThrow(Teams.PHOTO));
       if (!TextUtils.isEmpty(uri)) {
         long pictureId = Long.parseLong(Uri.parse(uri).getLastPathSegment());
-        Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(mActivity.getContentResolver(),
-            pictureId, MediaStore.Images.Thumbnails.MICRO_KIND, null);
+        Bitmap bitmap = MediaStore.Images.Thumbnails.getThumbnail(getActivity()
+            .getContentResolver(), pictureId, MediaStore.Images.Thumbnails.MICRO_KIND, null);
         mTeamPicture.setImageBitmap(bitmap);
       } else {
         Resources res = getResources();
@@ -187,19 +185,6 @@ public class TeamDetailsFragment extends SherlockFragment implements
     values.put(Teams.ROBOT_DRIVE_TRAIN, mDriveTrain.getSelectedItemPosition());
     values.put(Teams.ROBOT_TYPE_OF_WHEEL, mWheelType.getSelectedItemPosition());
     values.put(Teams.ROBOT_CAN_GO_UNDER_TOWER, mGoesUnderTower.isChecked() ? 1 : 0);
-    StorageUtil.updateTeam(mActivity, teamId, values);
-  }
-
-  /*****************/
-  /** OTHER STUFF **/
-  /*****************/
-
-  // Hold a reference to the underlying Activity for convenience
-  private static Activity mActivity;
-
-  @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    mActivity = activity;
+    StorageUtil.updateTeam(getActivity(), teamId, values);
   }
 }
