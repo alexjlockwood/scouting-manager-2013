@@ -18,7 +18,15 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
+/**
+ * A bunch of storage utility methods which perform asynchronous disk I/O
+ * (ie, reading/writing to the shared preferences and SQLite database).
+ *
+ * @author Alex Lockwood
+ */
 public final class StorageUtil {
+
+  private static final String KEY_SCOUT_MODE = "scout_mode";
 
   /**
    * Insert a single team into the database. This method is asynchronous.
@@ -83,8 +91,6 @@ public final class StorageUtil {
       }
     }.start();
   }
-
-  private static final String KEY_SCOUT_MODE = "scout_mode";
 
   /**
    * Saves the most recent scouting mode ('team' or 'match').

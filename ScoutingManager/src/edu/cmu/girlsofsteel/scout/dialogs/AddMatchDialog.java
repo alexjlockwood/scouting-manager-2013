@@ -15,6 +15,11 @@ import edu.cmu.girlsofsteel.scout.R;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
+/**
+ * Alert dialog which prompts the user to add a new match.
+ *
+ * @author Alex Lockwood
+ */
 public class AddMatchDialog extends DialogFragment {
 
   private static final String ARG_TEAM_ID = "team_id_arg";

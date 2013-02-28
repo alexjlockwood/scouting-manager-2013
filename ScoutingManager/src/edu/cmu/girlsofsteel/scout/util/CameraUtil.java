@@ -23,35 +23,61 @@ import android.provider.MediaStore;
 import edu.cmu.girlsofsteel.scout.R;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
+/**
+ * Camera utility methods (for taking "team pictures").
+ *
+ * @author Alex Lockwood
+ */
 public final class CameraUtil {
 
+  /**
+   * Returns true if the intent action is available on the device, false
+   * otherwise.
+   */
   public static boolean isIntentAvailable(Context ctx, String action) {
     PackageManager pm = ctx.getPackageManager();
     Intent intent = new Intent(action);
     return pm.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
   }
 
+  /**
+   * Returns true if the device has a camera installed of any kind, false
+   * otherwise.
+   */
   @SuppressLint("InlinedApi")
   public static boolean hasCameraFeature(Context ctx) {
     PackageManager pm = ctx.getPackageManager();
     if (CompatUtil.hasJellyBeanMR1()) {
       return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
     } else if (CompatUtil.hasGingerbread()) {
-      return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
-          pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
+      return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+          || pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT);
     } else {
       return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
   }
 
+  /**
+   * Returns true if the device has a camera application installed, false
+   * otherwise.
+   */
   public static boolean hasCameraApplication(Context ctx) {
     return isIntentAvailable(ctx, MediaStore.ACTION_IMAGE_CAPTURE);
   }
 
+  /**
+   * Returns true if the device has a camera and camera application installed,
+   * false otherwise.
+   */
   public static boolean hasCamera(Context ctx) {
     return hasCameraFeature(ctx) && hasCameraApplication(ctx);
   }
 
+  /**
+   * Loads a picture from a path and adds it to the gallery application. If the
+   * gallery application is not available, then calling this method does
+   * nothing.
+   */
   public static void addToGallery(Context ctx, String path) {
     if (!isIntentAvailable(ctx, Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)) {
       LOGW(ctx.getClass().getSimpleName(), "Gallery application not installed.");
@@ -62,6 +88,9 @@ public final class CameraUtil {
     ctx.sendBroadcast(intent);
   }
 
+  /**
+   * Returns the directory file where pictures are stored.
+   */
   public static File getCameraStorageDirectory(Context ctx) {
     File albumDir = new File(
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -72,12 +101,20 @@ public final class CameraUtil {
     return albumDir;
   }
 
+  /**
+   * Creates a uniquely named image (.jpg) file.
+   *
+   * @throws IOException If the image file could not be created.
+   */
   public static File createImageFile(Context ctx) throws IOException {
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
     String imageFileName = "IMG_" + timeStamp + "_";
     return File.createTempFile(imageFileName, ".jpg", getCameraStorageDirectory(ctx));
   }
 
+  /**
+   * Scales down a bitmap image to 512x512 and inserts it into the MediaStore.
+   */
   public static class ScaleBitmapTask extends AsyncTask<Void, Void, Boolean> {
     private Context mCtx;
     private String mPhotoPath;

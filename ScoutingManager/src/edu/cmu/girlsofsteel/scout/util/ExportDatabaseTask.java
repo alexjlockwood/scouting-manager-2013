@@ -18,8 +18,12 @@ import au.com.bytecode.opencsv.CSVWriter;
 import edu.cmu.girlsofsteel.scout.R;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
+/**
+ * TODO: document this!
+ *
+ * @author Alex Lockwood
+ */
 public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
-
   private static final String TAG = makeLogTag(ExportDatabaseTask.class);
   private Context mCtx;
 

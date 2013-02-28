@@ -15,6 +15,11 @@ import edu.cmu.girlsofsteel.scout.R;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
+/**
+ * Alert dialog which prompts the user to add a new team.
+ *
+ * @author Alex Lockwood
+ */
 public class AddTeamDialog extends DialogFragment {
 
   public static AddTeamDialog newInstance() {

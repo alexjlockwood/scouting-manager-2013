@@ -8,6 +8,12 @@ import android.support.v4.app.DialogFragment;
 import edu.cmu.girlsofsteel.scout.R;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
+/**
+ * Confirmation dialog which prompts the user before a team is permanently
+ * deleted.
+ *
+ * @author Alex Lockwood
+ */
 public class DeleteTeamDialog extends DialogFragment {
 
   private static final String KEY_IDS = "key_ids";

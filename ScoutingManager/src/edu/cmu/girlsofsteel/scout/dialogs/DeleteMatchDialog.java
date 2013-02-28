@@ -9,6 +9,12 @@ import android.support.v4.app.DialogFragment;
 import edu.cmu.girlsofsteel.scout.MatchDetailsFragment.OnMatchDeletedListener;
 import edu.cmu.girlsofsteel.scout.R;
 
+/**
+ * Confirmation dialog which prompts the user before a match is permanently
+ * deleted.
+ *
+ * @author Alex Lockwood
+ */
 public class DeleteMatchDialog extends DialogFragment {
 
   private static final String KEY_ID = "key_id";
