@@ -1,16 +1,20 @@
 package edu.cmu.girlsofsteel.scout;
 
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.TextUtils;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +22,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
+import edu.cmu.girlsofsteel.scout.util.CameraUtil;
+import edu.cmu.girlsofsteel.scout.util.CompatUtil;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
 /**
@@ -33,21 +40,15 @@ import edu.cmu.girlsofsteel.scout.util.StorageUtil;
  *
  * @author Alex Lockwood
  */
-public class TeamDetailsFragment extends SherlockFragment implements
-    LoaderManager.LoaderCallbacks<Cursor> {
+public class TeamDetailsFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,
+    View.OnClickListener {
   // private static final String TAG = makeLogTag(TeamListFragment.class);
 
   private static final int TEAM_LOADER_ID = 1;
   private static final String[] PROJECTION = null;
 
-  // TODO: figure out if rank is necessary?
-  // TODO: figure out if rank is necessary?
-  // TODO: figure out if rank is necessary?
-  // TODO: figure out if rank is necessary?
-  // TODO: figure out if rank is necessary?
-
   private ImageView mTeamPicture;
-  private EditText mTeamName/* , mTeamRank */;
+  private EditText mTeamName;
   private CheckBox mScoreLow, mScoreMid, mScoreHigh;
   private CheckBox mClimbLevelOne, mClimbLevelTwo, mClimbLevelThree;
   private CompoundButton mHelpsClimb, mDrivingGears, mGoesUnderTower;
@@ -59,7 +60,14 @@ public class TeamDetailsFragment extends SherlockFragment implements
 
     mTeamPicture = (ImageView) view.findViewById(R.id.team_picture);
     mTeamName = (EditText) view.findViewById(R.id.team_name);
-    // mTeamRank = (EditText) view.findViewById(R.id.team_rank);
+
+    if (CompatUtil.hasHoneycomb()) {
+      // Uses a PopupMenu for API 11+
+      mTeamPicture.setOnClickListener(this);
+    } else {
+      // Otherwise uses a context menu
+      registerForContextMenu(mTeamPicture);
+    }
 
     mScoreLow = (CheckBox) view.findViewById(R.id.checkbox_low_goal);
     mScoreMid = (CheckBox) view.findViewById(R.id.checkbox_mid_goal);
@@ -82,6 +90,7 @@ public class TeamDetailsFragment extends SherlockFragment implements
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+    setHasOptionsMenu(true);
     getLoaderManager().initLoader(TEAM_LOADER_ID, getArguments(), this);
   }
 
@@ -89,6 +98,27 @@ public class TeamDetailsFragment extends SherlockFragment implements
   public void onPause() {
     super.onPause();
     saveTeamData();
+  }
+
+  /****************/
+  /** ACTION BAR **/
+  /****************/
+
+  @Override
+  public void onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu,
+      com.actionbarsherlock.view.MenuInflater inflater) {
+    inflater.inflate(R.menu.team_details_actionbar, menu);
+    super.onCreateOptionsMenu(menu, inflater);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_clear_screen:
+        clearTeamData();
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
   }
 
   /**********************/
@@ -186,5 +216,76 @@ public class TeamDetailsFragment extends SherlockFragment implements
     values.put(Teams.ROBOT_TYPE_OF_WHEEL, mWheelType.getSelectedItemPosition());
     values.put(Teams.ROBOT_CAN_GO_UNDER_TOWER, mGoesUnderTower.isChecked() ? 1 : 0);
     StorageUtil.updateTeam(getActivity(), teamId, values);
+  }
+
+  private void clearTeamData() {
+    mTeamName.setText("");
+    mScoreLow.setChecked(false);
+    mScoreMid.setChecked(false);
+    mScoreHigh.setChecked(false);
+    mClimbLevelOne.setChecked(false);
+    mClimbLevelTwo.setChecked(false);
+    mClimbLevelThree.setChecked(false);
+    mHelpsClimb.setChecked(false);
+    mDrivingGears.setChecked(false);
+    mGoesUnderTower.setChecked(false);
+    mDriveTrain.setSelection(0);
+    mWheelType.setSelection(0);
+  }
+
+  @Override
+  public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+    super.onCreateContextMenu(menu, v, menuInfo);
+    getActivity().getMenuInflater().inflate(R.menu.team_picture_menu, menu);
+    menu.findItem(R.id.menu_take_picture).setEnabled(CameraUtil.hasCamera(getActivity()));
+  }
+
+  @Override
+  public boolean onContextItemSelected(android.view.MenuItem item) {
+    return pickTeamPictureMenuItem(item);
+  }
+
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+  @Override
+  public void onClick(View v) {
+    if (v.getId() == R.id.team_picture) {
+      if (CompatUtil.hasHoneycomb()) {
+        // Show the popup menu for devices on API 11+
+        PopupMenu popUp = new PopupMenu(getActivity(), v);
+        popUp.getMenuInflater().inflate(R.menu.team_picture_menu, popUp.getMenu());
+        popUp.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+          @Override
+          public boolean onMenuItemClick(android.view.MenuItem item) {
+            return pickTeamPictureMenuItem(item);
+          }
+        });
+        boolean hasCamera = CameraUtil.hasCamera(getActivity());
+        popUp.getMenu().findItem(R.id.menu_take_picture).setEnabled(hasCamera);
+        popUp.show();
+      }
+    }
+  }
+
+  private boolean pickTeamPictureMenuItem(android.view.MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_take_picture:
+        takePicture();
+        return true;
+      case R.id.menu_delete_picture:
+        deletePicture();
+        return true;
+    }
+    return false;
+  }
+
+  private void takePicture() {
+    // TODO: implement this
+  }
+
+  private void deletePicture() {
+    long teamId = getArguments().getLong(MainActivity.ARG_TEAM_ID);
+    ContentValues updateValues = new ContentValues();
+    updateValues.put(Teams.PHOTO, "");
+    StorageUtil.updateTeam(getActivity(), teamId, updateValues);
   }
 }
