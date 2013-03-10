@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -114,7 +115,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
   @Override
   public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
     switch (item.getItemId()) {
-      case R.id.menu_clear_screen:
+      case R.id.menu_clear_team_screen:
         clearTeamData();
         return true;
     }
@@ -280,6 +281,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
 
   private void takePicture() {
     // TODO: implement this
+    Toast.makeText(getActivity(), "Coming soon!", Toast.LENGTH_SHORT).show();
   }
 
   private void deletePicture() {

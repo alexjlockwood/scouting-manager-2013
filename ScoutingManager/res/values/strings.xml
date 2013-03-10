@@ -30,6 +30,15 @@
         <item quantity="one">One team will be deleted.</item>
         <item quantity="other">%d teams will be deleted.</item>
     </plurals>
+    
+        <plurals name="title_delete_matches">
+        <item quantity="one">Delete match?</item>
+        <item quantity="other">Delete matches?</item>
+    </plurals>
+    <plurals name="message_delete_matches">
+        <item quantity="one">One match will be deleted.</item>
+        <item quantity="other">%d matches will be deleted.</item>
+    </plurals>
 
     <!-- Menu -->
     <string name="menu_add_team">Add Team</string>
@@ -109,11 +118,21 @@
     <string name="goes_under_tower">Goes Under Tower</string>
 
     <!-- Match Scout -->
+    <string name="num_hits">Hits</string>
+    <string name="num_miss">Misses</string>
+    <string name="hit">Hit</string>
+    <string name="miss">Miss</string>
+    <string name="slash">/</string>
+    <string name="zero">0</string>
+    <string name="autonomous_shots">Autonomous</string>
+    <string name="teleop_shots">Tele-op</string>
+    <string name="high_basket">High Basket</string>
+    <string name="medium_basket">Medium Basket</string>
+    <string name="low_basket">Low Basket</string>
     <string name="tower_level">Tower Level</string>
     <string name="fell_off_tower">Fell Off Tower?</string>
     <string name="human_player_ability">Human Player Ability</string>
     <string name="high_scoring">High Scoring</string>
-    <string name="neutral">neutral</string>
     <string name="impedes_performance">Impedes Performance</string>
     <string name="frisbees_from_where">Frisbees From Where?</string>
     <string name="feeder">Feeder</string>
@@ -121,7 +140,10 @@
     <string name="strategy">Strategy</string>
     <string name="offense">Offense</string>
     <string name="defense">Defense</string>
+    <string name="neutral">Neutral</string>
     <string name="speed">Speed</string>
+    <string name="fast">Fast</string>
+    <string name="slow">Slow</string>
     <string name="maneuverability">Maneuverability</string>
     <string name="penalty">Penalty</string>
 

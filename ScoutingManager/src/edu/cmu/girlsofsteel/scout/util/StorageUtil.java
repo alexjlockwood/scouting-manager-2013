@@ -19,14 +19,15 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
 /**
- * A bunch of storage utility methods which perform asynchronous disk I/O
- * (ie, reading/writing to the shared preferences and SQLite database).
+ * A bunch of storage utility methods which perform asynchronous disk I/O (ie,
+ * reading/writing to the shared preferences and SQLite database).
  *
  * @author Alex Lockwood
  */
 public final class StorageUtil {
 
   private static final String KEY_SCOUT_MODE = "scout_mode";
+  private static final String KEY_TEAM_MATCH_ID = "team_match_id";
 
   /**
    * Insert a single team into the database. This method is asynchronous.
@@ -53,6 +54,16 @@ public final class StorageUtil {
     AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) {
     };
     handler.startUpdate(-1, null, Teams.teamIdUri(teamId), values, null, null);
+  }
+
+  /**
+   * Update a single team's record in the database. This method is asynchronous.
+   */
+  public static void updateTeamMatch(Context ctx, long teamMatchId, ContentValues values) {
+    AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) {
+    };
+    handler.startUpdate(-1, null, TeamMatches.CONTENT_URI, values, TeamMatches._ID + "=?",
+        new String[] { "" + teamMatchId });
   }
 
   /**
@@ -114,6 +125,29 @@ public final class StorageUtil {
     // Store "false" for TEAM, "true" for MATCH
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
     return prefs.getBoolean(KEY_SCOUT_MODE, false) ? ScoutMode.MATCH : ScoutMode.TEAM;
+  }
+
+  /**
+   * Saves the last selected team match id in match scout mode.
+   */
+  @TargetApi(Build.VERSION_CODES.GINGERBREAD)
+  public static void setLastSelectedTeamMatchId(Context ctx, long id) {
+    Editor editor = PreferenceManager.getDefaultSharedPreferences(ctx).edit();
+    editor.putLong(KEY_TEAM_MATCH_ID, id);
+    if (CompatUtil.hasGingerbread()) {
+      editor.apply();
+    } else {
+      editor.commit();
+    }
+  }
+
+  /**
+   * Gets the last selected team match id in match scout mode. Returns -1 if
+   * none exists.
+   */
+  public static long getLastSelectedTeamMatchId(Context ctx) {
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    return prefs.getLong(KEY_TEAM_MATCH_ID, -1);
   }
 
   private StorageUtil() {

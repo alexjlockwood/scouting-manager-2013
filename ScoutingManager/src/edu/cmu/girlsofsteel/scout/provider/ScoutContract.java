@@ -86,9 +86,16 @@ public final class ScoutContract {
     String AUTO_SHOTS_MADE_LOW = "auto_shots_made_low";
     String AUTO_SHOTS_MADE_MID = "auto_shots_made_mid";
     String AUTO_SHOTS_MADE_HIGH = "auto_shots_made_high";
+    String AUTO_SHOTS_MISS_LOW = "auto_shots_miss_low";
+    String AUTO_SHOTS_MISS_MID = "auto_shots_miss_mid";
+    String AUTO_SHOTS_MISS_HIGH = "auto_shots_miss_high";
+
     String TELE_SHOTS_MADE_LOW = "tele_shots_made_low";
     String TELE_SHOTS_MADE_MID = "tele_shots_made_mid";
     String TELE_SHOTS_MADE_HIGH = "tele_shots_made_high";
+    String TELE_SHOTS_MISS_LOW = "tele_shots_miss_low";
+    String TELE_SHOTS_MISS_MID = "tele_shots_miss_mid";
+    String TELE_SHOTS_MISS_HIGH = "tele_shots_miss_high";
 
     String SHOOTS_FROM_BACK_RIGHT = "shoots_from_back_right";
     String SHOOTS_FROM_BACK_LEFT = "shoots_from_back_left";

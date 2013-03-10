@@ -1,8 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_clear_screen"
-        android:orderInCategory="1"
+        android:id="@+id/menu_clear_team_screen"
         android:showAsAction="never"
         android:title="@string/menu_clear_screen"/>
 

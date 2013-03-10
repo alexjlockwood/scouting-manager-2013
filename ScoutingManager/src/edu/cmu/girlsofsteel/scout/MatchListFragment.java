@@ -1,10 +1,11 @@
 package edu.cmu.girlsofsteel.scout;
 
-import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager;
@@ -22,7 +23,6 @@ import com.actionbarsherlock.view.MenuItem;
 
 import edu.cmu.girlsofsteel.scout.dialogs.AddMatchDialog;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
-import edu.cmu.girlsofsteel.scout.util.CompatUtil;
 
 /**
  * {@link MatchListFragment} displays the all of the matches for a particular
@@ -40,6 +40,8 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
   private static final String DEFAULT_SORT = TeamMatches.MATCH_NUMBER + " COLLATE LOCALIZED ASC";
   private MatchListAdapter mAdapter;
   private OnMatchSelectedListener mCallback;
+
+  // private boolean mFirstLoad = true;
 
   /**
    * The container Activity must implement this interface so the frag can
@@ -68,18 +70,12 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
     getListView().setCacheColorHint(Color.WHITE);
   }
 
-  @SuppressLint("InlinedApi")
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
 
-    // Use fancier activated list item layout for Honeycomb and above
-    int layout = CompatUtil.hasHoneycomb()
-        ? android.R.layout.simple_list_item_activated_1
-        : android.R.layout.simple_list_item_1;
-
-    mAdapter = new MatchListAdapter(getActivity(), layout);
+    mAdapter = new MatchListAdapter(getActivity());
     setListShown(false);
     setListAdapter(mAdapter);
     setEmptyText(getActivity().getString(R.string.message_no_matches));
@@ -91,7 +87,7 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
 
     // Grab the intent extras (containing the current team id) from the parent
     // activity. A little hacky... but I'm feeling kinda lazy tonight. :)
-    Bundle args = ((MatchScoutActivity) getActivity()).getIntent().getExtras();
+    Bundle args = getActivity().getIntent().getExtras();
     getLoaderManager().initLoader(MATCH_LOADER_ID, args, this);
   }
 
@@ -112,6 +108,7 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
         TeamMatches.TEAM_ID + "=?", new String[] { "" + teamId }, DEFAULT_SORT);
   }
 
+  @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Override
   public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
     mAdapter.swapCursor(data);
@@ -120,6 +117,30 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
     } else {
       setListShownNoAnimation(true);
     }
+
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+    // TODO: remember the last clicked/selected match!
+
+    // if (mFirstLoad) {
+    // Must post this on the main thread's message queue if we want
+    // to call this in onLoadFinished (avoids an illegal state exception).
+    // new Handler(Looper.getMainLooper()).post(new Runnable() {
+    // @Override
+    // public void run() {
+    // ListView lv = getListView();
+    // lv.performItemClick(lv, 0, lv.getItemIdAtPosition(0));
+    // }
+    // });
+    // mFirstLoad = false;
+    // }
   }
 
   @Override
@@ -156,8 +177,8 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
 
   private static class MatchListAdapter extends ResourceCursorAdapter {
 
-    public MatchListAdapter(Context ctx, int layout) {
-      super(ctx, layout, null, 0);
+    public MatchListAdapter(Context ctx) {
+      super(ctx, R.layout.match_list_row, null, 0);
     }
 
     @Override
@@ -165,7 +186,7 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
       ViewHolder holder = (ViewHolder) view.getTag();
       if (holder == null) {
         holder = new ViewHolder();
-        holder.matchNum = (TextView) view.findViewById(android.R.id.text1);
+        holder.matchNum = (TextView) view.findViewById(R.id.match_number);
         holder.matchNumCol = cur.getColumnIndexOrThrow(TeamMatches.MATCH_NUMBER);
         view.setTag(holder);
       }

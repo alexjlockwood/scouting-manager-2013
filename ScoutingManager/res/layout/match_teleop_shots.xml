@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/teleop_shots_panel"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true" >
+
+    <!-- High Basket -->
+
+    <TextView
+        android:id="@+id/high_basket_header"
+        style="@style/match_basket_header"
+        android:text="@string/high_basket" />
+
+    <TextView
+        android:id="@+id/num_hits_header"
+        style="@style/match_basket_header"
+        android:layout_alignBaseline="@id/high_basket_header"
+        android:layout_marginLeft="80dp"
+        android:layout_toRightOf="@id/high_basket_header"
+        android:text="@string/num_hits" />
+
+    <TextView
+        android:id="@+id/num_misses_header"
+        style="@style/match_basket_header"
+        android:layout_alignBaseline="@id/high_basket_header"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/num_hits_header"
+        android:text="@string/num_miss" />
+
+    <Button
+        android:id="@+id/button_tele_shots_hit_high"
+        style="@style/match_button_hit"
+        android:layout_alignLeft="@id/high_basket_header"
+        android:layout_below="@id/high_basket_header" />
+
+    <Button
+        android:id="@+id/button_tele_shots_miss_high"
+        style="@style/match_button_miss"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_high"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@id/button_tele_shots_hit_high" />
+
+    <EditText
+        android:id="@+id/edittext_tele_shots_hit_high"
+        style="@style/match_basket_counter"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_high"
+        android:layout_alignLeft="@id/num_hits_header"
+        android:layout_toRightOf="@id/button_tele_shots_miss_high" />
+
+    <EditText
+        android:id="@+id/edittext_tele_shots_miss_high"
+        style="@style/match_basket_counter"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_high"
+        android:layout_alignLeft="@id/num_misses_header"
+        android:layout_toRightOf="@id/edittext_tele_shots_hit_high" />
+
+    <!-- Medium Basket -->
+
+    <TextView
+        android:id="@+id/medium_basket_header"
+        style="@style/match_basket_header"
+        android:layout_below="@id/button_tele_shots_hit_high"
+        android:layout_marginTop="16dp"
+        android:text="@string/medium_basket" />
+
+    <Button
+        android:id="@+id/button_tele_shots_hit_medium"
+        style="@style/match_button_hit"
+        android:layout_alignLeft="@id/button_tele_shots_hit_high"
+        android:layout_below="@id/medium_basket_header" />
+
+    <Button
+        android:id="@+id/button_tele_shots_miss_medium"
+        style="@style/match_button_miss"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_medium"
+        android:layout_alignLeft="@id/button_tele_shots_miss_high" />
+
+    <EditText
+        android:id="@+id/edittext_tele_shots_hit_medium"
+        style="@style/match_basket_counter"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_medium"
+        android:layout_alignLeft="@id/edittext_tele_shots_hit_high" />
+
+    <EditText
+        android:id="@+id/edittext_tele_shots_miss_medium"
+        style="@style/match_basket_counter"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_medium"
+        android:layout_alignLeft="@id/edittext_tele_shots_miss_high" />
+
+    <!-- Low Basket -->
+
+    <TextView
+        android:id="@+id/low_basket_header"
+        style="@style/match_basket_header"
+        android:layout_below="@id/button_tele_shots_hit_medium"
+        android:layout_marginTop="16dp"
+        android:text="@string/low_basket" />
+
+    <Button
+        android:id="@+id/button_tele_shots_hit_low"
+        style="@style/match_button_hit"
+        android:layout_alignLeft="@id/button_tele_shots_hit_high"
+        android:layout_below="@id/low_basket_header" />
+
+    <Button
+        android:id="@+id/button_tele_shots_miss_low"
+        style="@style/match_button_miss"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_low"
+        android:layout_alignLeft="@id/button_tele_shots_miss_high" />
+
+    <EditText
+        android:id="@+id/edittext_tele_shots_hit_low"
+        style="@style/match_basket_counter"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_low"
+        android:layout_alignLeft="@id/edittext_tele_shots_hit_medium" />
+
+    <EditText
+        android:id="@+id/edittext_tele_shots_miss_low"
+        style="@style/match_basket_counter"
+        android:layout_alignBaseline="@id/button_tele_shots_hit_low"
+        android:layout_alignLeft="@id/edittext_tele_shots_miss_high" />
+
+</RelativeLayout>

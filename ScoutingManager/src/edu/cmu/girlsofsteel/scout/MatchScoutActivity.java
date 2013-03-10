@@ -75,8 +75,8 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
 
   @Override
   public void onMatchSelected(long teamMatchId) {
-    MatchDetailsFragment detailsFrag = (MatchDetailsFragment) getSupportFragmentManager().findFragmentById(
-        R.id.match_details_fragment);
+    FragmentManager fm = getSupportFragmentManager();
+    MatchDetailsFragment detailsFrag = (MatchDetailsFragment) fm.findFragmentById(R.id.match_details_fragment);
 
     if (detailsFrag != null) {
       // If details frag is available, we're in two-pane layout. Tell the
@@ -87,8 +87,8 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
       // swap fragments. Replace whatever is in the fragment_container view with
       // this fragment, and add the transaction to the back stack so the user
       // can navigate back.
-      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-      Fragment fragment = MatchDetailsFragment.newInstance(teamMatchId);
+      FragmentTransaction transaction = fm.beginTransaction();
+      Fragment fragment = MatchDetailsFragment.newInstance(teamMatchId, mTeamNumber);
       transaction.replace(R.id.fragment_container, fragment);
       transaction.addToBackStack(null);
       transaction.commit();
@@ -107,8 +107,8 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
     if (fm.getBackStackEntryCount() > 0) {
       fm.popBackStack();
     } else {
-      MatchDetailsFragment detailsFrag = (MatchDetailsFragment) fm.findFragmentById(R.id.match_details_fragment);
-      detailsFrag.clearDetailsView();
+      //MatchDetailsFragment detailsFrag = (MatchDetailsFragment) fm.findFragmentById(R.id.match_details_fragment);
+      //detailsFrag.clearDetailsView();
     }
     StorageUtil.deleteTeamMatch(this, teamMatchId);
   }
@@ -116,6 +116,21 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
   /**********************/
   /** LOADER CALLBACKS **/
   /**********************/
+
+  static final String ARG_TEAM_NUMBER = "team_number";
+  private String mTeamNumber;
+
+  @Override
+  public void onSaveInstanceState(Bundle savedInstanceState) {
+    savedInstanceState.putString(ARG_TEAM_NUMBER, mTeamNumber);
+    super.onSaveInstanceState(savedInstanceState);
+  }
+
+  @Override
+  public void onRestoreInstanceState(Bundle outState) {
+    super.onRestoreInstanceState(outState);
+    mTeamNumber = outState.getString(ARG_TEAM_NUMBER);
+  }
 
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -128,6 +143,7 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
     if (data.moveToFirst()) {
       String teamNumber = data.getString(data.getColumnIndexOrThrow(Teams.NUMBER));
       getSupportActionBar().setSubtitle("Team " + teamNumber);
+      mTeamNumber = teamNumber;
     }
   }
 

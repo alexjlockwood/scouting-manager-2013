@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/menu_clear_match_screen"
+        android:orderInCategory="1"
+        android:showAsAction="never"
+        android:title="@string/menu_clear_screen"/>
+    <item
         android:id="@+id/menu_delete_match"
         android:icon="@drawable/ic_menu_delete"
+        android:orderInCategory="2"
         android:showAsAction="never"
         android:title="@string/menu_delete"/>
 

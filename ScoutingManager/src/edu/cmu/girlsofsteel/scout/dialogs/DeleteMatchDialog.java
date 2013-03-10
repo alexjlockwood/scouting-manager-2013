@@ -30,8 +30,8 @@ public class DeleteMatchDialog extends DialogFragment {
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     final long id = getArguments().getLong(KEY_ID);
-    String title = getResources().getQuantityString(R.plurals.title_delete_teams, 1);
-    String msg = getResources().getQuantityString(R.plurals.message_delete_teams, 1, 1);
+    String title = getResources().getQuantityString(R.plurals.title_delete_matches, 1);
+    String msg = getResources().getQuantityString(R.plurals.message_delete_matches, 1, 1);
     return new AlertDialog.Builder(getActivity())
         .setTitle(title)
         .setMessage(msg)

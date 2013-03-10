@@ -75,9 +75,16 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.AUTO_SHOTS_MADE_LOW + " INTEGER,"
         + TeamMatches.AUTO_SHOTS_MADE_MID + " INTEGER,"
         + TeamMatches.AUTO_SHOTS_MADE_HIGH + " INTEGER,"
+        + TeamMatches.AUTO_SHOTS_MISS_LOW + " INTEGER,"
+        + TeamMatches.AUTO_SHOTS_MISS_MID + " INTEGER,"
+        + TeamMatches.AUTO_SHOTS_MISS_HIGH + " INTEGER,"
+
         + TeamMatches.TELE_SHOTS_MADE_LOW + " INTEGER,"
         + TeamMatches.TELE_SHOTS_MADE_MID + " INTEGER,"
         + TeamMatches.TELE_SHOTS_MADE_HIGH + " INTEGER,"
+        + TeamMatches.TELE_SHOTS_MISS_LOW + " INTEGER,"
+        + TeamMatches.TELE_SHOTS_MISS_MID + " INTEGER,"
+        + TeamMatches.TELE_SHOTS_MISS_HIGH + " INTEGER,"
 
         + TeamMatches.SHOOTS_FROM_BACK_RIGHT + " INTEGER,"
         + TeamMatches.SHOOTS_FROM_BACK_LEFT + " INTEGER,"
@@ -95,15 +102,15 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.TOWER_LEVEL_THREE + " INTEGER,"
         + TeamMatches.TOWER_FELL_OFF + " INTEGER,"
 
-        + TeamMatches.HUMAN_PLAYER_ABILITY + " INTEGER,"
+        + TeamMatches.HUMAN_PLAYER_ABILITY + " INTEGER DEFAULT -1,"
 
         + TeamMatches.FRISBEES_FROM_FEEDER + " INTEGER,"
         + TeamMatches.FRISBEES_FROM_FLOOR + " INTEGER,"
 
-        + TeamMatches.ROBOT_STRATEGY + " INTEGER,"
-        + TeamMatches.ROBOT_SPEED + " INTEGER,"
-        + TeamMatches.ROBOT_MANEUVERABILITY + " INTEGER,"
-        + TeamMatches.ROBOT_PENALTY + " INTEGER,"
+        + TeamMatches.ROBOT_STRATEGY + " INTEGER DEFAULT -1,"
+        + TeamMatches.ROBOT_SPEED + " INTEGER DEFAULT -1,"
+        + TeamMatches.ROBOT_MANEUVERABILITY + " INTEGER DEFAULT -1,"
+        + TeamMatches.ROBOT_PENALTY + " INTEGER DEFAULT -1,"
 
         + "UNIQUE (" + TeamMatches.MATCH_NUMBER + "," + TeamMatches.TEAM_ID + ") ON CONFLICT IGNORE);");
   }
