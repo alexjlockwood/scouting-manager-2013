@@ -8,13 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
-// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
-// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
-// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
-// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
-// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
-// TODO: Don't use ON CONFLICT IGNORE! Weird incompatibilities with 2.3 vs 4.0!
-
 /**
  * This class is responsible for the creation of the database. The ScoutProvider
  * class allows access to the data stored in the database.
@@ -48,12 +41,12 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + Teams.NUMBER + " INTEGER NOT NULL,"
         + Teams.NAME + " TEXT,"
         + Teams.PHOTO + " TEXT,"
+        + Teams.RANK + " INTEGER,"
 
         + Teams.ROBOT_CAN_SCORE_ON_LOW + " INTEGER,"
         + Teams.ROBOT_CAN_SCORE_ON_MID + " INTEGER,"
         + Teams.ROBOT_CAN_SCORE_ON_HIGH + " INTEGER,"
 
-        // + Teams.ROBOT_CAN_CLIMB + " INTEGER,"
         + Teams.ROBOT_CAN_CLIMB_LEVEL_ONE + " INTEGER,"
         + Teams.ROBOT_CAN_CLIMB_LEVEL_TWO + " INTEGER,"
         + Teams.ROBOT_CAN_CLIMB_LEVEL_THREE + " INTEGER,"
@@ -72,31 +65,22 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.TEAM_ID + " INTEGER NOT NULL " + References.TEAM_ID + ","
         + TeamMatches.MATCH_NUMBER + " INTEGER NOT NULL, "
 
-        + TeamMatches.AUTO_SHOTS_MADE_LOW + " INTEGER,"
-        + TeamMatches.AUTO_SHOTS_MADE_MID + " INTEGER,"
-        + TeamMatches.AUTO_SHOTS_MADE_HIGH + " INTEGER,"
-        + TeamMatches.AUTO_SHOTS_MISS_LOW + " INTEGER,"
-        + TeamMatches.AUTO_SHOTS_MISS_MID + " INTEGER,"
-        + TeamMatches.AUTO_SHOTS_MISS_HIGH + " INTEGER,"
+        + TeamMatches.AUTO_SHOTS_MADE_LOW + " INTEGER DEFAULT 0,"
+        + TeamMatches.AUTO_SHOTS_MADE_MID + " INTEGER DEFAULT 0,"
+        + TeamMatches.AUTO_SHOTS_MADE_HIGH + " INTEGER DEFAULT 0,"
+        + TeamMatches.AUTO_SHOTS_MISS_LOW + " INTEGER DEFAULT 0,"
+        + TeamMatches.AUTO_SHOTS_MISS_MID + " INTEGER DEFAULT 0,"
+        + TeamMatches.AUTO_SHOTS_MISS_HIGH + " INTEGER DEFAULT 0,"
 
-        + TeamMatches.TELE_SHOTS_MADE_LOW + " INTEGER,"
-        + TeamMatches.TELE_SHOTS_MADE_MID + " INTEGER,"
-        + TeamMatches.TELE_SHOTS_MADE_HIGH + " INTEGER,"
-        + TeamMatches.TELE_SHOTS_MISS_LOW + " INTEGER,"
-        + TeamMatches.TELE_SHOTS_MISS_MID + " INTEGER,"
-        + TeamMatches.TELE_SHOTS_MISS_HIGH + " INTEGER,"
+        + TeamMatches.TELE_SHOTS_MADE_LOW + " INTEGER DEFAULT 0,"
+        + TeamMatches.TELE_SHOTS_MADE_MID + " INTEGER DEFAULT 0,"
+        + TeamMatches.TELE_SHOTS_MADE_HIGH + " INTEGER DEFAULT 0,"
+        + TeamMatches.TELE_SHOTS_MISS_LOW + " INTEGER DEFAULT 0,"
+        + TeamMatches.TELE_SHOTS_MISS_MID + " INTEGER DEFAULT 0,"
+        + TeamMatches.TELE_SHOTS_MISS_HIGH + " INTEGER DEFAULT 0,"
 
-        + TeamMatches.SHOOTS_FROM_BACK_RIGHT + " INTEGER,"
-        + TeamMatches.SHOOTS_FROM_BACK_LEFT + " INTEGER,"
-        + TeamMatches.SHOOTS_FROM_FRONT_RIGHT + " INTEGER,"
-        + TeamMatches.SHOOTS_FROM_FRONT_LEFT + " INTEGER,"
-        + TeamMatches.SHOOTS_FROM_SIDE_RIGHT + " INTEGER,"
-        + TeamMatches.SHOOTS_FROM_SIDE_LEFT + " INTEGER,"
-        + TeamMatches.SHOOTS_FROM_FRONT + " INTEGER,"
-        + TeamMatches.SHOOTS_FROM_ANYWHERE + " INTEGER,"
-        + TeamMatches.SHOOTS_FROM_OTHER + " INTEGER,"
+        + TeamMatches.SHOOTS_FROM_WHERE + " TEXT,"
 
-        // + TeamMatches.TOWER_LEVEL_NONE + " INTEGER,"
         + TeamMatches.TOWER_LEVEL_ONE + " INTEGER,"
         + TeamMatches.TOWER_LEVEL_TWO + " INTEGER,"
         + TeamMatches.TOWER_LEVEL_THREE + " INTEGER,"

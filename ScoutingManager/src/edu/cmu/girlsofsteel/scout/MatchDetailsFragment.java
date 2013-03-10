@@ -138,18 +138,25 @@ public class MatchDetailsFragment extends SherlockFragment implements LoaderMana
     mButtonAutoMissMed = (Button) autoPanel.findViewById(R.id.button_auto_shots_miss_medium);
     mButtonAutoHitLow = (Button) autoPanel.findViewById(R.id.button_auto_shots_hit_low);
     mButtonAutoMissLow = (Button) autoPanel.findViewById(R.id.button_auto_shots_miss_low);
-    mEditAutoHitHigh = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_hit_high);
-    mEditAutoMissHigh = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_miss_high);
-    mEditAutoHitMed = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_hit_medium);
-    mEditAutoMissMed = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_miss_medium);
-    mEditAutoHitLow = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_hit_low);
-    mEditAutoMissLow = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_miss_low);
     mButtonAutoHitHigh.setOnClickListener(this);
     mButtonAutoMissHigh.setOnClickListener(this);
     mButtonAutoHitMed.setOnClickListener(this);
     mButtonAutoMissMed.setOnClickListener(this);
     mButtonAutoHitLow.setOnClickListener(this);
     mButtonAutoMissLow.setOnClickListener(this);
+    
+    mEditAutoHitHigh = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_hit_high);
+    mEditAutoMissHigh = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_miss_high);
+    mEditAutoHitMed = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_hit_medium);
+    mEditAutoMissMed = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_miss_medium);
+    mEditAutoHitLow = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_hit_low);
+    mEditAutoMissLow = (EditText) autoPanel.findViewById(R.id.edittext_auto_shots_miss_low);
+    mEditAutoHitHigh.setOnClickListener(this);
+    mEditAutoMissHigh.setOnClickListener(this);
+    mEditAutoHitMed.setOnClickListener(this);
+    mEditAutoMissMed.setOnClickListener(this);
+    mEditAutoHitLow.setOnClickListener(this);
+    mEditAutoMissLow.setOnClickListener(this);
 
     View teleOpPanel = view.findViewById(R.id.teleop_shots_panel);
     mButtonTeleHitHigh = (Button) teleOpPanel.findViewById(R.id.button_tele_shots_hit_high);
@@ -158,18 +165,25 @@ public class MatchDetailsFragment extends SherlockFragment implements LoaderMana
     mButtonTeleMissMed = (Button) teleOpPanel.findViewById(R.id.button_tele_shots_miss_medium);
     mButtonTeleHitLow = (Button) teleOpPanel.findViewById(R.id.button_tele_shots_hit_low);
     mButtonTeleMissLow = (Button) teleOpPanel.findViewById(R.id.button_tele_shots_miss_low);
-    mEditTeleHitHigh = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_hit_high);
-    mEditTeleMissHigh = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_miss_high);
-    mEditTeleHitMed = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_hit_medium);
-    mEditTeleMissMed = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_miss_medium);
-    mEditTeleHitLow = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_hit_low);
-    mEditTeleMissLow = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_miss_low);
     mButtonTeleHitHigh.setOnClickListener(this);
     mButtonTeleMissHigh.setOnClickListener(this);
     mButtonTeleHitMed.setOnClickListener(this);
     mButtonTeleMissMed.setOnClickListener(this);
     mButtonTeleHitLow.setOnClickListener(this);
     mButtonTeleMissLow.setOnClickListener(this);
+    
+    mEditTeleHitHigh = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_hit_high);
+    mEditTeleMissHigh = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_miss_high);
+    mEditTeleHitMed = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_hit_medium);
+    mEditTeleMissMed = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_miss_medium);
+    mEditTeleHitLow = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_hit_low);
+    mEditTeleMissLow = (EditText) teleOpPanel.findViewById(R.id.edittext_tele_shots_miss_low);
+    mEditTeleHitHigh.setOnClickListener(this);
+    mEditTeleMissHigh.setOnClickListener(this);
+    mEditTeleHitMed.setOnClickListener(this);
+    mEditTeleMissMed.setOnClickListener(this);
+    mEditTeleHitLow.setOnClickListener(this);
+    mEditTeleMissLow.setOnClickListener(this);
 
     mTowerLevelOne = (CheckBox) view.findViewById(R.id.cb_tower_level_one);
     mTowerLevelTwo = (CheckBox) view.findViewById(R.id.cb_tower_level_two);
@@ -204,38 +218,74 @@ public class MatchDetailsFragment extends SherlockFragment implements LoaderMana
       case R.id.button_auto_shots_hit_high:
         incrementCount(mEditAutoHitHigh);
         break;
+      case R.id.edittext_auto_shots_hit_high:
+        decrementCount(mEditAutoHitHigh);
+        break;
       case R.id.button_auto_shots_miss_high:
         incrementCount(mEditAutoMissHigh);
+        break;
+      case R.id.edittext_auto_shots_miss_high:
+        decrementCount(mEditAutoMissHigh);
         break;
       case R.id.button_auto_shots_hit_medium:
         incrementCount(mEditAutoHitMed);
         break;
+      case R.id.edittext_auto_shots_hit_medium:
+        decrementCount(mEditAutoHitMed);
+        break;
       case R.id.button_auto_shots_miss_medium:
         incrementCount(mEditAutoMissMed);
+        break;
+      case R.id.edittext_auto_shots_miss_medium:
+        decrementCount(mEditAutoMissMed);
         break;
       case R.id.button_auto_shots_hit_low:
         incrementCount(mEditAutoHitLow);
         break;
+      case R.id.edittext_auto_shots_hit_low:
+        decrementCount(mEditAutoHitLow);
+        break;
       case R.id.button_auto_shots_miss_low:
         incrementCount(mEditAutoMissLow);
+        break;
+      case R.id.edittext_auto_shots_miss_low:
+        decrementCount(mEditAutoMissLow);
         break;
       case R.id.button_tele_shots_hit_high:
         incrementCount(mEditTeleHitHigh);
         break;
+      case R.id.edittext_tele_shots_hit_high: 
+        decrementCount(mEditTeleHitHigh);
+        break;
       case R.id.button_tele_shots_miss_high:
         incrementCount(mEditTeleMissHigh);
+        break;
+      case R.id.edittext_tele_shots_miss_high:
+        decrementCount(mEditTeleMissHigh);
         break;
       case R.id.button_tele_shots_hit_medium:
         incrementCount(mEditTeleHitMed);
         break;
+      case R.id.edittext_tele_shots_hit_medium:
+        decrementCount(mEditTeleHitMed);
+        break;
       case R.id.button_tele_shots_miss_medium:
         incrementCount(mEditTeleMissMed);
+        break;
+      case R.id.edittext_tele_shots_miss_medium:
+        decrementCount(mEditTeleMissMed);
         break;
       case R.id.button_tele_shots_hit_low:
         incrementCount(mEditTeleHitLow);
         break;
+      case R.id.edittext_tele_shots_hit_low:
+        decrementCount(mEditTeleHitLow);
+        break;
       case R.id.button_tele_shots_miss_low:
         incrementCount(mEditTeleMissLow);
+        break;
+      case R.id.edittext_tele_shots_miss_low:
+        decrementCount(mEditTeleMissLow);
         break;
     }
   }
@@ -245,7 +295,20 @@ public class MatchDetailsFragment extends SherlockFragment implements LoaderMana
     int score = TextUtils.isEmpty(text) ? 0 : Integer.valueOf(text);
     edit.setText("" + Math.min(score + 1, 999));
   }
+  
+  private void decrementCount(EditText edit) {
+    String text = edit.getText().toString();
+    int score = TextUtils.isEmpty(text) ? 0 : Integer.valueOf(text);
+    edit.setText("" + Math.max(score - 1, 0));
+  }
 
+  /** Called by the {@link MatchScoutActivity} when the match has been deleted. */
+  void matchDeleted() {
+    mTeamMatchId = -1;
+    clearMatchData();
+  }
+  
+  
   /** Called by the {@link MatchScoutActivity} in dual pane layouts. */
   void updateDetailsView(long teamMatchId) {
     if (mTeamMatchId != teamMatchId) {
@@ -416,7 +479,7 @@ public class MatchDetailsFragment extends SherlockFragment implements LoaderMana
     }
   }
 
-  private void clearScreen() {
+  private void clearMatchData() {
     mEditAutoHitHigh.setText("0");
     mEditAutoMissHigh.setText("0");
     mEditAutoHitMed.setText("0");
@@ -456,7 +519,7 @@ public class MatchDetailsFragment extends SherlockFragment implements LoaderMana
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_clear_match_screen:
-        clearScreen();
+        clearMatchData();
         return true;
       case R.id.menu_delete_match:
         mCallback.onShowConfirmationDialog(mTeamMatchId);

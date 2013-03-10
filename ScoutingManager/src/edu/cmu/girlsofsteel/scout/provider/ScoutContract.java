@@ -22,6 +22,8 @@ public final class ScoutContract {
     String NAME = "team_name";
     /** The uri address for the team's photo */
     String PHOTO = "team_photo";
+    /** The team's rank */
+    String RANK = "team_rank";
 
     /** Does the robot score on the low hoop? */
     String ROBOT_CAN_SCORE_ON_LOW = "robot_can_score_on_low";
@@ -97,15 +99,7 @@ public final class ScoutContract {
     String TELE_SHOTS_MISS_MID = "tele_shots_miss_mid";
     String TELE_SHOTS_MISS_HIGH = "tele_shots_miss_high";
 
-    String SHOOTS_FROM_BACK_RIGHT = "shoots_from_back_right";
-    String SHOOTS_FROM_BACK_LEFT = "shoots_from_back_left";
-    String SHOOTS_FROM_FRONT_RIGHT = "shoots_from_front_right";
-    String SHOOTS_FROM_FRONT_LEFT = "shoots_from_front_left";
-    String SHOOTS_FROM_SIDE_RIGHT = "shoots_from_side_right";
-    String SHOOTS_FROM_SIDE_LEFT = "shoots_from_side_left";
-    String SHOOTS_FROM_FRONT = "shoots_from_front";
-    String SHOOTS_FROM_ANYWHERE = "shoots_from_anywhere";
-    String SHOOTS_FROM_OTHER = "shoots_from_other";
+    String SHOOTS_FROM_WHERE = "shoots_from_where";
 
     String TOWER_LEVEL_ONE = "tower_level_one";
     String TOWER_LEVEL_TWO = "tower_level_two";

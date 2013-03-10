@@ -33,7 +33,7 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
  * @author Alex Lockwood
  */
 public class MatchListFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-  // private static final String TAG = makeLogTag(MatchListFragment.class);
+  // private static final String TAG = LogUtil.makeLogTag(MatchListFragment.class);
 
   private static final int MATCH_LOADER_ID = 1;
   private static final String[] PROJECTION = { TeamMatches._ID, TeamMatches.TEAM_ID, TeamMatches.MATCH_NUMBER };
@@ -117,30 +117,6 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
     } else {
       setListShownNoAnimation(true);
     }
-
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-    // TODO: remember the last clicked/selected match!
-
-    // if (mFirstLoad) {
-    // Must post this on the main thread's message queue if we want
-    // to call this in onLoadFinished (avoids an illegal state exception).
-    // new Handler(Looper.getMainLooper()).post(new Runnable() {
-    // @Override
-    // public void run() {
-    // ListView lv = getListView();
-    // lv.performItemClick(lv, 0, lv.getItemIdAtPosition(0));
-    // }
-    // });
-    // mFirstLoad = false;
-    // }
   }
 
   @Override
@@ -170,7 +146,7 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
     }
     return super.onOptionsItemSelected(item);
   }
-
+  
   /************************/
   /** MATCH LIST ADAPTER **/
   /************************/

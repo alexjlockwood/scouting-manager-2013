@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/match_scout_scrollview"
@@ -17,8 +16,10 @@
 
         <TextView
             android:id="@+id/tv_autonomous_shots"
-            style="@style/team_input_main_header"
-            android:text="@string/autonomous_shots" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/autonomous_shots"
+            android:textSize="32sp" />
 
         <include layout="@layout/match_auto_shots" />
 
@@ -26,11 +27,22 @@
 
         <TextView
             android:id="@+id/tv_teleop_shots"
-            style="@style/team_input_main_header"
-            android:text="@string/teleop_shots" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/teleop_shots"
+            android:textSize="32sp"
+            android:layout_marginTop="24dp" />
 
         <include layout="@layout/match_teleop_shots" />
 
+         <TextView
+            android:id="@+id/tv_general"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/general"
+            android:textSize="32sp"
+            android:layout_marginTop="24dp" />
+        
         <!-- Tower level? -->
 
         <TextView
@@ -55,6 +67,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/level_three" />
+
+        <!-- Shoots from where? -->
+
+        <TextView
+            android:id="@+id/tv_shoots_from_where"
+            style="@style/team_input_main_header"
+            android:text="@string/shoots_from_where" />
+
+        <EditText
+            android:id="@+id/et_shoots_from_where"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/shoots_from_where_hint" />
 
         <!-- Fell off tower? -->
 

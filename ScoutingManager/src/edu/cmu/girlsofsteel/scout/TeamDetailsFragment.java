@@ -49,7 +49,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
   private static final String[] PROJECTION = null;
 
   private ImageView mTeamPicture;
-  private EditText mTeamName;
+  private EditText mTeamName, mTeamRank;
   private CheckBox mScoreLow, mScoreMid, mScoreHigh;
   private CheckBox mClimbLevelOne, mClimbLevelTwo, mClimbLevelThree;
   private CompoundButton mHelpsClimb, mDrivingGears, mGoesUnderTower;
@@ -61,6 +61,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
 
     mTeamPicture = (ImageView) view.findViewById(R.id.team_picture);
     mTeamName = (EditText) view.findViewById(R.id.team_name);
+    mTeamRank = (EditText) view.findViewById(R.id.team_rank);
 
     if (CompatUtil.hasHoneycomb()) {
       // Uses a PopupMenu for API 11+
@@ -150,6 +151,10 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
       // Team name
       String teamName = data.getString(data.getColumnIndexOrThrow(Teams.NAME));
       mTeamName.setText(teamName != null ? teamName : "");
+      
+      // Team rank
+      String teamRank = data.getString(data.getColumnIndexOrThrow(Teams.RANK));
+      mTeamRank.setText(teamRank);
 
       // Team picture
       String uri = data.getString(data.getColumnIndexOrThrow(Teams.PHOTO));
@@ -205,6 +210,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
     long teamId = getArguments().getLong(MainActivity.ARG_TEAM_ID);
     ContentValues values = new ContentValues();
     values.put(Teams.NAME, mTeamName.getText().toString());
+    values.put(Teams.RANK, Integer.valueOf(mTeamRank.getText().toString()));
     values.put(Teams.ROBOT_CAN_SCORE_ON_LOW, mScoreLow.isChecked() ? 1 : 0);
     values.put(Teams.ROBOT_CAN_SCORE_ON_MID, mScoreMid.isChecked() ? 1 : 0);
     values.put(Teams.ROBOT_CAN_SCORE_ON_HIGH, mScoreHigh.isChecked() ? 1 : 0);
@@ -218,9 +224,10 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
     values.put(Teams.ROBOT_CAN_GO_UNDER_TOWER, mGoesUnderTower.isChecked() ? 1 : 0);
     StorageUtil.updateTeam(getActivity(), teamId, values);
   }
-
+  
   private void clearTeamData() {
     mTeamName.setText("");
+    mTeamRank.setText("");
     mScoreLow.setChecked(false);
     mScoreMid.setChecked(false);
     mScoreHigh.setChecked(false);

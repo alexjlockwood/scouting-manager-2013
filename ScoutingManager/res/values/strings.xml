@@ -43,7 +43,8 @@
     <!-- Menu -->
     <string name="menu_add_team">Add Team</string>
     <string name="menu_add_match">Add Match</string>
-    <string name="menu_delete">Delete</string>
+    <string name="menu_delete_team">Delete Team</string>
+    <string name="menu_delete_match">Delete Match</string>
     <string name="menu_search">Search</string>
     <string name="menu_match_number_hint">Match #</string>
     <string name="menu_search_team_hint">Search for team…</string>
@@ -64,7 +65,8 @@
 
     <!-- Disk Storage -->
     <string name="export_dir_name">scouting_manager</string>
-    <string name="export_file_name">csvfile.csv</string>
+    <string name="export_teams_file_name">teams.csv</string>
+    <string name="export_matches_file_name">matches.csv</string>
     <string name="export_not_mounted">External storage not mounted.</string>
     <string name="export_success">Data written to external storage.</string>
     <string name="export_failed">Could not export data.</string>
@@ -122,15 +124,17 @@
     <string name="num_miss">Misses</string>
     <string name="hit">Hit</string>
     <string name="miss">Miss</string>
-    <string name="slash">/</string>
     <string name="zero">0</string>
     <string name="autonomous_shots">Autonomous</string>
     <string name="teleop_shots">Tele-op</string>
-    <string name="high_basket">High Basket</string>
-    <string name="medium_basket">Medium Basket</string>
-    <string name="low_basket">Low Basket</string>
+    <string name="general">General</string>
+    <string name="high_basket">High Goal</string>
+    <string name="medium_basket">Medium Goal</string>
+    <string name="low_basket">Low Goal</string>
     <string name="tower_level">Tower Level</string>
     <string name="fell_off_tower">Fell Off Tower?</string>
+    <string name="shoots_from_where">Shoots From Where?</string>
+    <string name="shoots_from_where_hint">Shoots From Where?</string>
     <string name="human_player_ability">Human Player Ability</string>
     <string name="high_scoring">High Scoring</string>
     <string name="impedes_performance">Impedes Performance</string>

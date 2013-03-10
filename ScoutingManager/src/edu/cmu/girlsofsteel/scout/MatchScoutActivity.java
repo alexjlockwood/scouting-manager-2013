@@ -39,10 +39,10 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
 
   /** Used to pass team match ids to the {@link ScoutMatchDetailsFragment}. */
   static final String ARG_TEAM_MATCH_ID = "team_match_id";
-
+  
   private static final int TEAM_LOADER_ID = 1;
   private static final String[] PROJECTION = { Teams._ID, Teams.NUMBER };
-
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -104,11 +104,14 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
   @Override
   public void onMatchDeleted(long teamMatchId) {
     FragmentManager fm = getSupportFragmentManager();
+    MatchDetailsFragment detailsFrag = (MatchDetailsFragment) fm.findFragmentById(R.id.match_details_fragment);
+    if (detailsFrag != null) {
+      // Notify the fragment that the match will be deleted.
+      detailsFrag.matchDeleted();
+    }
+    System.out.println("" + teamMatchId);
     if (fm.getBackStackEntryCount() > 0) {
       fm.popBackStack();
-    } else {
-      //MatchDetailsFragment detailsFrag = (MatchDetailsFragment) fm.findFragmentById(R.id.match_details_fragment);
-      //detailsFrag.clearDetailsView();
     }
     StorageUtil.deleteTeamMatch(this, teamMatchId);
   }
