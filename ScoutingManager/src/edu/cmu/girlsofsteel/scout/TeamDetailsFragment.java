@@ -151,7 +151,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
       // Team name
       String teamName = data.getString(data.getColumnIndexOrThrow(Teams.NAME));
       mTeamName.setText(teamName != null ? teamName : "");
-      
+
       // Team rank
       String teamRank = data.getString(data.getColumnIndexOrThrow(Teams.RANK));
       mTeamRank.setText(teamRank);
@@ -210,7 +210,6 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
     long teamId = getArguments().getLong(MainActivity.ARG_TEAM_ID);
     ContentValues values = new ContentValues();
     values.put(Teams.NAME, mTeamName.getText().toString());
-    values.put(Teams.RANK, Integer.valueOf(mTeamRank.getText().toString()));
     values.put(Teams.ROBOT_CAN_SCORE_ON_LOW, mScoreLow.isChecked() ? 1 : 0);
     values.put(Teams.ROBOT_CAN_SCORE_ON_MID, mScoreMid.isChecked() ? 1 : 0);
     values.put(Teams.ROBOT_CAN_SCORE_ON_HIGH, mScoreHigh.isChecked() ? 1 : 0);
@@ -222,9 +221,12 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
     values.put(Teams.ROBOT_DRIVE_TRAIN, mDriveTrain.getSelectedItemPosition());
     values.put(Teams.ROBOT_TYPE_OF_WHEEL, mWheelType.getSelectedItemPosition());
     values.put(Teams.ROBOT_CAN_GO_UNDER_TOWER, mGoesUnderTower.isChecked() ? 1 : 0);
+    if (!TextUtils.isEmpty(mTeamRank.getText())) {
+      values.put(Teams.RANK, Integer.valueOf(mTeamRank.getText().toString()));
+    }
     StorageUtil.updateTeam(getActivity(), teamId, values);
   }
-  
+
   private void clearTeamData() {
     mTeamName.setText("");
     mTeamRank.setText("");

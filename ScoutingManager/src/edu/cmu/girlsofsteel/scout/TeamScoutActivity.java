@@ -23,10 +23,6 @@ public class TeamScoutActivity extends SherlockFragmentActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    if (getIntent() == null || getIntent().getLongExtra(MainActivity.ARG_TEAM_ID, -1) == -1) {
-      throw new RuntimeException("This activity requires a valid team id in order to function!");
-    }
-
     // Enable up navigation
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);

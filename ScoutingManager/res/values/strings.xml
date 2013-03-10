@@ -65,8 +65,8 @@
 
     <!-- Disk Storage -->
     <string name="export_dir_name">scouting_manager</string>
-    <string name="export_teams_file_name">teams.csv</string>
-    <string name="export_matches_file_name">matches.csv</string>
+    <string name="export_teams_file_name">teams</string>
+    <string name="export_matches_file_name">matches</string>
     <string name="export_not_mounted">External storage not mounted.</string>
     <string name="export_success">Data written to external storage.</string>
     <string name="export_failed">Could not export data.</string>

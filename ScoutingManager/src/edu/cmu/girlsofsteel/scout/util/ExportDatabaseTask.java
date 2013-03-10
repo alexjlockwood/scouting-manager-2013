@@ -14,16 +14,18 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.widget.Toast;
 import au.com.bytecode.opencsv.CSVWriter;
 import edu.cmu.girlsofsteel.scout.R;
+import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
 /**
  * Exports the teams and matches to a CSV file on the disk.
- * 
+ *
  * @author Alex Lockwood
  */
 public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
@@ -46,22 +48,25 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
     exportDir.mkdir();
 
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-    File teamsFile = new File(exportDir, res.getString(R.string.export_teams_file_name) + "_" + timeStamp);
-    File matchesFile = new File(exportDir, res.getString(R.string.export_matches_file_name) + "_" + timeStamp);
+    File teamsFile = new File(exportDir, res.getString(R.string.export_teams_file_name) + "_" + timeStamp + ".csv");
+    File matchesFile = new File(exportDir, res.getString(R.string.export_matches_file_name) + "_" + timeStamp + ".csv");
+
+    Uri[] uris = new Uri[] { Teams.CONTENT_URI, TeamMatches.CONTENT_URI };
+    File[] files = new File[] { teamsFile, matchesFile };
 
     try {
-      for (File file : new File[] { teamsFile, matchesFile }) {
-        file.createNewFile();
-        CSVWriter writer = new CSVWriter(new FileWriter(file));
-        Cursor cur = mCtx.getContentResolver().query(Teams.CONTENT_URI, null, null, null, null);
+      for (int i = 0; i < uris.length; i++) {
+        files[i].createNewFile();
+        CSVWriter writer = new CSVWriter(new FileWriter(files[i]));
+        Cursor cur = mCtx.getContentResolver().query(uris[i], null, null, null, null);
+        String[] colNames = cur.getColumnNames();
+        writer.writeNext(colNames);
         if (cur.moveToFirst()) {
-          String[] colNames = cur.getColumnNames();
-          writer.writeNext(colNames);
           do {
             String[] row = new String[colNames.length];
-            for (int i = 0; i < colNames.length; i++) {
+            for (int j = 0; j < colNames.length; j++) {
               // This will throw an exception if the field value is a BLOB!
-              row[i] = cur.getString(i);
+              row[j] = cur.getString(j);
             }
             writer.writeNext(row);
           } while (cur.moveToNext());
