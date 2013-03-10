@@ -20,6 +20,8 @@ Obtaining the Source Code
         $ git submodule init
         $ git submodule update
 
-4. Open Eclipse and import the ``scouting-manager-2013/ScoutingManager`` project into your workspace.
+4. Import the ``scouting-manager-2013/ActionBarSherlock/library`` project into your Eclipse workspace.
 
-5. Done!
+5. Import the ``scouting-manager-2013/ScoutingManager`` project into your Eclipse workspace.
+
+6. Done!
