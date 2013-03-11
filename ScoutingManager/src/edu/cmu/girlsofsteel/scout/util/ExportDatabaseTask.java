@@ -98,7 +98,7 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
     File exportDir = new File(Environment.getExternalStorageDirectory(), exportDirName);
     exportDir.mkdir();
 
-    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+    String timeStamp = "";//new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
     File teamsFile = new File(exportDir, res.getString(R.string.export_teams_file_name) + "_" + timeStamp + ".csv");
     File matchesFile = new File(exportDir, res.getString(R.string.export_matches_file_name) + "_" + timeStamp + ".csv");
 
