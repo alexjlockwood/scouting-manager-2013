@@ -13,7 +13,8 @@ import edu.cmu.girlsofsteel.scout.util.ExportDatabaseTask;
  * @author Alex Lockwood
  */
 public class MainActivity extends SherlockFragmentActivity {
-  // private static final String TAG = LogUtil.makeLogTag(MainActivity.class);
+  @SuppressWarnings("unused")
+  private static final String TAG = MainActivity.class.getSimpleName();
 
   /** Used to pass team ids to the next activity. */
   static final String ARG_TEAM_ID = "team_id";

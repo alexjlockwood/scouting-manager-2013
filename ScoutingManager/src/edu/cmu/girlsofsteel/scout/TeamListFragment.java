@@ -2,7 +2,6 @@ package edu.cmu.girlsofsteel.scout;
 
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGE;
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGW;
-import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,7 +68,7 @@ import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
  */
 public class TeamListFragment extends SherlockListFragment implements MultiChoiceModeListener,
     LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener {
-  private static final String TAG = makeLogTag(TeamListFragment.class);
+  private static final String TAG = TeamListFragment.class.getSimpleName();
 
   private static final String KEY_SELECTED_TEAM_IDS = "selected_team_ids";
   private static final String KEY_CAMERA_TEAM_ID = "camera_team_id";
@@ -212,7 +211,12 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
       setListShownNoAnimation(true);
     }
   }
-
+  
+  @Override
+  public void onLoaderReset(Loader<Cursor> data) {
+    mAdapter.swapCursor(null);
+  }
+  
   /*************************/
   /** QUERY TEXT LISTENER **/
   /*************************/
@@ -227,11 +231,6 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     mFilter = newText;
     getLoaderManager().restartLoader(TEAM_LOADER_ID, null, this);
     return true;
-  }
-
-  @Override
-  public void onLoaderReset(Loader<Cursor> data) {
-    mAdapter.swapCursor(null);
   }
 
   /****************/

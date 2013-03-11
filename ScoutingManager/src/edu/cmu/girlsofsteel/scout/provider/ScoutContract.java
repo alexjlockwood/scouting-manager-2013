@@ -61,6 +61,8 @@ public final class ScoutContract {
      */
     String ROBOT_DRIVE_TRAIN = "drive_train";
 
+    String ROBOT_DRIVE_TRAIN_OTHER = "drive_train_other";
+    
     /**
      * 0 - KoP
      * 1 - plaction/traction

@@ -10,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.view.View;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
@@ -35,12 +36,13 @@ import edu.cmu.girlsofsteel.scout.util.StorageUtil;
  */
 public class MatchScoutActivity extends SherlockFragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>,
     MatchListFragment.OnMatchSelectedListener, MatchDetailsFragment.OnMatchDeletedListener {
-  // private static final String TAG = makeLogTag(MatchScoutActivity.class);
+  @SuppressWarnings("unused")
+  private static final String TAG = MatchScoutActivity.class.getSimpleName();
 
   /** Used to pass team match ids to the {@link ScoutMatchDetailsFragment}. */
   static final String ARG_TEAM_MATCH_ID = "team_match_id";
   
-  private static final int TEAM_LOADER_ID = 1;
+  private static final int TEAM_LOADER_ID = 0;
   private static final String[] PROJECTION = { Teams._ID, Teams.NUMBER };
   
   @Override
@@ -81,6 +83,7 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
     if (detailsFrag != null) {
       // If details frag is available, we're in two-pane layout. Tell the
       // details fragment to update its content with the new team match id.
+      detailsFrag.getView().findViewById(R.id.viewPager).setVisibility(View.VISIBLE);
       detailsFrag.updateDetailsView(teamMatchId);
     } else {
       // If the fragment is not available, we're in the one-pane layout and must
@@ -109,7 +112,6 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements Load
       // Notify the fragment that the match will be deleted.
       detailsFrag.matchDeleted();
     }
-    System.out.println("" + teamMatchId);
     if (fm.getBackStackEntryCount() > 0) {
       fm.popBackStack();
     }

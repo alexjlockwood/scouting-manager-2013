@@ -1,7 +1,6 @@
 package edu.cmu.girlsofsteel.scout.util;
 
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGE;
-import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -27,7 +26,8 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
  * @author Alex Lockwood
  */
 public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
-  private static final String TAG = makeLogTag(ExportDatabaseTask.class);
+  private static final String TAG = ExportDatabaseTask.class.getSimpleName();
+  
   private Context mCtx;
 
   private static final String[] TEAMS_PROJECTION = {
@@ -45,6 +45,7 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
     Teams.ROBOT_DRIVE_TRAIN,
     Teams.ROBOT_TYPE_OF_WHEEL,
     Teams.ROBOT_CAN_GO_UNDER_TOWER,
+    Teams.ROBOT_DRIVE_TRAIN_OTHER,
   };
   
   private static final String[] MATCHES_PROJECTION = {

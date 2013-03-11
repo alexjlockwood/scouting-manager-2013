@@ -2,7 +2,6 @@ package edu.cmu.girlsofsteel.scout.provider;
 
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGI;
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGV;
-import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 
 import java.util.Arrays;
 
@@ -26,7 +25,7 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutDatabase.Tables;
  * The client must perform such actions on their own.
  */
 public class ScoutProvider extends ContentProvider {
-  private static final String TAG = makeLogTag(ScoutProvider.class);
+  private static final String TAG = ScoutProvider.class.getSimpleName();
 
   private static final int TEAMS = 100;
   private static final int TEAMS_ID = 101;
@@ -118,17 +117,7 @@ public class ScoutProvider extends ContentProvider {
           getContext().getContentResolver().notifyChange(newUri, null);
           return newUri;
         }
-
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-
-        // else {
-        // throw new SQLException("Failed to insert row into " + uri);
-        // }
+        // TODO: consider throwing an SQLiteException here...
         return null;
       }
       case TEAM_MATCHES: {
@@ -138,17 +127,7 @@ public class ScoutProvider extends ContentProvider {
           getContext().getContentResolver().notifyChange(newUri, null);
           return newUri;
         }
-
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-        // TODO: Dont want to throw exception here because of duplicates...
-
-        // else {
-        // throw new SQLException("Failed to insert row into " + uri);
-        // }
+        // TODO: consider throwing an SQLiteException here...
         return null;
       }
       default:

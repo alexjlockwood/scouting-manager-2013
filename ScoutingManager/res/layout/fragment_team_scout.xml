@@ -140,6 +140,13 @@
             android:layout_height="wrap_content"
             android:entries="@array/drive_options" />
 
+       	<EditText
+            android:id="@+id/edittext_drive_train_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/drive_train_other" 
+            android:enabled="false" />
+        
         <TextView
             android:id="@+id/textview_wheel_type"
             style="@style/team_input_main_header"

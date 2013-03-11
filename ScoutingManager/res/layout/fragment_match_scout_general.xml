@@ -1,0 +1,237 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/match_scout_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/match_scout_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp" >
+
+        <!-- Tower level? -->
+
+        <TextView
+            android:id="@+id/tv_tower_level"
+            style="@style/team_input_main_header"
+            android:text="@string/tower_level" />
+
+        <CheckBox
+            android:id="@+id/cb_tower_level_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/level_one" />
+
+        <CheckBox
+            android:id="@+id/cb_tower_level_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/level_two" />
+
+        <CheckBox
+            android:id="@+id/cb_tower_level_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/level_three" />
+
+        <!-- Shoots from where? -->
+
+        <TextView
+            android:id="@+id/tv_shoots_from_where"
+            style="@style/team_input_main_header"
+            android:text="@string/shoots_from_where" />
+
+        <EditText
+            android:id="@+id/et_shoots_from_where"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/shoots_from_where_hint" />
+
+        <!-- Fell off tower? -->
+
+        <TextView
+            android:id="@+id/tv_fell_off_tower"
+            style="@style/team_input_main_header"
+            android:text="@string/fell_off_tower" />
+
+        <include layout="@layout/compat_fell_off_tower" />
+
+        <!-- Human player ability -->
+
+        <TextView
+            android:id="@+id/tv_human_player_ability"
+            style="@style/team_input_main_header"
+            android:text="@string/human_player_ability" />
+
+        <RadioGroup
+            android:id="@+id/rg_human_player_ability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/rb_human_player_high_scoring"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/high_scoring" />
+
+            <RadioButton
+                android:id="@+id/rb_human_player_neutral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/neutral" />
+
+            <RadioButton
+                android:id="@+id/rb_human_player_impedes_performance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/impedes_performance" />
+        </RadioGroup>
+
+        <!-- Frisbees from where? -->
+
+        <TextView
+            android:id="@+id/tv_frisbees_from_where"
+            style="@style/team_input_main_header"
+            android:text="@string/frisbees_from_where" />
+
+        <CheckBox
+            android:id="@+id/cb_feeder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/feeder" />
+
+        <CheckBox
+            android:id="@+id/cb_floor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/floor" />
+
+        <!-- Strategy -->
+
+        <TextView
+            android:id="@+id/tv_strategy"
+            style="@style/team_input_main_header"
+            android:text="@string/strategy" />
+
+        <RadioGroup
+            android:id="@+id/rg_strategy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/rb_strategy_offense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/offense" />
+
+            <RadioButton
+                android:id="@+id/rb_strategy_neutral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/neutral" />
+
+            <RadioButton
+                android:id="@+id/rb_strategy_defense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/defense" />
+        </RadioGroup>
+
+        <!-- Speed -->
+
+        <TextView
+            android:id="@+id/tv_speed"
+            style="@style/team_input_main_header"
+            android:text="@string/speed" />
+
+        <RadioGroup
+            android:id="@+id/rg_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/rb_speed_fast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fast" />
+
+            <RadioButton
+                android:id="@+id/rb_speed_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/medium" />
+
+            <RadioButton
+                android:id="@+id/rb_speed_slow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/slow" />
+        </RadioGroup>
+
+        <!-- Maneuverability -->
+
+        <TextView
+            android:id="@+id/tv_maneuverability"
+            style="@style/team_input_main_header"
+            android:text="@string/maneuverability" />
+
+        <RadioGroup
+            android:id="@+id/rg_maneuverability"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/rb_maneuverability_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/high" />
+
+            <RadioButton
+                android:id="@+id/rb_maneuverability_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/medium" />
+
+            <RadioButton
+                android:id="@+id/rb_maneuverability_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/low" />
+        </RadioGroup>
+
+        <!-- Penalty -->
+
+        <TextView
+            android:id="@+id/tv_penalty"
+            style="@style/team_input_main_header"
+            android:text="@string/penalty" />
+
+        <RadioGroup
+            android:id="@+id/rg_penalty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <RadioButton
+                android:id="@+id/rb_penalty_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/high" />
+
+            <RadioButton
+                android:id="@+id/rb_penalty_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/medium" />
+
+            <RadioButton
+                android:id="@+id/rb_penalty_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/low" />
+        </RadioGroup>
+    </LinearLayout>
+
+</ScrollView>

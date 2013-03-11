@@ -27,21 +27,21 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 /**
  * {@link MatchListFragment} displays the all of the matches for a particular
  * team. It's parent activity is the {@link MatchScoutActivity}.
- *
+ * 
  * This fragment requires a valid 'team_id' in order to function properly.
- *
+ * 
  * @author Alex Lockwood
  */
 public class MatchListFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
-  // private static final String TAG = LogUtil.makeLogTag(MatchListFragment.class);
+  @SuppressWarnings("unused")
+  private static final String TAG = MatchListFragment.class.getSimpleName();
 
   private static final int MATCH_LOADER_ID = 1;
   private static final String[] PROJECTION = { TeamMatches._ID, TeamMatches.TEAM_ID, TeamMatches.MATCH_NUMBER };
   private static final String DEFAULT_SORT = TeamMatches.MATCH_NUMBER + " COLLATE LOCALIZED ASC";
+  
   private MatchListAdapter mAdapter;
   private OnMatchSelectedListener mCallback;
-
-  // private boolean mFirstLoad = true;
 
   /**
    * The container Activity must implement this interface so the frag can
@@ -58,7 +58,8 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
     try {
       mCallback = (OnMatchSelectedListener) activity;
     } catch (ClassCastException e) {
-      throw new ClassCastException(activity.toString() + " must implement OnMatchSelectedListener!");
+      throw new ClassCastException(activity.toString()
+          + " must implement OnMatchSelectedListener!");
     }
   }
 
@@ -93,8 +94,8 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
 
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
-    mCallback.onMatchSelected(id);
     getListView().setItemChecked(position, true);
+    mCallback.onMatchSelected(id);
   }
 
   /**********************/
@@ -107,10 +108,10 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
     return new CursorLoader(getActivity(), TeamMatches.CONTENT_URI, PROJECTION,
         TeamMatches.TEAM_ID + "=?", new String[] { "" + teamId }, DEFAULT_SORT);
   }
-
+  
   @TargetApi(Build.VERSION_CODES.HONEYCOMB)
   @Override
-  public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+  public void onLoadFinished(Loader<Cursor> loader, final Cursor data) {
     mAdapter.swapCursor(data);
     if (isResumed()) {
       setListShown(true);
@@ -138,7 +139,8 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_add_match:
-        Bundle args = ((MatchScoutActivity) getActivity()).getIntent().getExtras();
+        Bundle args = ((MatchScoutActivity) getActivity()).getIntent()
+            .getExtras();
         long teamId = args.getLong(MainActivity.ARG_TEAM_ID);
         DialogFragment dialog = AddMatchDialog.newInstance(teamId);
         dialog.show(getFragmentManager(), AddMatchDialog.class.getSimpleName());
@@ -146,7 +148,7 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
     }
     return super.onOptionsItemSelected(item);
   }
-  
+
   /************************/
   /** MATCH LIST ADAPTER **/
   /************************/
@@ -163,7 +165,8 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
       if (holder == null) {
         holder = new ViewHolder();
         holder.matchNum = (TextView) view.findViewById(R.id.match_number);
-        holder.matchNumCol = cur.getColumnIndexOrThrow(TeamMatches.MATCH_NUMBER);
+        holder.matchNumCol = cur
+            .getColumnIndexOrThrow(TeamMatches.MATCH_NUMBER);
         view.setTag(holder);
       }
 

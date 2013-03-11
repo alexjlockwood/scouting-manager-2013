@@ -9,10 +9,6 @@ import android.util.Log;
  */
 public final class LogUtil {
 
-  public static String makeLogTag(Class<?> cls) {
-    return cls.getSimpleName();
-  }
-
   public static void LOGE(String tag, String message) {
     if (Log.isLoggable(tag, Log.ERROR)) {
       Log.e(tag, message);

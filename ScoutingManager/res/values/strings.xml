@@ -49,7 +49,6 @@
     <string name="menu_match_number_hint">Match #</string>
     <string name="menu_search_team_hint">Search for team…</string>
     <string name="menu_export">Export All</string>
-    <string name="menu_settings">Settings</string>
     <string name="menu_take_picture">Take Picture</string>
     <string name="menu_delete_picture">Delete Picture</string>
     <string name="menu_clear_screen">Clear Screen</string>
@@ -57,10 +56,6 @@
     <plurals name="title_selected_teams">
         <item quantity="one">1 team selected</item>
         <item quantity="other"><xliff:g id="num_teams">%1$d</xliff:g> teams selected</item>
-    </plurals>
-    <plurals name="title_selected_matches">
-        <item quantity="one">1 match selected</item>
-        <item quantity="other"><xliff:g id="num_matches">%1$d</xliff:g> matches selected</item>
     </plurals>
 
     <!-- Disk Storage -->
@@ -84,12 +79,12 @@
     <string name="medium">Medium</string>
     <string name="high">High</string>
     <string name="climb">Climb</string>
-    <string name="not_available">N/A</string>
     <string name="level_one">Level 1</string>
     <string name="level_two">Level 2</string>
     <string name="level_three">Level 3</string>
     <string name="helps_climb">Helps Climb</string>
     <string name="drive_train">Drive Train</string>
+    <string name="drive_train_other">Other?</string>
     <string name="driving_gears">Driving Gears</string>
     <string name="one">One</string>
     <string name="multiple">Multiple</string>
@@ -125,9 +120,6 @@
     <string name="hit">Hit</string>
     <string name="miss">Miss</string>
     <string name="zero">0</string>
-    <string name="autonomous_shots">Autonomous</string>
-    <string name="teleop_shots">Tele-op</string>
-    <string name="general">General</string>
     <string name="high_basket">High Goal</string>
     <string name="medium_basket">Medium Goal</string>
     <string name="low_basket">Low Goal</string>

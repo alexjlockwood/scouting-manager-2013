@@ -18,6 +18,8 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -43,9 +45,9 @@ import edu.cmu.girlsofsteel.scout.util.StorageUtil;
  */
 public class TeamDetailsFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor>,
     View.OnClickListener {
-  // private static final String TAG = makeLogTag(TeamListFragment.class);
+  @SuppressWarnings("unused")
+  private static final String TAG = TeamListFragment.class.getSimpleName();
 
-  private static final int TEAM_LOADER_ID = 1;
   private static final String[] PROJECTION = null;
 
   private ImageView mTeamPicture;
@@ -54,6 +56,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
   private CheckBox mClimbLevelOne, mClimbLevelTwo, mClimbLevelThree;
   private CompoundButton mHelpsClimb, mDrivingGears, mGoesUnderTower;
   private Spinner mDriveTrain, mWheelType;
+  private EditText mDriveTrainOther;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,30 +65,44 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
     mTeamPicture = (ImageView) view.findViewById(R.id.team_picture);
     mTeamName = (EditText) view.findViewById(R.id.team_name);
     mTeamRank = (EditText) view.findViewById(R.id.team_rank);
-
-    if (CompatUtil.hasHoneycomb()) {
-      // Uses a PopupMenu for API 11+
-      mTeamPicture.setOnClickListener(this);
-    } else {
-      // Otherwise uses a context menu
-      registerForContextMenu(mTeamPicture);
-    }
-
     mScoreLow = (CheckBox) view.findViewById(R.id.checkbox_low_goal);
     mScoreMid = (CheckBox) view.findViewById(R.id.checkbox_mid_goal);
     mScoreHigh = (CheckBox) view.findViewById(R.id.checkbox_high_goal);
-
     mClimbLevelOne = (CheckBox) view.findViewById(R.id.checkbox_level_one);
     mClimbLevelTwo = (CheckBox) view.findViewById(R.id.checkbox_level_two);
     mClimbLevelThree = (CheckBox) view.findViewById(R.id.checkbox_level_three);
-
     mHelpsClimb = (CompoundButton) view.findViewById(R.id.toggle_helps_climb);
     mDrivingGears = (CompoundButton) view.findViewById(R.id.toggle_driving_gears);
     mGoesUnderTower = (CompoundButton) view.findViewById(R.id.toggle_goes_under_tower);
-
     mDriveTrain = (Spinner) view.findViewById(R.id.spinner_drive_train);
+    mDriveTrainOther = (EditText) view.findViewById(R.id.edittext_drive_train_other);
     mWheelType = (Spinner) view.findViewById(R.id.spinner_wheel_type);
-
+    
+    mDriveTrain.setOnItemSelectedListener(new OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+        // TODO: avoid hardcoding the value '8' here (fragile code)
+        if (position == 8) {
+          mDriveTrainOther.setEnabled(true);
+        } else {
+          mDriveTrainOther.setText("");
+          mDriveTrainOther.setEnabled(false);
+        }
+      }
+      @Override
+      public void onNothingSelected(AdapterView<?> parentView) {
+        mDriveTrainOther.setEnabled(false);
+      }
+  });
+    
+    if (CompatUtil.hasHoneycomb()) {
+      // Use a PopupMenu for API 11+
+      mTeamPicture.setOnClickListener(this);
+    } else {
+      // Otherwise use a context menu
+      registerForContextMenu(mTeamPicture);
+    }
+    
     return view;
   }
 
@@ -93,7 +110,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
-    getLoaderManager().initLoader(TEAM_LOADER_ID, getArguments(), this);
+    getLoaderManager().initLoader(0, getArguments(), this);
   }
 
   @Override
@@ -196,6 +213,12 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
       int driveTrain = data.getInt(data.getColumnIndexOrThrow(Teams.ROBOT_DRIVE_TRAIN));
       mDriveTrain.setSelection(driveTrain);
 
+      String driveTrainOther = data.getString(data.getColumnIndexOrThrow(Teams.ROBOT_DRIVE_TRAIN_OTHER));
+      mDriveTrainOther.setText(driveTrainOther);
+      
+      // TODO: avoid hardcoding the value '8' here (fragile code)
+      mDriveTrainOther.setEnabled(driveTrain == 8);
+      
       // Wheel type?
       int wheelType = data.getInt(data.getColumnIndexOrThrow(Teams.ROBOT_TYPE_OF_WHEEL));
       mWheelType.setSelection(wheelType);
@@ -221,6 +244,7 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
     values.put(Teams.ROBOT_DRIVE_TRAIN, mDriveTrain.getSelectedItemPosition());
     values.put(Teams.ROBOT_TYPE_OF_WHEEL, mWheelType.getSelectedItemPosition());
     values.put(Teams.ROBOT_CAN_GO_UNDER_TOWER, mGoesUnderTower.isChecked() ? 1 : 0);
+    values.put(Teams.ROBOT_DRIVE_TRAIN_OTHER, mDriveTrainOther.getText().toString());
     if (!TextUtils.isEmpty(mTeamRank.getText())) {
       values.put(Teams.RANK, Integer.valueOf(mTeamRank.getText().toString()));
     }
@@ -241,6 +265,8 @@ public class TeamDetailsFragment extends SherlockFragment implements LoaderManag
     mGoesUnderTower.setChecked(false);
     mDriveTrain.setSelection(0);
     mWheelType.setSelection(0);
+    mDriveTrainOther.setText("");
+    mDriveTrainOther.setEnabled(false);
   }
 
   @Override

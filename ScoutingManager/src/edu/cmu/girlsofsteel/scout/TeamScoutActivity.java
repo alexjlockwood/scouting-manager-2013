@@ -17,7 +17,8 @@ import com.actionbarsherlock.view.MenuItem;
  * @author Alex Lockwood
  */
 public class TeamScoutActivity extends SherlockFragmentActivity {
-  // private static final String TAG = LogUtil.makeLogTag(TeamScoutActivity.class);
+  @SuppressWarnings("unused")
+  private static final String TAG = TeamScoutActivity.class.getSimpleName();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

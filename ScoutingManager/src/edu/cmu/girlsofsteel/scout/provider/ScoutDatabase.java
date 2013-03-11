@@ -1,7 +1,6 @@
-package edu.cmu.girlsofsteel.scout.provider;
+  package edu.cmu.girlsofsteel.scout.provider;
 
 import static edu.cmu.girlsofsteel.scout.util.LogUtil.LOGW;
-import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -13,10 +12,10 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
  * class allows access to the data stored in the database.
  */
 public class ScoutDatabase extends SQLiteOpenHelper {
-  private static final String TAG = makeLogTag(ScoutDatabase.class);
+  private static final String TAG = ScoutDatabase.class.getSimpleName();
 
   private static final String DATABASE_NAME = "scouting_manager.db";
-  private static final int DATABASE_VERSION = 1;
+  private static final int DATABASE_VERSION = 2;
 
   /** SQLite table names. */
   interface Tables {
@@ -54,6 +53,7 @@ public class ScoutDatabase extends SQLiteOpenHelper {
 
         + Teams.ROBOT_NUM_DRIVING_GEARS + " INTEGER DEFAULT 0,"
         + Teams.ROBOT_DRIVE_TRAIN + " INTEGER DEFAULT -1,"
+        + Teams.ROBOT_DRIVE_TRAIN_OTHER + " TEXT,"
         + Teams.ROBOT_TYPE_OF_WHEEL + " INTEGER DEFAULT -1,"
         + Teams.ROBOT_CAN_GO_UNDER_TOWER + " INTEGER DEFAULT 0,"
 
@@ -100,12 +100,11 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + "UNIQUE (" + TeamMatches.MATCH_NUMBER + "," + TeamMatches.TEAM_ID + ") ON CONFLICT IGNORE);");
   }
 
-  /**
-   * The database currently upgrades the database by destroying the existing
-   * data. The real application MUST upgrade the database in place.
-   */
   @Override
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     LOGW(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ".");
+    db.execSQL("DROP TABLE IF EXISTS " + Tables.TEAMS);
+    db.execSQL("DROP TABLE IF EXISTS " + Tables.TEAM_MATCHES);
+    onCreate(db);
   }
 }
