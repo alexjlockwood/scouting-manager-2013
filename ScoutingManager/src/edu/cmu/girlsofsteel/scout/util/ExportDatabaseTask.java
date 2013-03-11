@@ -6,9 +6,6 @@ import static edu.cmu.girlsofsteel.scout.util.LogUtil.makeLogTag;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import android.content.ContentResolver;
 import android.content.Context;

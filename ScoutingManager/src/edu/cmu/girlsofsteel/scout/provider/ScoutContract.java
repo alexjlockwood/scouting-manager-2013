@@ -17,36 +17,37 @@ public final class ScoutContract {
   interface TeamsColumns {
 
     /** The team's unique number */
-    String NUMBER = "team_number";
+    String NUMBER = "number";
+    
     /** The team's nickname */
-    String NAME = "team_name";
+    String NAME = "name";
+    
     /** The uri address for the team's photo */
     String PHOTO = "team_photo";
+    
     /** The team's rank */
-    String RANK = "team_rank";
+    String RANK = "rank";
 
     /** Does the robot score on the low hoop? */
-    String ROBOT_CAN_SCORE_ON_LOW = "robot_can_score_on_low";
+    String ROBOT_CAN_SCORE_ON_LOW = "score_on_low";
     /** Does the robot score on the middle hoop? */
-    String ROBOT_CAN_SCORE_ON_MID = "robot_can_score_on_mid";
+    String ROBOT_CAN_SCORE_ON_MID = "score_on_mid";
     /** Does the robot score on the high hoop? */
-    String ROBOT_CAN_SCORE_ON_HIGH = "robot_can_score_on_high";
+    String ROBOT_CAN_SCORE_ON_HIGH = "score_on_high";
 
-    /** Can the robot climb? */
-    // String ROBOT_CAN_CLIMB = "robot_can_climb";
     /** Can the robot climb on level 1? */
-    String ROBOT_CAN_CLIMB_LEVEL_ONE = "robot_can_climb_level_one";
+    String ROBOT_CAN_CLIMB_LEVEL_ONE = "climb_level_one";
     /** Can the robot climb on level 2? */
-    String ROBOT_CAN_CLIMB_LEVEL_TWO = "robot_can_climb_level_two";
+    String ROBOT_CAN_CLIMB_LEVEL_TWO = "climb_level_two";
     /** Can the robot climb on level 3? */
-    String ROBOT_CAN_CLIMB_LEVEL_THREE = "robot_can_climb_level_three";
+    String ROBOT_CAN_CLIMB_LEVEL_THREE = "climb_level_three";
     /** Can the robot help climb? */
-    String ROBOT_CAN_HELP_CLIMB = "robot_can_help_climb";
+    String ROBOT_CAN_HELP_CLIMB = "helps_climb";
 
     /** Can the robot go under the tower? */
-    String ROBOT_CAN_GO_UNDER_TOWER = "robot_go_under_tower";
+    String ROBOT_CAN_GO_UNDER_TOWER = "goes_under_tower";
     /** How many driving gears does the robot have? */
-    String ROBOT_NUM_DRIVING_GEARS = "robot_num_driving_gears";
+    String ROBOT_NUM_DRIVING_GEARS = "driving_gears";
 
     /**
      * 0 - Basic tank drive (4 wheels)
@@ -58,7 +59,7 @@ public final class ScoutContract {
      * 6 - Omni (swerve/crab)
      * 7 - Other
      */
-    String ROBOT_DRIVE_TRAIN = "robot_drive_train";
+    String ROBOT_DRIVE_TRAIN = "drive_train";
 
     /**
      * 0 - KoP
@@ -67,21 +68,14 @@ public final class ScoutContract {
      * 3 - mecanum
      * 4 - other
      */
-    String ROBOT_TYPE_OF_WHEEL = "robot_type_of_wheel";
-  }
-
-  /** Column names for matches table */
-  interface MatchesColumns {
-    /** The match's unique number */
-    String NUMBER = "match_number";
+    String ROBOT_TYPE_OF_WHEEL = "type_of_wheel";
   }
 
   /** Column names for team_matches table */
   interface TeamMatchesColumns {
     /** References '_id' in Teams table */
-    String TEAM_ID = "team_id";
-    /** References '_id' in Matches table */
-    //String MATCH_ID = "match_id";
+    String TEAM_ID = "team_number";
+    
     /** References 'number' in Matches table */
     String MATCH_NUMBER = "match_number";
 
@@ -91,59 +85,26 @@ public final class ScoutContract {
     String AUTO_SHOTS_MISS_LOW = "auto_shots_miss_low";
     String AUTO_SHOTS_MISS_MID = "auto_shots_miss_mid";
     String AUTO_SHOTS_MISS_HIGH = "auto_shots_miss_high";
-
+    
     String TELE_SHOTS_MADE_LOW = "tele_shots_made_low";
     String TELE_SHOTS_MADE_MID = "tele_shots_made_mid";
     String TELE_SHOTS_MADE_HIGH = "tele_shots_made_high";
     String TELE_SHOTS_MISS_LOW = "tele_shots_miss_low";
     String TELE_SHOTS_MISS_MID = "tele_shots_miss_mid";
     String TELE_SHOTS_MISS_HIGH = "tele_shots_miss_high";
-
+    
     String SHOOTS_FROM_WHERE = "shoots_from_where";
-
     String TOWER_LEVEL_ONE = "tower_level_one";
     String TOWER_LEVEL_TWO = "tower_level_two";
     String TOWER_LEVEL_THREE = "tower_level_three";
-
-    String TOWER_FELL_OFF = "tower_fell_off";
-
-    /**
-     * 0 - Impedes performance
-     * 1 - Neutral
-     * 2 - High scoring
-     */
+    String TOWER_FELL_OFF = "fell_off_tower";
     String HUMAN_PLAYER_ABILITY = "human_player_ability";
-
     String FRISBEES_FROM_FEEDER = "frisbees_from_feeder";
     String FRISBEES_FROM_FLOOR = "frisbees_from_floor";
-
-    /**
-     * 0 - Defensive
-     * 1 - Neutral
-     * 2 - Offensive
-     */
-    String ROBOT_STRATEGY = "robot_strategy";
-
-    /**
-     * 0 - Slow
-     * 1 - Medium
-     * 2 - Fast
-     */
-    String ROBOT_SPEED = "robot_speed";
-
-    /**
-     * 0 - Low
-     * 1 - Medium
-     * 2 - High
-     */
-    String ROBOT_MANEUVERABILITY = "robot_maneuverability";
-
-    /**
-     * 0 - Low
-     * 1 - Medium
-     * 2 - High
-     */
-    String ROBOT_PENALTY = "robot_penalty";
+    String ROBOT_STRATEGY = "strategy";
+    String ROBOT_SPEED = "speed";
+    String ROBOT_MANEUVERABILITY = "maneuverability";
+    String ROBOT_PENALTY = "penalty";
   }
   //@formatter:on
 
