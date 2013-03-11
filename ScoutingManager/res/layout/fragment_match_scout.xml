@@ -106,7 +106,7 @@
                 android:id="@+id/rb_human_player_high_scoring"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/offense" />
+                android:text="@string/high_scoring" />
 
             <RadioButton
                 android:id="@+id/rb_human_player_neutral"

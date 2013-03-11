@@ -43,19 +43,20 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + Teams.PHOTO + " TEXT,"
         + Teams.RANK + " INTEGER,"
 
-        + Teams.ROBOT_CAN_SCORE_ON_LOW + " INTEGER,"
-        + Teams.ROBOT_CAN_SCORE_ON_MID + " INTEGER,"
-        + Teams.ROBOT_CAN_SCORE_ON_HIGH + " INTEGER,"
+        + Teams.ROBOT_CAN_SCORE_ON_LOW + " INTEGER DEFAULT 0,"
+        + Teams.ROBOT_CAN_SCORE_ON_MID + " INTEGER DEFAULT 0,"
+        + Teams.ROBOT_CAN_SCORE_ON_HIGH + " INTEGER DEFAULT 0,"
 
-        + Teams.ROBOT_CAN_CLIMB_LEVEL_ONE + " INTEGER,"
-        + Teams.ROBOT_CAN_CLIMB_LEVEL_TWO + " INTEGER,"
-        + Teams.ROBOT_CAN_CLIMB_LEVEL_THREE + " INTEGER,"
-        + Teams.ROBOT_CAN_HELP_CLIMB + " INTEGER,"
+        + Teams.ROBOT_CAN_CLIMB_LEVEL_ONE + " INTEGER DEFAULT 0,"
+        + Teams.ROBOT_CAN_CLIMB_LEVEL_TWO + " INTEGER DEFAULT 0,"
+        + Teams.ROBOT_CAN_CLIMB_LEVEL_THREE + " INTEGER DEFAULT 0,"
+        + Teams.ROBOT_CAN_HELP_CLIMB + " INTEGER DEFAULT 0,"
 
-        + Teams.ROBOT_CAN_GO_UNDER_TOWER + " INTEGER,"
-        + Teams.ROBOT_NUM_DRIVING_GEARS + " INTEGER,"
-        + Teams.ROBOT_DRIVE_TRAIN + " INTEGER,"
-        + Teams.ROBOT_TYPE_OF_WHEEL + " INTEGER,"
+        + Teams.ROBOT_NUM_DRIVING_GEARS + " INTEGER DEFAULT 0,"
+        + Teams.ROBOT_DRIVE_TRAIN + " INTEGER DEFAULT -1,"
+        + Teams.ROBOT_TYPE_OF_WHEEL + " INTEGER DEFAULT -1,"
+        + Teams.ROBOT_CAN_GO_UNDER_TOWER + " INTEGER DEFAULT 0,"
+
 
         + "UNIQUE (" + Teams.NUMBER + ") ON CONFLICT IGNORE);");
 
@@ -66,30 +67,30 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.MATCH_NUMBER + " INTEGER NOT NULL, "
 
         + TeamMatches.AUTO_SHOTS_MADE_LOW + " INTEGER DEFAULT 0,"
-        + TeamMatches.AUTO_SHOTS_MADE_MID + " INTEGER DEFAULT 0,"
-        + TeamMatches.AUTO_SHOTS_MADE_HIGH + " INTEGER DEFAULT 0,"
         + TeamMatches.AUTO_SHOTS_MISS_LOW + " INTEGER DEFAULT 0,"
+        + TeamMatches.AUTO_SHOTS_MADE_MID + " INTEGER DEFAULT 0,"
         + TeamMatches.AUTO_SHOTS_MISS_MID + " INTEGER DEFAULT 0,"
+        + TeamMatches.AUTO_SHOTS_MADE_HIGH + " INTEGER DEFAULT 0,"
         + TeamMatches.AUTO_SHOTS_MISS_HIGH + " INTEGER DEFAULT 0,"
 
         + TeamMatches.TELE_SHOTS_MADE_LOW + " INTEGER DEFAULT 0,"
-        + TeamMatches.TELE_SHOTS_MADE_MID + " INTEGER DEFAULT 0,"
-        + TeamMatches.TELE_SHOTS_MADE_HIGH + " INTEGER DEFAULT 0,"
         + TeamMatches.TELE_SHOTS_MISS_LOW + " INTEGER DEFAULT 0,"
+        + TeamMatches.TELE_SHOTS_MADE_MID + " INTEGER DEFAULT 0,"
         + TeamMatches.TELE_SHOTS_MISS_MID + " INTEGER DEFAULT 0,"
+        + TeamMatches.TELE_SHOTS_MADE_HIGH + " INTEGER DEFAULT 0,"
         + TeamMatches.TELE_SHOTS_MISS_HIGH + " INTEGER DEFAULT 0,"
 
         + TeamMatches.SHOOTS_FROM_WHERE + " TEXT,"
 
-        + TeamMatches.TOWER_LEVEL_ONE + " INTEGER,"
-        + TeamMatches.TOWER_LEVEL_TWO + " INTEGER,"
-        + TeamMatches.TOWER_LEVEL_THREE + " INTEGER,"
-        + TeamMatches.TOWER_FELL_OFF + " INTEGER,"
+        + TeamMatches.TOWER_LEVEL_ONE + " INTEGER DEFAULT 0,"
+        + TeamMatches.TOWER_LEVEL_TWO + " INTEGER DEFAULT 0,"
+        + TeamMatches.TOWER_LEVEL_THREE + " INTEGER DEFAULT 0,"
+        + TeamMatches.TOWER_FELL_OFF + " INTEGER DEFAULT 0,"
 
         + TeamMatches.HUMAN_PLAYER_ABILITY + " INTEGER DEFAULT -1,"
 
-        + TeamMatches.FRISBEES_FROM_FEEDER + " INTEGER,"
-        + TeamMatches.FRISBEES_FROM_FLOOR + " INTEGER,"
+        + TeamMatches.FRISBEES_FROM_FEEDER + " INTEGER DEFAULT 0,"
+        + TeamMatches.FRISBEES_FROM_FLOOR + " INTEGER DEFAULT 0,"
 
         + TeamMatches.ROBOT_STRATEGY + " INTEGER DEFAULT -1,"
         + TeamMatches.ROBOT_SPEED + " INTEGER DEFAULT -1,"

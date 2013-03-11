@@ -196,6 +196,7 @@ public class MatchDetailsFragment extends SherlockFragment implements LoaderMana
     mSpeed = (RadioGroup) view.findViewById(R.id.rg_speed);
     mManeuverability = (RadioGroup) view.findViewById(R.id.rg_maneuverability);
     mPenalty = (RadioGroup) view.findViewById(R.id.rg_penalty);
+    
     return view;
   }
 
