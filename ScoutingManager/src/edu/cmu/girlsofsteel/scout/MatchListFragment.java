@@ -44,6 +44,17 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
   private OnMatchSelectedListener mCallback;
 
   /**
+   * Callback interface for the {@link AddMatchDialog} and the
+   * {@link MatchScoutActivity}.
+   */
+  public interface OnMatchAddedListener {
+    /**
+     * Called by the {@link AddMatchDialog} when the user adds a new match.
+     */
+    public void onMatchAdded(long teamId, int matchNumber);
+  }
+  
+  /**
    * The container Activity must implement this interface so the frag can
    * deliver callback messages.
    */
@@ -91,7 +102,7 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
     Bundle args = getActivity().getIntent().getExtras();
     getLoaderManager().initLoader(MATCH_LOADER_ID, args, this);
   }
-
+  
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     getListView().setItemChecked(position, true);
@@ -139,8 +150,7 @@ public class MatchListFragment extends SherlockListFragment implements LoaderMan
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_add_match:
-        Bundle args = ((MatchScoutActivity) getActivity()).getIntent()
-            .getExtras();
+        Bundle args = ((MatchScoutActivity) getActivity()).getIntent().getExtras();
         long teamId = args.getLong(MainActivity.ARG_TEAM_ID);
         DialogFragment dialog = AddMatchDialog.newInstance(teamId);
         dialog.show(getFragmentManager(), AddMatchDialog.class.getSimpleName());

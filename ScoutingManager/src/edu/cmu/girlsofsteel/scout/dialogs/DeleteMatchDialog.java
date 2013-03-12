@@ -16,8 +16,8 @@ import edu.cmu.girlsofsteel.scout.R;
  * @author Alex Lockwood
  */
 public class DeleteMatchDialog extends DialogFragment {
-
   private static final String KEY_ID = "key_id";
+  private OnMatchDeletedListener mCallback;
 
   public static DeleteMatchDialog newInstance(long id) {
     DeleteMatchDialog dialog = new DeleteMatchDialog();
@@ -25,6 +25,16 @@ public class DeleteMatchDialog extends DialogFragment {
     args.putLong(KEY_ID, id);
     dialog.setArguments(args);
     return dialog;
+  }
+  
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    try {
+      mCallback = (OnMatchDeletedListener) activity;
+    } catch (ClassCastException e) {
+      throw new ClassCastException(activity.toString() + " must implement OnMatchDeletedListener");
+    }
   }
 
   @Override
@@ -50,19 +60,5 @@ public class DeleteMatchDialog extends DialogFragment {
               }
             })
         .create();
-  }
-
-  private OnMatchDeletedListener mCallback;
-
-  @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    // This makes sure that the container activity has implemented
-    // the callback interface. If not, it throws an exception.
-    try {
-      mCallback = (OnMatchDeletedListener) activity;
-    } catch (ClassCastException e) {
-      throw new ClassCastException(activity.toString() + " must implement OnMatchDeletedListener");
-    }
   }
 }

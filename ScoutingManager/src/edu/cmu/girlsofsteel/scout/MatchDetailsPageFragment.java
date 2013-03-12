@@ -23,9 +23,9 @@ import com.actionbarsherlock.app.SherlockFragment;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
 import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
-public abstract class MatchPageFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class MatchDetailsPageFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<Cursor> {
   @SuppressWarnings("unused")
-  private static final String TAG = MatchPageFragment.class.getSimpleName();
+  private static final String TAG = MatchDetailsPageFragment.class.getSimpleName();
   
   private static final String KEY_TEAM_MATCH_ID = "key_team_match_id";
   protected long mTeamMatchId = -1;
@@ -94,7 +94,7 @@ public abstract class MatchPageFragment extends SherlockFragment implements Load
     }
   }
   
-  private static abstract class MatchAutoTelePage extends MatchPageFragment implements View.OnClickListener {
+  private static abstract class MatchAutoTelePage extends MatchDetailsPageFragment implements View.OnClickListener {
     @SuppressWarnings("unused")
     private static final String TAG = MatchAutoTelePage.class.getSimpleName();
     
@@ -346,7 +346,7 @@ public abstract class MatchPageFragment extends SherlockFragment implements Load
     }
   }
   
-  public static class MatchGeneralPage extends MatchPageFragment {  
+  public static class MatchGeneralPage extends MatchDetailsPageFragment {  
     @SuppressWarnings("unused")
     private static final String TAG = MatchGeneralPage.class.getSimpleName();
     

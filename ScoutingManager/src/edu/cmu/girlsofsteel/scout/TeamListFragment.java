@@ -88,7 +88,7 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
   private static final int REQUEST_CODE_TAKE_TEAM_PICTURE = 1;
   private File mPhotoFile = null;
   private long mTeamId = 0L;
-
+  
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

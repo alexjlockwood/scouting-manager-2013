@@ -1,8 +1,8 @@
 package edu.cmu.girlsofsteel.scout.dialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -11,9 +11,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import edu.cmu.girlsofsteel.scout.MatchListFragment.OnMatchAddedListener;
 import edu.cmu.girlsofsteel.scout.R;
-import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
-import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
 /**
  * Alert dialog which prompts the user to add a new match.
@@ -21,8 +20,8 @@ import edu.cmu.girlsofsteel.scout.util.StorageUtil;
  * @author Alex Lockwood
  */
 public class AddMatchDialog extends DialogFragment {
-
   private static final String ARG_TEAM_ID = "team_id_arg";
+  private OnMatchAddedListener mCallback;
 
   public static AddMatchDialog newInstance(long teamId) {
     AddMatchDialog frag = new AddMatchDialog();
@@ -32,6 +31,16 @@ public class AddMatchDialog extends DialogFragment {
     return frag;
   }
 
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    try {
+      mCallback = (OnMatchAddedListener) activity;
+    } catch (ClassCastException e) {
+      throw new ClassCastException(activity.toString() + " must implement OnMatchAddedListener");
+    }
+  }
+  
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     final Context ctx = getActivity();
@@ -51,10 +60,9 @@ public class AddMatchDialog extends DialogFragment {
               public void onClick(DialogInterface dialog, int whichButton) {
                 CharSequence text = edit.getText();
                 if (!TextUtils.isEmpty(text)) {
-                  ContentValues values = new ContentValues();
-                  values.put(TeamMatches.TEAM_ID, getArguments().getLong(ARG_TEAM_ID));
-                  values.put(TeamMatches.MATCH_NUMBER, Integer.valueOf(text.toString()));
-                  StorageUtil.insertTeamMatch(getActivity(), values);
+                  long teamId = getArguments().getLong(ARG_TEAM_ID);
+                  int matchNumber = Integer.valueOf(text.toString());
+                  mCallback.onMatchAdded(teamId, matchNumber);
                 }
 
                 // Force close soft input

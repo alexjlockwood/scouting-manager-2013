@@ -115,11 +115,20 @@ public class MatchDetailsFragment extends SherlockFragment {
     setHasOptionsMenu(true);
   }
   
+  void saveAllData() {
+    for (int i=0; i<3; i++) {
+      MatchDetailsPageFragment frag = mAdapter.getFragment(i);
+      if (frag != null) {
+        frag.saveData();
+      }
+    }
+  }
+  
   /** Called by the {@link MatchScoutActivity} when the match has been deleted. */
   void matchDeleted() {
     mTeamMatchId = -1;
     for (int i=0; i<3; i++) {
-      MatchPageFragment frag = mAdapter.getFragment(i);
+      MatchDetailsPageFragment frag = mAdapter.getFragment(i);
       if (frag != null) {
         frag.matchDeleted();
       }
@@ -131,7 +140,7 @@ public class MatchDetailsFragment extends SherlockFragment {
     if (mTeamMatchId != teamMatchId) {
       mTeamMatchId = teamMatchId;
       for (int i=0; i<3; i++) {
-        MatchPageFragment frag = mAdapter.getFragment(i);
+        MatchDetailsPageFragment frag = mAdapter.getFragment(i);
         if (frag != null) {
           frag.updateDetailsView(teamMatchId);
         }
@@ -154,14 +163,16 @@ public class MatchDetailsFragment extends SherlockFragment {
     switch (item.getItemId()) {
       case R.id.menu_clear_match_screen:
         for (int i=0; i<3; i++) {
-          MatchPageFragment frag = mAdapter.getFragment(i);
+          MatchDetailsPageFragment frag = mAdapter.getFragment(i);
           if (frag != null) {
             frag.clearScreen();
           }
         }
         return true;
       case R.id.menu_delete_match:
-        mCallback.onShowConfirmationDialog(mTeamMatchId);
+        if (mTeamMatchId != -1) {
+          mCallback.onShowConfirmationDialog(mTeamMatchId);
+        }
         return true;
     }
     return super.onOptionsItemSelected(item);
@@ -190,13 +201,13 @@ public class MatchDetailsFragment extends SherlockFragment {
       Fragment frag = null;
       switch(position) {
         case 0:
-          frag = MatchPageFragment.MatchAutoPage.newInstance(mTeamMatchId);
+          frag = MatchDetailsPageFragment.MatchAutoPage.newInstance(mTeamMatchId);
           break;
         case 1: 
-          frag = MatchPageFragment.MatchTelePage.newInstance(mTeamMatchId);
+          frag = MatchDetailsPageFragment.MatchTelePage.newInstance(mTeamMatchId);
           break;
         case 2: 
-          frag = MatchPageFragment.MatchGeneralPage.newInstance(mTeamMatchId);
+          frag = MatchDetailsPageFragment.MatchGeneralPage.newInstance(mTeamMatchId);
           break;
       }
       mFragments.put(position, new WeakReference<Fragment>(frag));
@@ -209,10 +220,10 @@ public class MatchDetailsFragment extends SherlockFragment {
         mFragments.remove(position);
     }
 
-    public MatchPageFragment getFragment(int position) {
+    public MatchDetailsPageFragment getFragment(int position) {
       WeakReference<Fragment> weakRef = mFragments.get(position);
       if (weakRef != null) {
-        return (MatchPageFragment) weakRef.get();
+        return (MatchDetailsPageFragment) weakRef.get();
       }
       return null;
     }

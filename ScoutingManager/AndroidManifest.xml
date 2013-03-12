@@ -42,7 +42,11 @@
         <activity
             android:name="edu.cmu.girlsofsteel.scout.MatchScoutActivity"
             android:label="@string/title_match_scout"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden" 
+            android:configChanges="orientation|screenSize" >
+
+            <!-- TODO: fix this last minute configChange hack! -->
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.cmu.girlsofsteel.scout.MainActivity" >
