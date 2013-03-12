@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
@@ -59,8 +58,7 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements
     getSupportActionBar().setHomeButtonEnabled(true);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    getSupportLoaderManager().initLoader(TEAM_LOADER_ID,
-        getIntent().getExtras(), this);
+    getSupportLoaderManager().initLoader(TEAM_LOADER_ID, getIntent().getExtras(), this);
 
     // Check whether the activity is using the layout version with the
     // fragment_container FrameLayout. If so, we must add the first fragment.
@@ -84,25 +82,24 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements
   @Override
   public void onMatchSelected(long teamMatchId) {
     FragmentManager fm = getSupportFragmentManager();
-    MatchDetailsFragment detailsFrag = (MatchDetailsFragment) fm
-        .findFragmentById(R.id.match_details_fragment);
+    MatchDetailsFragment detailsFrag = (MatchDetailsFragment) fm.findFragmentById(R.id.match_details_fragment);
     if (detailsFrag != null) {
       // If details frag is available, we're in two-pane layout. Tell the
       // details fragment to update its content with the new team match id.
-      detailsFrag.getView().findViewById(R.id.viewPager)
-          .setVisibility(View.VISIBLE);
+      detailsFrag.getView().findViewById(R.id.viewPager).setVisibility(View.VISIBLE);
       detailsFrag.updateDetailsView(teamMatchId);
     } else {
       // If the fragment is not available, we're in the one-pane layout and must
       // swap fragments. Replace whatever is in the fragment_container view with
       // this fragment, and add the transaction to the back stack so the user
       // can navigate back.
-      FragmentTransaction transaction = fm.beginTransaction();
-      Fragment fragment = MatchDetailsFragment.newInstance(teamMatchId,
-          mTeamNumber);
-      transaction.replace(R.id.fragment_container, fragment);
-      transaction.addToBackStack(null);
-      transaction.commit();
+      Fragment fragment = MatchDetailsFragment.newInstance(teamMatchId, mTeamNumber);
+      fm.beginTransaction()
+          .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right, 
+              android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+          .replace(R.id.fragment_container, fragment)
+          .addToBackStack(null)
+          .commit();
     }
   }
 
@@ -136,8 +133,7 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements
     if (detailsFrag != null) {
       // Notify the fragment that the match will be deleted.
       detailsFrag.matchDeleted();
-      detailsFrag.getView().findViewById(R.id.viewPager)
-          .setVisibility(View.INVISIBLE);
+      detailsFrag.getView().findViewById(R.id.viewPager).setVisibility(View.INVISIBLE);
     }
     if (fm.getBackStackEntryCount() > 0) {
       fm.popBackStack();
@@ -167,15 +163,13 @@ public class MatchScoutActivity extends SherlockFragmentActivity implements
   @Override
   public Loader<Cursor> onCreateLoader(int id, Bundle args) {
     long teamId = args.getLong(MainActivity.ARG_TEAM_ID);
-    return new CursorLoader(this, Teams.teamIdUri(teamId), PROJECTION, null,
-        null, null);
+    return new CursorLoader(this, Teams.teamIdUri(teamId), PROJECTION, null, null, null);
   }
 
   @Override
   public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
     if (data.moveToFirst()) {
-      String teamNumber = data.getString(data
-          .getColumnIndexOrThrow(Teams.NUMBER));
+      String teamNumber = data.getString(data.getColumnIndexOrThrow(Teams.NUMBER));
       getSupportActionBar().setSubtitle("Team " + teamNumber);
       mTeamNumber = teamNumber;
     }

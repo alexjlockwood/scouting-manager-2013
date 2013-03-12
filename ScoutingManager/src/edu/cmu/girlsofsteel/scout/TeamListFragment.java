@@ -56,9 +56,6 @@ import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.ActionMode;
 import edu.cmu.girlsofsteel.scout.util.actionmodecompat.MultiChoiceModeListener;
 
-// TODO: figure out why ActionMode doesn't persist on config changes!
-// TODO: figure out how to save selected team ids across config changes!
-
 /**
  * {@link TeamListFragment} displays the all of the teams currently in the
  * database. It's parent activity is the {@link MainActivity}. It's view is seen
@@ -166,10 +163,9 @@ public class TeamListFragment extends SherlockListFragment implements MultiChoic
     }
 
     // Gravity.END introduced in API 14
-    int gravityCompat = CompatUtil.hasICS() ? (Gravity.CENTER_VERTICAL | Gravity.END) : Gravity.CENTER_VERTICAL;
     activity.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM, ActionBar.DISPLAY_SHOW_CUSTOM);
     activity.getSupportActionBar().setCustomView(mScoutModeView, new ActionBar.LayoutParams(
-        ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, gravityCompat));
+        ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, Gravity.CENTER_VERTICAL | Gravity.END));
 
     mScoutModeView.setChecked(StorageUtil.getScoutMode(activity) == ScoutMode.MATCH);
     mScoutModeView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
