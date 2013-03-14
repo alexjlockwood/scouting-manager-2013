@@ -426,8 +426,8 @@ public abstract class MatchDetailsPageFragment extends SherlockFragment implemen
         int towerLevelThree = data.getInt(data.getColumnIndexOrThrow(TeamMatches.TOWER_LEVEL_THREE));
         String shootsFromWhere = data.getString(data.getColumnIndexOrThrow(TeamMatches.SHOOTS_FROM_WHERE));
         int fellOffTower = data.getInt(data.getColumnIndexOrThrow(TeamMatches.TOWER_FELL_OFF));
-        int frisbeesFeeder = data.getInt(data.getColumnIndexOrThrow(TeamMatches.FRISBEES_FROM_FLOOR));
-        int frisbeesFloor = data.getInt(data.getColumnIndexOrThrow(TeamMatches.FRISBEES_FROM_FEEDER));
+        int frisbeesFloor = data.getInt(data.getColumnIndexOrThrow(TeamMatches.FRISBEES_FROM_FLOOR));
+        int frisbeesFeeder = data.getInt(data.getColumnIndexOrThrow(TeamMatches.FRISBEES_FROM_FEEDER));
         int humanPlayerAbility = data.getInt(data.getColumnIndexOrThrow(TeamMatches.HUMAN_PLAYER_ABILITY));
         int strategy = data.getInt(data.getColumnIndexOrThrow(TeamMatches.ROBOT_STRATEGY));
         int speed = data.getInt(data.getColumnIndexOrThrow(TeamMatches.ROBOT_SPEED));

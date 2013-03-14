@@ -14,7 +14,6 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.widget.Toast;
 import au.com.bytecode.opencsv.CSVWriter;
 import edu.cmu.girlsofsteel.scout.R;
 import edu.cmu.girlsofsteel.scout.provider.ScoutContract.TeamMatches;
@@ -27,60 +26,38 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
  */
 public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
   private static final String TAG = ExportDatabaseTask.class.getSimpleName();
-  
-  private Context mCtx;
 
-  private static final String[] TEAMS_PROJECTION = {
-    Teams.NUMBER,
-    Teams.NAME,
-    Teams.RANK,
-    Teams.ROBOT_CAN_SCORE_ON_LOW,
-    Teams.ROBOT_CAN_SCORE_ON_MID,
-    Teams.ROBOT_CAN_SCORE_ON_HIGH,
-    Teams.ROBOT_CAN_CLIMB_LEVEL_ONE,
-    Teams.ROBOT_CAN_CLIMB_LEVEL_TWO,
-    Teams.ROBOT_CAN_CLIMB_LEVEL_THREE,
-    Teams.ROBOT_CAN_HELP_CLIMB,
-    Teams.ROBOT_NUM_DRIVING_GEARS,
-    Teams.ROBOT_DRIVE_TRAIN,
-    Teams.ROBOT_TYPE_OF_WHEEL,
-    Teams.ROBOT_CAN_GO_UNDER_TOWER,
-    Teams.ROBOT_DRIVE_TRAIN_OTHER,
-  };
-  
-  private static final String[] MATCHES_PROJECTION = {
-    TeamMatches.TEAM_ID,
-    TeamMatches.MATCH_NUMBER,
-    TeamMatches.AUTO_SHOTS_MADE_LOW,
-    TeamMatches.AUTO_SHOTS_MISS_LOW,
-    TeamMatches.AUTO_SHOTS_MADE_MID,
-    TeamMatches.AUTO_SHOTS_MISS_MID,
-    TeamMatches.AUTO_SHOTS_MADE_HIGH,
-    TeamMatches.AUTO_SHOTS_MISS_HIGH,
-    TeamMatches.TELE_SHOTS_MADE_LOW,
-    TeamMatches.TELE_SHOTS_MISS_LOW,
-    TeamMatches.TELE_SHOTS_MADE_MID,
-    TeamMatches.TELE_SHOTS_MISS_MID,
-    TeamMatches.TELE_SHOTS_MADE_HIGH,
-    TeamMatches.TELE_SHOTS_MISS_HIGH,
-    TeamMatches.SHOOTS_FROM_WHERE,
-    TeamMatches.TOWER_LEVEL_ONE,
-    TeamMatches.TOWER_LEVEL_TWO,
-    TeamMatches.TOWER_LEVEL_THREE,
-    TeamMatches.TOWER_FELL_OFF,
-    TeamMatches.FRISBEES_FROM_FEEDER,
-    TeamMatches.FRISBEES_FROM_FLOOR,
-    TeamMatches.ROBOT_STRATEGY,
-    TeamMatches.ROBOT_SPEED,
-    TeamMatches.ROBOT_MANEUVERABILITY,
-    TeamMatches.ROBOT_PENALTY,
-  };
-  
+  private Context mCtx;
+  private ExportTaskListener mCallback;
+
+  private static final String[] TEAMS_PROJECTION = { Teams.NUMBER, Teams.NAME,
+      Teams.RANK, Teams.ROBOT_CAN_SCORE_ON_LOW, Teams.ROBOT_CAN_SCORE_ON_MID,
+      Teams.ROBOT_CAN_SCORE_ON_HIGH, Teams.ROBOT_CAN_CLIMB_LEVEL_ONE,
+      Teams.ROBOT_CAN_CLIMB_LEVEL_TWO, Teams.ROBOT_CAN_CLIMB_LEVEL_THREE,
+      Teams.ROBOT_CAN_HELP_CLIMB, Teams.ROBOT_NUM_DRIVING_GEARS,
+      Teams.ROBOT_DRIVE_TRAIN, Teams.ROBOT_TYPE_OF_WHEEL,
+      Teams.ROBOT_CAN_GO_UNDER_TOWER, Teams.ROBOT_DRIVE_TRAIN_OTHER, };
+
+  private static final String[] MATCHES_PROJECTION = { TeamMatches.TEAM_ID,
+      TeamMatches.MATCH_NUMBER, TeamMatches.AUTO_SHOTS_MADE_LOW,
+      TeamMatches.AUTO_SHOTS_MISS_LOW, TeamMatches.AUTO_SHOTS_MADE_MID,
+      TeamMatches.AUTO_SHOTS_MISS_MID, TeamMatches.AUTO_SHOTS_MADE_HIGH,
+      TeamMatches.AUTO_SHOTS_MISS_HIGH, TeamMatches.TELE_SHOTS_MADE_LOW,
+      TeamMatches.TELE_SHOTS_MISS_LOW, TeamMatches.TELE_SHOTS_MADE_MID,
+      TeamMatches.TELE_SHOTS_MISS_MID, TeamMatches.TELE_SHOTS_MADE_HIGH,
+      TeamMatches.TELE_SHOTS_MISS_HIGH, TeamMatches.SHOOTS_FROM_WHERE,
+      TeamMatches.TOWER_LEVEL_ONE, TeamMatches.TOWER_LEVEL_TWO,
+      TeamMatches.TOWER_LEVEL_THREE, TeamMatches.TOWER_FELL_OFF,
+      TeamMatches.FRISBEES_FROM_FEEDER, TeamMatches.FRISBEES_FROM_FLOOR,
+      TeamMatches.ROBOT_STRATEGY, TeamMatches.ROBOT_SPEED,
+      TeamMatches.ROBOT_MANEUVERABILITY, TeamMatches.ROBOT_PENALTY, };
+
   private String[] wheelType;
   private String[] driveTrain;
-  
-  public ExportDatabaseTask(Context ctx) {
+
+  public ExportDatabaseTask(Context ctx, ExportTaskListener callback) {
     mCtx = ctx.getApplicationContext();
+    mCallback = callback;
     wheelType = mCtx.getResources().getStringArray(R.array.wheel_options);
     driveTrain = mCtx.getResources().getStringArray(R.array.drive_options);
   }
@@ -96,9 +73,8 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
     File exportDir = new File(Environment.getExternalStorageDirectory(), exportDirName);
     exportDir.mkdir();
 
-    String timeStamp = "";//"_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-    File teamsFile = new File(exportDir, res.getString(R.string.export_teams_file_name) + timeStamp + ".csv");
-    File matchesFile = new File(exportDir, res.getString(R.string.export_matches_file_name) + timeStamp + ".csv");
+    File teamsFile = new File(exportDir, res.getString(R.string.export_teams_file_name) + ".csv");
+    File matchesFile = new File(exportDir, res.getString(R.string.export_matches_file_name) + ".csv");
 
     CSVWriter writer;
     Cursor cursor;
@@ -146,33 +122,33 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
     String[] row = new String[cursor.getColumnCount()];
     for (int i = 0; i < row.length; i++) {
       String currentCol = cursor.getColumnName(i);
-      
+
       // Replace '0' and '1' with 'no' and 'yes'
       if (currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_LOW)
           || currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_MID)
           || currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_HIGH)
-          || currentCol.equals(Teams.ROBOT_CAN_HELP_CLIMB) 
+          || currentCol.equals(Teams.ROBOT_CAN_HELP_CLIMB)
           || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_ONE)
           || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_TWO)
           || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_THREE)
           || currentCol.equals(Teams.ROBOT_CAN_GO_UNDER_TOWER)) {
         row[i] = (cursor.getInt(i) == 0) ? "no" : "yes";
       }
-      
+
       else if (currentCol.equals(Teams.ROBOT_NUM_DRIVING_GEARS)) {
         row[i] = (cursor.getInt(i) == 0) ? "one" : "multiple";
       }
-      
+
       else if (currentCol.equals(Teams.ROBOT_DRIVE_TRAIN)) {
         int cellVal = cursor.getInt(i);
         row[i] = (cellVal != -1) ? driveTrain[cellVal] : "";
       }
-      
+
       else if (currentCol.equals(Teams.ROBOT_TYPE_OF_WHEEL)) {
         int cellVal = cursor.getInt(i);
         row[i] = (cellVal != -1) ? wheelType[cellVal] : "";
-      } 
-      
+      }
+
       else {
         // No need to process the cell's value
         row[i] = cursor.getString(i);
@@ -180,12 +156,12 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
     }
     writer.writeNext(row);
   }
-  
+
   private void writeMatchRow(CSVWriter writer, Cursor cursor) {
     String[] row = new String[cursor.getColumnCount()];
-    for (int i = 0; i <row.length; i++) {
+    for (int i = 0; i < row.length; i++) {
       String currentCol = cursor.getColumnName(i);
-      
+
       // Replace the team id with the team number (because I'm too
       // lazy to figure out how to do joins in Android :/)
       if (currentCol.equals(TeamMatches.TEAM_ID)) {
@@ -199,7 +175,7 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
           row[i] = "";
         }
       }
-      
+
       // Replace '0' and '1' with 'no' and 'yes'
       else if (currentCol.equals(TeamMatches.TOWER_LEVEL_ONE)
           || currentCol.equals(TeamMatches.TOWER_LEVEL_TWO)
@@ -207,53 +183,88 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
           || currentCol.equals(TeamMatches.TOWER_FELL_OFF)
           || currentCol.equals(TeamMatches.FRISBEES_FROM_FEEDER)) {
         row[i] = (cursor.getInt(i) == 0) ? "no" : "yes";
-      } 
-      
+      }
+
       else if (currentCol.equals(TeamMatches.HUMAN_PLAYER_ABILITY)) {
         switch (cursor.getInt(i)) {
-          case 0: row[i] = "high scoring"; break;
-          case 1: row[i] = "neutral"; break;
-          case 2: row[i] = "impedes performance"; break;
-          default: row[i] = "";
+          case 0:
+            row[i] = "high scoring";
+            break;
+          case 1:
+            row[i] = "neutral";
+            break;
+          case 2:
+            row[i] = "impedes performance";
+            break;
+          default:
+            row[i] = "";
         }
-      } 
-      
+      }
+
       else if (currentCol.equals(TeamMatches.ROBOT_STRATEGY)) {
         switch (cursor.getInt(i)) {
-          case 0: row[i] = "offense"; break;
-          case 1: row[i] = "neutral"; break;
-          case 2: row[i] = "defense"; break;
-          default: row[i] = "";
+          case 0:
+            row[i] = "offense";
+            break;
+          case 1:
+            row[i] = "neutral";
+            break;
+          case 2:
+            row[i] = "defense";
+            break;
+          default:
+            row[i] = "";
         }
-      } 
-      
+      }
+
       else if (currentCol.equals(TeamMatches.ROBOT_SPEED)) {
         switch (cursor.getInt(i)) {
-          case 0: row[i] = "fast"; break;
-          case 1: row[i] = "medium"; break;
-          case 2: row[i] = "slow"; break;
-          default: row[i] = "";
+          case 0:
+            row[i] = "fast";
+            break;
+          case 1:
+            row[i] = "medium";
+            break;
+          case 2:
+            row[i] = "slow";
+            break;
+          default:
+            row[i] = "";
         }
       }
-      
+
       else if (currentCol.equals(TeamMatches.ROBOT_MANEUVERABILITY)) {
         switch (cursor.getInt(i)) {
-          case 0: row[i] = "high"; break;
-          case 1: row[i] = "medium"; break;
-          case 2: row[i] = "low"; break;
-          default: row[i] = "";
+          case 0:
+            row[i] = "high";
+            break;
+          case 1:
+            row[i] = "medium";
+            break;
+          case 2:
+            row[i] = "low";
+            break;
+          default:
+            row[i] = "";
         }
       }
-      
+
       else if (currentCol.equals(TeamMatches.ROBOT_PENALTY)) {
         switch (cursor.getInt(i)) {
-          case 0: row[i] = "high"; break;
-          case 1: row[i] = "medium"; break;
-          case 2: row[i] = "low"; break;
-          default: row[i] = "";
+          case 0:
+            row[i] = "high";
+            break;
+          case 1:
+            row[i] = "medium";
+            break;
+          case 2:
+            row[i] = "low";
+            break;
+          default:
+            row[i] = "";
         }
-      } 
-      
+      }
+
       else {
         // No need to process the cell's value
         row[i] = cursor.getString(i);
@@ -261,9 +272,19 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
     }
     writer.writeNext(row);
   }
-  
+
   @Override
-  protected void onPostExecute(String toastMsg) {
-    Toast.makeText(mCtx, toastMsg, Toast.LENGTH_SHORT).show();
+  protected void onPostExecute(String result) {
+    mCallback.onExportComplete(result);
+  }
+
+  /**
+   * Callback interface for the export task.
+   */
+  public interface ExportTaskListener {
+    /**
+     * Called when the files have been successfully written to the disk.
+     */
+    void onExportComplete(String result);
   }
 }

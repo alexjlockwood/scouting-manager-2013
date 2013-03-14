@@ -48,10 +48,11 @@
     <string name="menu_search">Search</string>
     <string name="menu_match_number_hint">Match #</string>
     <string name="menu_search_team_hint">Search for team…</string>
-    <string name="menu_export">Export All</string>
+    <string name="menu_export">Export to CSV</string>
     <string name="menu_take_picture">Take Picture</string>
     <string name="menu_delete_picture">Delete Picture</string>
     <string name="menu_clear_screen">Clear Screen</string>
+    <string name="menu_share">Share</string>
 
     <plurals name="title_selected_teams">
         <item quantity="one">1 team selected</item>
@@ -65,7 +66,9 @@
     <string name="export_not_mounted">External storage not mounted.</string>
     <string name="export_success">Data written to external storage.</string>
     <string name="export_failed">Could not export data.</string>
-
+    <string name="share_scouting_data">Share scouting data…</string>
+	<string name="no_data_to_share">No data to share.</string>
+    
     <!-- Camera -->
     <string name="camera_storage_directory_name">team_pictures</string>
     <string name="camera_take_picture_failed">Unable to take team picture.</string>
