@@ -10,11 +10,11 @@ Obtaining the Source Code
 
 2. Open up a terminal (called 'Git BASH' if you installed using the link above) and execute the following command:
 
-        $ git clone https://github.com/alexjlockwood/scoutingmanager-2013.git
+        $ git clone https://github.com/alexjlockwood/scouting-manager-2013.git
 
    This will create a ``scouting-manager-2013`` directory containing the source code for Scouting Manager.
 
-3. Scouting Manager uses a third-party library called ActionBarSherlock. Before importing the project into Eclipse, you must initialize the library by executing the following commands:
+3. Scouting Manager uses a third-party library called ActionBarSherlock. Before importing the project into Eclipse, you must initialize this library by executing the following commands:
 
         $ cd scouting-manager-2013/
         $ git submodule init
@@ -22,6 +22,6 @@ Obtaining the Source Code
 
    Then, import the ``scouting-manager-2013/ActionBarSherlock/library`` project into your Eclipse workspace.
 
-4. Import the ``scouting-manager-2013/ScoutingManager`` project into your Eclipse workspace.
+4. Add the ``scouting-manager-2013/ActionBarSherlock/library`` and ``scouting-manager-2013/ScoutingManager`` projects (as Android Projects from Existing Code) into your Eclipse workspace. 
 
 5. Done!
