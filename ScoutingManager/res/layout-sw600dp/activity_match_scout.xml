@@ -7,14 +7,14 @@
 
     <fragment
         android:id="@+id/match_list_fragment"
-        android:name="edu.cmu.girlsofsteel.scout.MatchListFragment"
+        android:name="edu.cmu.girlsofsteel.scouting.MatchListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
 
     <fragment
         android:id="@+id/match_details_fragment"
-        android:name="edu.cmu.girlsofsteel.scout.MatchDetailsFragment"
+        android:name="edu.cmu.girlsofsteel.scouting.MatchDetailsFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="2" />

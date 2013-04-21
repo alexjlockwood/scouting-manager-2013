@@ -3,4 +3,4 @@
     android:name="edu.cmu.girlsofsteel.scout.TeamListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    class="edu.cmu.girlsofsteel.scout.TeamListFragment" />
+    class="edu.cmu.girlsofsteel.scouting.TeamListFragment" />
