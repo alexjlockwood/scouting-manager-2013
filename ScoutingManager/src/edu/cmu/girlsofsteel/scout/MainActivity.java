@@ -3,6 +3,8 @@ package edu.cmu.girlsofsteel.scout;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -14,6 +16,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import edu.cmu.girlsofsteel.scout.util.ExportDatabaseTask;
 import edu.cmu.girlsofsteel.scout.util.ExportDatabaseTask.ExportTaskListener;
+import edu.cmu.girlsofsteel.scout.util.StorageUtil;
 
 /**
  * {@link MainActivity} is the main activity for the application. It displays a
@@ -60,21 +63,35 @@ public class MainActivity extends SherlockFragmentActivity {
         // Export all database tables to CSV files on external storage
         new ExportDatabaseTask(this, mExportListener).execute();
         return true;
+      case R.id.menu_purge_all:
+        new AlertDialog.Builder(this)
+            .setIcon(R.drawable.ic_alert_warning)
+            .setTitle(R.string.title_delete_database)
+            .setMessage(R.string.message_delete_database)
+            .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                StorageUtil.purgeAll(getApplicationContext());
+              }
+            })
+            .setNegativeButton(R.string.no, null)
+            .show();
+        return true;
     }
     return super.onOptionsItemSelected(item);
   }
-  
+
   // Callback for the "share" menu item.
   private final ExportTaskListener mShareListener = new ExportTaskListener() {
     @Override
-    public void onExportComplete(String result) { 
+    public void onExportComplete(String result) {
       Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
       if (!result.equals(getString(R.string.export_success))) {
         // Not very pretty, I know... but it was a last minute addition
         // on the day of the robotics competition. :)
         return;
       }
-      
+
       Resources res = getResources();
       Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
       emailIntent.setType("text/csv");
@@ -89,7 +106,7 @@ public class MainActivity extends SherlockFragmentActivity {
         Toast.makeText(getApplicationContext(), R.string.no_data_to_share, Toast.LENGTH_SHORT).show();
         return;
       }
-        
+
       ArrayList<Uri> csvUris = new ArrayList<Uri>();
       csvUris.add(Uri.fromFile(teamsFile));
       if (matchesFile.isFile()) {
@@ -102,11 +119,11 @@ public class MainActivity extends SherlockFragmentActivity {
       startActivity(Intent.createChooser(emailIntent, getString(R.string.share_scouting_data)));
     }
   };
-  
+
   // Callback for the "export" menu item.
   private final ExportTaskListener mExportListener = new ExportTaskListener() {
     @Override
-    public void onExportComplete(String result) { 
+    public void onExportComplete(String result) {
       Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
     }
   };

@@ -103,6 +103,12 @@ public final class StorageUtil {
     }.start();
   }
 
+  public static void purgeAll(Context ctx) {
+    AsyncQueryHandler handler = new AsyncQueryHandler(ctx.getContentResolver()) {
+    };
+    handler.startDelete(-1, null, ScoutContract.BASE_URI, null, null);
+  }
+
   /**
    * Saves the most recent scouting mode ('team' or 'match').
    */

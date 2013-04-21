@@ -21,7 +21,7 @@ import edu.cmu.girlsofsteel.scout.provider.ScoutContract.Teams;
 
 /**
  * Exports the teams and matches to a CSV file on the disk.
- * 
+ *
  * @author Alex Lockwood
  */
 public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
@@ -30,27 +30,22 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
   private Context mCtx;
   private ExportTaskListener mCallback;
 
-  private static final String[] TEAMS_PROJECTION = { Teams.NUMBER, Teams.NAME,
-      Teams.RANK, Teams.ROBOT_CAN_SCORE_ON_LOW, Teams.ROBOT_CAN_SCORE_ON_MID,
-      Teams.ROBOT_CAN_SCORE_ON_HIGH, Teams.ROBOT_CAN_CLIMB_LEVEL_ONE,
-      Teams.ROBOT_CAN_CLIMB_LEVEL_TWO, Teams.ROBOT_CAN_CLIMB_LEVEL_THREE,
-      Teams.ROBOT_CAN_HELP_CLIMB, Teams.ROBOT_NUM_DRIVING_GEARS,
-      Teams.ROBOT_DRIVE_TRAIN, Teams.ROBOT_TYPE_OF_WHEEL,
+  private static final String[] TEAMS_PROJECTION = { Teams.NUMBER, Teams.NAME, Teams.RANK,
+      Teams.ROBOT_CAN_SCORE_ON_LOW, Teams.ROBOT_CAN_SCORE_ON_MID, Teams.ROBOT_CAN_SCORE_ON_HIGH,
+      Teams.ROBOT_CAN_CLIMB_LEVEL_ONE, Teams.ROBOT_CAN_CLIMB_LEVEL_TWO, Teams.ROBOT_CAN_CLIMB_LEVEL_THREE,
+      Teams.ROBOT_CAN_HELP_CLIMB, Teams.ROBOT_NUM_DRIVING_GEARS, Teams.ROBOT_DRIVE_TRAIN, Teams.ROBOT_TYPE_OF_WHEEL,
       Teams.ROBOT_CAN_GO_UNDER_TOWER, Teams.ROBOT_DRIVE_TRAIN_OTHER, };
 
-  private static final String[] MATCHES_PROJECTION = { TeamMatches.TEAM_ID,
-      TeamMatches.MATCH_NUMBER, TeamMatches.AUTO_SHOTS_MADE_LOW,
-      TeamMatches.AUTO_SHOTS_MISS_LOW, TeamMatches.AUTO_SHOTS_MADE_MID,
-      TeamMatches.AUTO_SHOTS_MISS_MID, TeamMatches.AUTO_SHOTS_MADE_HIGH,
-      TeamMatches.AUTO_SHOTS_MISS_HIGH, TeamMatches.TELE_SHOTS_MADE_LOW,
-      TeamMatches.TELE_SHOTS_MISS_LOW, TeamMatches.TELE_SHOTS_MADE_MID,
-      TeamMatches.TELE_SHOTS_MISS_MID, TeamMatches.TELE_SHOTS_MADE_HIGH,
-      TeamMatches.TELE_SHOTS_MISS_HIGH, TeamMatches.SHOOTS_FROM_WHERE,
-      TeamMatches.TOWER_LEVEL_ONE, TeamMatches.TOWER_LEVEL_TWO,
-      TeamMatches.TOWER_LEVEL_THREE, TeamMatches.TOWER_FELL_OFF,
-      TeamMatches.FRISBEES_FROM_FEEDER, TeamMatches.FRISBEES_FROM_FLOOR,
-      TeamMatches.ROBOT_STRATEGY, TeamMatches.ROBOT_SPEED,
-      TeamMatches.ROBOT_MANEUVERABILITY, TeamMatches.ROBOT_PENALTY, };
+  private static final String[] MATCHES_PROJECTION = { TeamMatches.TEAM_ID, TeamMatches.MATCH_NUMBER,
+      TeamMatches.AUTO_SHOTS_MADE_TOWER, TeamMatches.AUTO_SHOTS_MISS_TOWER, TeamMatches.AUTO_SHOTS_MADE_LOW,
+      TeamMatches.AUTO_SHOTS_MISS_LOW, TeamMatches.AUTO_SHOTS_MADE_MID, TeamMatches.AUTO_SHOTS_MISS_MID,
+      TeamMatches.AUTO_SHOTS_MADE_HIGH, TeamMatches.AUTO_SHOTS_MISS_HIGH, TeamMatches.TELE_SHOTS_MADE_TOWER,
+      TeamMatches.TELE_SHOTS_MISS_TOWER, TeamMatches.TELE_SHOTS_MADE_LOW, TeamMatches.TELE_SHOTS_MISS_LOW,
+      TeamMatches.TELE_SHOTS_MADE_MID, TeamMatches.TELE_SHOTS_MISS_MID, TeamMatches.TELE_SHOTS_MADE_HIGH,
+      TeamMatches.TELE_SHOTS_MISS_HIGH, TeamMatches.SHOOTS_FROM_WHERE, TeamMatches.TOWER_LEVEL_ONE,
+      TeamMatches.TOWER_LEVEL_TWO, TeamMatches.TOWER_LEVEL_THREE, TeamMatches.TOWER_FELL_OFF,
+      TeamMatches.FRISBEES_FROM_FEEDER, TeamMatches.FRISBEES_FROM_FLOOR, TeamMatches.ROBOT_STRATEGY,
+      TeamMatches.ROBOT_SPEED, TeamMatches.ROBOT_MANEUVERABILITY, TeamMatches.ROBOT_PENALTY, TeamMatches.COMMENTS, };
 
   private String[] wheelType;
   private String[] driveTrain;
@@ -124,14 +119,10 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
       String currentCol = cursor.getColumnName(i);
 
       // Replace '0' and '1' with 'no' and 'yes'
-      if (currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_LOW)
-          || currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_MID)
-          || currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_HIGH)
-          || currentCol.equals(Teams.ROBOT_CAN_HELP_CLIMB)
-          || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_ONE)
-          || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_TWO)
-          || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_THREE)
-          || currentCol.equals(Teams.ROBOT_CAN_GO_UNDER_TOWER)) {
+      if (currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_LOW) || currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_MID)
+          || currentCol.equals(Teams.ROBOT_CAN_SCORE_ON_HIGH) || currentCol.equals(Teams.ROBOT_CAN_HELP_CLIMB)
+          || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_ONE) || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_TWO)
+          || currentCol.equals(Teams.ROBOT_CAN_CLIMB_LEVEL_THREE) || currentCol.equals(Teams.ROBOT_CAN_GO_UNDER_TOWER)) {
         row[i] = (cursor.getInt(i) == 0) ? "no" : "yes";
       }
 
@@ -177,10 +168,8 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
       }
 
       // Replace '0' and '1' with 'no' and 'yes'
-      else if (currentCol.equals(TeamMatches.TOWER_LEVEL_ONE)
-          || currentCol.equals(TeamMatches.TOWER_LEVEL_TWO)
-          || currentCol.equals(TeamMatches.TOWER_LEVEL_THREE)
-          || currentCol.equals(TeamMatches.TOWER_FELL_OFF)
+      else if (currentCol.equals(TeamMatches.TOWER_LEVEL_ONE) || currentCol.equals(TeamMatches.TOWER_LEVEL_TWO)
+          || currentCol.equals(TeamMatches.TOWER_LEVEL_THREE) || currentCol.equals(TeamMatches.TOWER_FELL_OFF)
           || currentCol.equals(TeamMatches.FRISBEES_FROM_FEEDER)) {
         row[i] = (cursor.getInt(i) == 0) ? "no" : "yes";
       }
@@ -220,13 +209,13 @@ public class ExportDatabaseTask extends AsyncTask<Void, Void, String> {
       else if (currentCol.equals(TeamMatches.ROBOT_SPEED)) {
         switch (cursor.getInt(i)) {
           case 0:
-            row[i] = "fast";
+            row[i] = "excellent";
             break;
           case 1:
-            row[i] = "medium";
+            row[i] = "average";
             break;
           case 2:
-            row[i] = "slow";
+            row[i] = "fair";
             break;
           default:
             row[i] = "";

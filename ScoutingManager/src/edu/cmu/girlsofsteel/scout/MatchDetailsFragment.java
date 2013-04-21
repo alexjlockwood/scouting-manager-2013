@@ -24,14 +24,14 @@ import edu.cmu.girlsofsteel.scout.dialogs.DeleteMatchDialog;
 public class MatchDetailsFragment extends SherlockFragment {
   @SuppressWarnings("unused")
   private static final String TAG = MatchDetailsFragment.class.getSimpleName();
-  
+
   private static final String KEY_TEAM_MATCH_ID = "key_team_match_id";
 
   private long mTeamMatchId = -1;
   private OnMatchDeletedListener mCallback;
   private ViewPager mViewPager;
   private MatchAdapter mAdapter;
-  
+
   /**
    * Callback interface for the {@link DeleteMatchDialog} and the
    * {@link MatchScoutActivity}.
@@ -49,7 +49,7 @@ public class MatchDetailsFragment extends SherlockFragment {
      */
     public void onMatchDeleted(long teamMatchId);
   }
-  
+
   /**
    * Static factory method which returns a new instance with the given team
    * match id and number set in its arguments.
@@ -114,7 +114,7 @@ public class MatchDetailsFragment extends SherlockFragment {
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
   }
-  
+
   void saveAllData() {
     for (int i=0; i<3; i++) {
       MatchDetailsPageFragment frag = mAdapter.getFragment(i);
@@ -123,7 +123,7 @@ public class MatchDetailsFragment extends SherlockFragment {
       }
     }
   }
-  
+
   /** Called by the {@link MatchScoutActivity} when the match has been deleted. */
   void matchDeleted() {
     mTeamMatchId = -1;
@@ -134,7 +134,7 @@ public class MatchDetailsFragment extends SherlockFragment {
       }
     }
   }
-  
+
   /** Called by the {@link MatchScoutActivity} in dual pane layouts. */
   void updateDetailsView(long teamMatchId) {
     if (mTeamMatchId != teamMatchId) {
@@ -147,7 +147,7 @@ public class MatchDetailsFragment extends SherlockFragment {
       }
     }
   }
-    
+
   /****************/
   /** ACTION BAR **/
   /****************/
@@ -177,16 +177,16 @@ public class MatchDetailsFragment extends SherlockFragment {
     }
     return super.onOptionsItemSelected(item);
   }
-  
+
   /************************/
   /** VIEW PAGER ADAPTER **/
   /************************/
-  
+
   private class MatchAdapter extends FragmentPagerAdapter {
     private final String[] PAGE_TITLES = { "Autonomous", "Tele-Op", "General" };
-    
+
     private SparseArray<WeakReference<Fragment>> mFragments = new SparseArray<WeakReference<Fragment>>();
-    
+
     public MatchAdapter(FragmentManager fm) {
       super(fm);
     }
@@ -203,17 +203,17 @@ public class MatchDetailsFragment extends SherlockFragment {
         case 0:
           frag = MatchDetailsPageFragment.MatchAutoPage.newInstance(mTeamMatchId);
           break;
-        case 1: 
+        case 1:
           frag = MatchDetailsPageFragment.MatchTelePage.newInstance(mTeamMatchId);
           break;
-        case 2: 
+        case 2:
           frag = MatchDetailsPageFragment.MatchGeneralPage.newInstance(mTeamMatchId);
           break;
       }
       mFragments.put(position, new WeakReference<Fragment>(frag));
       return frag;
     }
-    
+
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         super.destroyItem(container, position, object);
@@ -227,7 +227,7 @@ public class MatchDetailsFragment extends SherlockFragment {
       }
       return null;
     }
-    
+
     @Override
     public CharSequence getPageTitle(int position) {
       return PAGE_TITLES[position].toUpperCase(Locale.US);
