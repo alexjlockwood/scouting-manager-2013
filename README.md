@@ -20,10 +20,6 @@ Obtaining the Source Code
         $ git submodule init
         $ git submodule update
 
-   Then, import the ``scouting-manager-2013/ActionBarSherlock/library`` project into your Eclipse workspace.
-
-4. Add the ``scouting-manager-2013/ActionBarSherlock/library`` and ``scouting-manager-2013/ScoutingManager`` projects (as Android Projects from Existing Code) into your Eclipse workspace. 
-
-5. Copy ``scouting-manager-2013/ScoutingManager/libs/android-support-v4.jar`` and paste it in ``scouting-manager-2013/ActionBarSherlock/library/libs/android-support-v4.jar`` (replacing the older version of the file).
+4. Add the ``scouting-manager-2013/ActionBarSherlock/actionbarsherlock`` and ``scouting-manager-2013/ScoutingManager`` projects (as Android Projects from Existing Code) into your Eclipse workspace. 
 
 5. Done!
