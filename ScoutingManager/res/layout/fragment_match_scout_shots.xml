@@ -1,11 +1,12 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent" 
+    android:padding="8dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" >
+        android:layout_height="wrap_content" 
+        android:layout_gravity="center_horizontal" >
 
         <!-- High Basket -->
 
@@ -122,6 +123,39 @@
             style="@style/match_basket_counter"
             android:layout_alignBaseline="@id/button_shots_hit_low"
             android:layout_alignLeft="@id/edittext_shots_miss_high" />
+
+        <!-- Speed/Agility Basket -->
+
+        <TextView
+            android:id="@+id/tower_basket_header"
+            style="@style/match_basket_header"
+            android:layout_below="@id/button_shots_hit_low"
+            android:layout_marginTop="16dp"
+            android:text="@string/tower_basket" />
+
+        <Button
+            android:id="@+id/button_shots_hit_tower"
+            style="@style/match_button_hit"
+            android:layout_alignLeft="@id/button_shots_hit_high"
+            android:layout_below="@id/tower_basket_header" />
+
+        <Button
+            android:id="@+id/button_shots_miss_tower"
+            style="@style/match_button_miss"
+            android:layout_alignBaseline="@id/button_shots_hit_tower"
+            android:layout_alignLeft="@id/button_shots_miss_high" />
+
+        <EditText
+            android:id="@+id/edittext_shots_hit_tower"
+            style="@style/match_basket_counter"
+            android:layout_alignBaseline="@id/button_shots_hit_tower"
+            android:layout_alignLeft="@id/edittext_shots_hit_low" />
+
+        <EditText
+            android:id="@+id/edittext_shots_miss_tower"
+            style="@style/match_basket_counter"
+            android:layout_alignBaseline="@id/button_shots_hit_tower"
+            android:layout_alignLeft="@id/edittext_shots_miss_high" />
     </RelativeLayout>
 
-</RelativeLayout>
+</ScrollView>

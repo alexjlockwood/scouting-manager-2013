@@ -30,8 +30,7 @@
         <item quantity="one">One team will be deleted.</item>
         <item quantity="other">%d teams will be deleted.</item>
     </plurals>
-    
-        <plurals name="title_delete_matches">
+    <plurals name="title_delete_matches">
         <item quantity="one">Delete match?</item>
         <item quantity="other">Delete matches?</item>
     </plurals>
@@ -39,6 +38,9 @@
         <item quantity="one">One match will be deleted.</item>
         <item quantity="other">%d matches will be deleted.</item>
     </plurals>
+
+    <string name="title_delete_database">Delete Database</string>
+    <string name="message_delete_database">All data in the database will be deleted. This cannot be undone.</string>
 
     <!-- Menu -->
     <string name="menu_add_team">Add Team</string>
@@ -53,6 +55,7 @@
     <string name="menu_delete_picture">Delete Picture</string>
     <string name="menu_clear_screen">Clear Screen</string>
     <string name="menu_share">Share</string>
+    <string name="menu_purge_all">Delete All Data</string>
 
     <plurals name="title_selected_teams">
         <item quantity="one">1 team selected</item>
@@ -67,8 +70,8 @@
     <string name="export_success">Data written to external storage.</string>
     <string name="export_failed">Could not export data.</string>
     <string name="share_scouting_data">Share scouting data…</string>
-	<string name="no_data_to_share">No data to share.</string>
-    
+    <string name="no_data_to_share">No data to share.</string>
+
     <!-- Camera -->
     <string name="camera_storage_directory_name">team_pictures</string>
     <string name="camera_take_picture_failed">Unable to take team picture.</string>
@@ -126,6 +129,7 @@
     <string name="high_basket">High Goal</string>
     <string name="medium_basket">Medium Goal</string>
     <string name="low_basket">Low Goal</string>
+    <string name="tower_basket">Tower Goal</string>
     <string name="tower_level">Tower Level</string>
     <string name="fell_off_tower">Fell Off Tower?</string>
     <string name="shoots_from_where">Shoots From Where?</string>
@@ -140,10 +144,15 @@
     <string name="offense">Offense</string>
     <string name="defense">Defense</string>
     <string name="neutral">Neutral</string>
-    <string name="speed">Speed</string>
+    <string name="speed">Speed/Agility</string>
     <string name="fast">Fast</string>
     <string name="slow">Slow</string>
+    <string name="excellent">Excellent</string>
+    <string name="average">Average</string>
+    <string name="fair">Fair</string>
+    <string name="not_available">N/A</string>
     <string name="maneuverability">Maneuverability</string>
     <string name="penalty">Penalty</string>
+    <string name="comments">Additional comments</string>
 
 </resources>

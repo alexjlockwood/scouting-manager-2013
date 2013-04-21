@@ -140,7 +140,7 @@
                 android:text="@string/defense" />
         </RadioGroup>
 
-        <!-- Speed -->
+        <!-- Speed/Agility -->
 
         <TextView
             android:id="@+id/tv_speed"
@@ -156,19 +156,19 @@
                 android:id="@+id/rb_speed_fast"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fast" />
+                android:text="@string/excellent" />
 
             <RadioButton
                 android:id="@+id/rb_speed_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/medium" />
+                android:text="@string/average" />
 
             <RadioButton
                 android:id="@+id/rb_speed_slow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slow" />
+                android:text="@string/fair" />
         </RadioGroup>
 
         <!-- Maneuverability -->
@@ -232,6 +232,12 @@
                 android:layout_height="wrap_content"
                 android:text="@string/low" />
         </RadioGroup>
+
+        <EditText
+            android:id="@+id/et_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/comments" />
     </LinearLayout>
 
 </ScrollView>
