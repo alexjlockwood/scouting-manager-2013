@@ -22,4 +22,6 @@ Obtaining the Source Code
 
 4. Add the ``scouting-manager-2013/ActionBarSherlock/actionbarsherlock`` and ``scouting-manager-2013/ScoutingManager`` projects (as Android Projects from Existing Code) into your Eclipse workspace. 
 
-5. Done!
+5. Make sure the Android Support Package (revision 12) is added to your build path. To do this, right click on the ``actionbarsherlock`` project, go to ``Android Tools``, and click ``Add Support Library...``.
+
+6. Done!
