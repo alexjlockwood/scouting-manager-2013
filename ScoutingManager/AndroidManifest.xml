@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.cmu.girlsofsteel.scout"
-    android:versionCode="5"
-    android:versionName="1.04" >
+    package="edu.cmu.girlsofsteel.scouting"
+    android:versionCode="8"
+    android:versionName="1.05" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -21,7 +21,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Sherlock.Light" >
         <activity
-            android:name="edu.cmu.girlsofsteel.scout.MainActivity"
+            android:name="edu.cmu.girlsofsteel.scouting.MainActivity"
             android:label="@string/app_name"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
@@ -31,16 +31,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="edu.cmu.girlsofsteel.scout.TeamScoutActivity"
+            android:name="edu.cmu.girlsofsteel.scouting.TeamScoutActivity"
             android:label="@string/title_team_scout"
             android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.cmu.girlsofsteel.scout.MainActivity" >
+                android:value="edu.cmu.girlsofsteel.scouting.MainActivity" >
             </meta-data>
         </activity>
         <activity
-            android:name="edu.cmu.girlsofsteel.scout.MatchScoutActivity"
+            android:name="edu.cmu.girlsofsteel.scouting.MatchScoutActivity"
             android:label="@string/title_match_scout"
             android:windowSoftInputMode="stateHidden" 
             android:configChanges="orientation|screenSize" >
@@ -49,14 +49,14 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.cmu.girlsofsteel.scout.MainActivity" >
+                android:value="edu.cmu.girlsofsteel.scouting.MainActivity" >
             </meta-data>
         </activity>
 
         <!-- Content Provider -->
         <provider
-            android:name="edu.cmu.girlsofsteel.scout.provider.ScoutProvider"
-            android:authorities="edu.cmu.girlsofsteel.scout"
+            android:name="edu.cmu.girlsofsteel.scouting.provider.ScoutProvider"
+            android:authorities="edu.cmu.girlsofsteel.scouting"
             android:exported="false" >
         </provider>
     </application>
