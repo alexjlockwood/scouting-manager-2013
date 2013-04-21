@@ -66,6 +66,8 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.TEAM_ID + " INTEGER NOT NULL " + References.TEAM_ID + ","
         + TeamMatches.MATCH_NUMBER + " INTEGER NOT NULL, "
 
+        + TeamMatches.AUTO_SHOTS_MADE_TOWER + " INTEGER DEFAULT 0,"
+        + TeamMatches.AUTO_SHOTS_MISS_TOWER + " INTEGER DEFAULT 0,"
         + TeamMatches.AUTO_SHOTS_MADE_LOW + " INTEGER DEFAULT 0,"
         + TeamMatches.AUTO_SHOTS_MISS_LOW + " INTEGER DEFAULT 0,"
         + TeamMatches.AUTO_SHOTS_MADE_MID + " INTEGER DEFAULT 0,"
@@ -73,6 +75,8 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.AUTO_SHOTS_MADE_HIGH + " INTEGER DEFAULT 0,"
         + TeamMatches.AUTO_SHOTS_MISS_HIGH + " INTEGER DEFAULT 0,"
 
+        + TeamMatches.TELE_SHOTS_MADE_TOWER + " INTEGER DEFAULT 0,"
+        + TeamMatches.TELE_SHOTS_MISS_TOWER + " INTEGER DEFAULT 0,"
         + TeamMatches.TELE_SHOTS_MADE_LOW + " INTEGER DEFAULT 0,"
         + TeamMatches.TELE_SHOTS_MISS_LOW + " INTEGER DEFAULT 0,"
         + TeamMatches.TELE_SHOTS_MADE_MID + " INTEGER DEFAULT 0,"
@@ -96,6 +100,7 @@ public class ScoutDatabase extends SQLiteOpenHelper {
         + TeamMatches.ROBOT_SPEED + " INTEGER DEFAULT -1,"
         + TeamMatches.ROBOT_MANEUVERABILITY + " INTEGER DEFAULT -1,"
         + TeamMatches.ROBOT_PENALTY + " INTEGER DEFAULT -1,"
+        + TeamMatches.COMMENTS + " TEXT,"
 
         + "UNIQUE (" + TeamMatches.MATCH_NUMBER + "," + TeamMatches.TEAM_ID + ") ON CONFLICT IGNORE);");
   }
@@ -106,5 +111,9 @@ public class ScoutDatabase extends SQLiteOpenHelper {
     db.execSQL("DROP TABLE IF EXISTS " + Tables.TEAMS);
     db.execSQL("DROP TABLE IF EXISTS " + Tables.TEAM_MATCHES);
     onCreate(db);
+  }
+
+  static void deleteDatabase(Context context) {
+    context.deleteDatabase(DATABASE_NAME);
   }
 }

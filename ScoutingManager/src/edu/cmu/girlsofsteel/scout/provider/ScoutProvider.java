@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -68,7 +69,12 @@ public class ScoutProvider extends ContentProvider {
   @Override
   public int delete(Uri uri, String selection, String[] selectionArgs) {
     LOGV(TAG, "delete(uri=" + uri + ")");
-
+    if (uri == ScoutContract.BASE_URI) {
+      // Handle whole database deletes (e.g. when signing out)
+      deleteDatabase();
+      getContext().getContentResolver().notifyChange(uri, null, false);
+      return 1;
+    }
     SQLiteDatabase db = mOpenHelper.getWritableDatabase();
     String table, where = null;
 
@@ -201,5 +207,13 @@ public class ScoutProvider extends ContentProvider {
     int rowsAffected = db.update(table, values, where, selectionArgs);
     getContext().getContentResolver().notifyChange(uri, null);
     return rowsAffected;
+  }
+
+  private void deleteDatabase() {
+    // TODO: wait for content provider operations to finish, then tear down
+    mOpenHelper.close();
+    Context context = getContext();
+    ScoutDatabase.deleteDatabase(context);
+    mOpenHelper = new ScoutDatabase(getContext());
   }
 }

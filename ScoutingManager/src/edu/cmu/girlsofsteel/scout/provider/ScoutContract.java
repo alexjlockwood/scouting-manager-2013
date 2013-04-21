@@ -18,13 +18,13 @@ public final class ScoutContract {
 
     /** The team's unique number */
     String NUMBER = "number";
-    
+
     /** The team's nickname */
     String NAME = "name";
-    
+
     /** The uri address for the team's photo */
     String PHOTO = "team_photo";
-    
+
     /** The team's rank */
     String RANK = "rank";
 
@@ -62,7 +62,7 @@ public final class ScoutContract {
     String ROBOT_DRIVE_TRAIN = "drive_train";
 
     String ROBOT_DRIVE_TRAIN_OTHER = "drive_train_other";
-    
+
     /**
      * 0 - KoP
      * 1 - plaction/traction
@@ -77,24 +77,28 @@ public final class ScoutContract {
   interface TeamMatchesColumns {
     /** References '_id' in Teams table */
     String TEAM_ID = "team_number";
-    
+
     /** References 'number' in Matches table */
     String MATCH_NUMBER = "match_number";
 
+    String AUTO_SHOTS_MADE_TOWER = "auto_shots_made_tower";
+    String AUTO_SHOTS_MISS_TOWER = "auto_shots_miss_tower";
     String AUTO_SHOTS_MADE_LOW = "auto_shots_made_low";
     String AUTO_SHOTS_MADE_MID = "auto_shots_made_mid";
     String AUTO_SHOTS_MADE_HIGH = "auto_shots_made_high";
     String AUTO_SHOTS_MISS_LOW = "auto_shots_miss_low";
     String AUTO_SHOTS_MISS_MID = "auto_shots_miss_mid";
     String AUTO_SHOTS_MISS_HIGH = "auto_shots_miss_high";
-    
+
+    String TELE_SHOTS_MADE_TOWER = "tele_shots_made_tower";
+    String TELE_SHOTS_MISS_TOWER = "tele_shots_miss_tower";
     String TELE_SHOTS_MADE_LOW = "tele_shots_made_low";
     String TELE_SHOTS_MADE_MID = "tele_shots_made_mid";
     String TELE_SHOTS_MADE_HIGH = "tele_shots_made_high";
     String TELE_SHOTS_MISS_LOW = "tele_shots_miss_low";
     String TELE_SHOTS_MISS_MID = "tele_shots_miss_mid";
     String TELE_SHOTS_MISS_HIGH = "tele_shots_miss_high";
-    
+
     String SHOOTS_FROM_WHERE = "shoots_from_where";
     String TOWER_LEVEL_ONE = "tower_level_one";
     String TOWER_LEVEL_TWO = "tower_level_two";
@@ -107,11 +111,12 @@ public final class ScoutContract {
     String ROBOT_SPEED = "speed";
     String ROBOT_MANEUVERABILITY = "maneuverability";
     String ROBOT_PENALTY = "penalty";
+    String COMMENTS = "comments";
   }
   //@formatter:on
 
   public static final String AUTHORITY = "edu.cmu.girlsofsteel.scout";
-  private static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
+  public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
   private static final String PATH_TEAMS = "teams";
   // private static final String PATH_MATCHES = "matches";
   private static final String PATH_TEAM_MATCHES = "team_matches";
